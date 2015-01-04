@@ -17,7 +17,7 @@ public class SOM extends SomBasics {
 		super(columns, rows, inputLength, rand);
 	}
 	
-	/**
+	/** 
 	 * Creates a new SOM where all node vector values are initialized to a random value between 0 and 1
 	 * @param columns width of the map 
 	 * @param rows height of the map 
