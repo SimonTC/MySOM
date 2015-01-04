@@ -1,4 +1,4 @@
-package dk.stcl;
+package dk.stcl.experiments;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import dk.stcl.som.SOM;
 import dk.stcl.som.SomNode;
 import dk.stcl.utils.DataLoader;
 
-public class Controller {
+public class ControllerMNIST {
 
 	private SimpleMatrix data;
 	private SOM som;
@@ -38,12 +38,12 @@ public class Controller {
 		String dataPathTest ="C:/Users/Simon/Documents/Experiments/SOM/MNIST/test.csv";
 		String filepathTestLabels = "C:/Users/Simon/Documents/Experiments/SOM/MNIST/test_output.csv";
 		
-		Controller c = new Controller();
+		ControllerMNIST c = new ControllerMNIST();
 		c.setupExperiment(dataPathTrain, dataPathValidation, dataPathTest, filepathTestLabels);
 		c.run(false);
 	}
 	
-	public Controller() {
+	public ControllerMNIST() {
 		// TODO Auto-generated constructor stub
 	}
 

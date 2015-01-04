@@ -12,7 +12,7 @@ public abstract class SomBasics {
 	protected double learningRate, neighborhoodRadius;
 	protected double initialLearningRate, initialNeighborhoodRadius;
 	protected SomNode bmu;
-	protected int inputLength;
+	protected int inputLength, rows, columns;
 	
 	
 	/**
@@ -26,11 +26,14 @@ public abstract class SomBasics {
 	 */
 	public SomBasics(int columns, int rows, int inputLength, Random rand, double initialLearningrate, double initialNeighborhodRadius) {
 		this.inputLength = inputLength;
+		this.rows = rows;
+		this.columns = columns;
 		somMap = new SomMap(columns, rows, inputLength, rand);
 		errorMatrix = new SimpleMatrix(rows, columns);
 		learning = true;
 		this.initialLearningRate = initialLearningrate;
 		this.initialNeighborhoodRadius = initialNeighborhodRadius;
+		
 	}
 	
 	/**

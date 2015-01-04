@@ -14,17 +14,17 @@ public class RSOM extends SomBasics {
 		super(columns, rows, inputLength, rand, initialLearningrate,
 				initialNeighborhodRadius);
 		
-		setupLeakyDifferences(rows, columns, inputLength);
+		setupLeakyDifferences();
 		this.decayFactor = decayFactor;		
 	}
 
 	public RSOM(int columns, int rows, int inputLength, Random rand, double decayFactor) {
 		super(columns, rows, inputLength, rand);
-		setupLeakyDifferences(rows, columns, inputLength);
+		setupLeakyDifferences();
 		this.decayFactor = decayFactor;
 	}
 	
-	private void setupLeakyDifferences(int rows, int columns, int inputLength){
+	private void setupLeakyDifferences(){
 		leakyDifferencesMap = new SomMap(columns, rows, inputLength);
 	}
 	
@@ -37,9 +37,9 @@ public class RSOM extends SomBasics {
 	 */
 	public SomNode getBMU(SimpleMatrix inputVector) {		
 		double min = Double.POSITIVE_INFINITY;
-		SomNode[] nodes = leakyDifferencesMap.getNodes();
+		SomNode[] leakyNodes = leakyDifferencesMap.getNodes();
 		SomNode BMU = null;
-		for (SomNode n : nodes){
+		for (SomNode n : leakyNodes){
 			double value = n.getVector().elementSum();
 			errorMatrix.set(n.getRow(), n.getCol(), value);
 			if (value < min) {
@@ -83,17 +83,24 @@ public class RSOM extends SomBasics {
 	public SomNode step(SimpleMatrix inputVector, double learningRate,
 			double neighborhoodRadius) {
 		
-		if (learning){
-			updateLeakyDifferences(inputVector);
-		}
+
+		updateLeakyDifferences(inputVector);
 		
 		//Find BMU
-		SomNode bmu = getBMU();		
+		bmu = getBMU(null);		
 		
 		if (learning){
 			updateWeights(bmu, inputVector, learningRate, neighborhoodRadius);
 		}
 	
+		return bmu;
+	}
+	
+	public SomNode step(double[] inputVector){
+		SimpleMatrix vector = new SimpleMatrix(1, inputLength, true, inputVector);
+		
+		bmu = this.step(vector, this.learningRate, this.neighborhoodRadius);
+		
 		return bmu;
 	}
 
@@ -109,6 +116,14 @@ public class RSOM extends SomBasics {
 		weightVector = weightVector.plus(delta);
 		n.setVector(weightVector);
 
+	}
+	
+	/**
+	 * Resets the leaky difference vector. 
+	 * Used between sequences when trining
+	 */
+	public void flush(){
+		setupLeakyDifferences();
 	}
 	
 	
