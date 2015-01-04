@@ -20,7 +20,7 @@ public class SOM extends SomBasics {
 	/** 
 	 * Creates a new SOM where all node vector values are initialized to a random value between 0 and 1
 	 * @param columns width of the map 
-	 * @param rows height of the map 
+	 * @param rows height of the map  
 	 */
 	public SOM(int columns, int rows, int inputLength, Random rand, double initialLearningrate, double initialNeighborhodRadius) {
 		super(columns, rows, inputLength, rand, initialLearningrate, initialNeighborhodRadius);
