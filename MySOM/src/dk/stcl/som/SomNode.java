@@ -85,25 +85,6 @@ public class SomNode {
 	}
 	
 	/**
-	 * Adjust the values of the nodes based on the difference between the valueVectors of this node and input vector
-	 * @param inputVector
-	 * @param learningRate
-	 * @param learningEffect How effective the learning is. This is dependant on the distance to the bmu
-	 */
-	public void adjustValues(SimpleMatrix inputVector, double learningRate, double learningEffect){
-		//Calculate difference between input and current values
-		SimpleMatrix diff = inputVector.minus(valueVector);
-		
-		//Multiply by learning rate and learning effect
-		SimpleMatrix tmp = new SimpleMatrix(diff.numRows(), diff.numCols());
-		tmp.set(learningRate * learningEffect);
-		diff = diff.elementMult(tmp);
-		
-		//Add the dist-values to the value vector
-		valueVector = valueVector.plus(diff);
-	}
-	
-	/**
 	 * Returns the vector with the values for this node
 	 * @return
 	 */

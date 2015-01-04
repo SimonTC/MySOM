@@ -79,20 +79,36 @@ public class SOM extends SomBasics {
 	/**
 	 * Updates the weights of a single node
 	 */
-	public SomNode weightAdjustment(SomNode n, SomNode bmu, SimpleMatrix inputVector, double neighborhoodRadius, double learningRate ){
-		double squaredDistance = n.distanceTo(bmu);
-		double squaredRadius = neighborhoodRadius * neighborhoodRadius;
-		if (squaredDistance <= squaredRadius){ 
-			double learningEffect = learningEffect(squaredDistance, squaredRadius);
-			n.adjustValues(inputVector, learningRate, learningEffect);					
-		}
-		return n;
+	public void weightAdjustment(SomNode n, SomNode bmu, SimpleMatrix inputVector, double neighborhoodRadius, double learningRate ){
+		double learningEffect = learningEffect(n,bmu);
+		adjustNodeWeights(n, inputVector, learningRate, learningEffect);					
+		
+	}
+	
+	/**
+	 * Adjust the weights of the nodes based on the difference between the valueVectors of this node and input vector
+	 * @param n node which weight vector should be adjusted
+	 * @param inputVector
+	 * @param learningRate
+	 * @param learningEffect How effective the learning is. This is dependant on the distance to the bmu
+	 */
+	private void adjustNodeWeights(SomNode n, SimpleMatrix inputVector, double learningRate, double learningEffect){
+		SimpleMatrix valueVector = n.getVector();
+		
+		//Calculate difference between input and current values
+		SimpleMatrix diff = inputVector.minus(valueVector);
+		
+		//Multiply by learning rate and learning effect
+		SimpleMatrix tmp = new SimpleMatrix(diff.numRows(), diff.numCols());
+		tmp.set(learningRate * learningEffect);
+		diff = diff.elementMult(tmp);
+		
+		//Add the dist-values to the value vector
+		valueVector = valueVector.plus(diff);
+		
+		n.setVector(valueVector);
 	}
 
-	@Override
-	public SomNode getBMU() throws UnsupportedOperationException{
-		return bmu;
-	}
 	
 	
 	

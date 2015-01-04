@@ -44,6 +44,10 @@ public abstract class SomBasics {
 		this(columns, rows, inputLength, rand, 0.9, Math.max(columns, rows) / (double)2);
 	}
 	
+	/**
+	 * The activation matrix is computed as 1 - (Ei / Emax)
+	 * @return
+	 */
 	public SimpleMatrix computeActivationMatrix(){
 		double maxError = errorMatrix.elementMaxAbs();
 		SimpleMatrix m = errorMatrix.divide(maxError);
@@ -53,7 +57,9 @@ public abstract class SomBasics {
 		return activation;
 	}
 	
-	public abstract SomNode getBMU();
+	public SomNode getBMU(){
+		return bmu;
+	}
 	
 	public abstract SomNode getBMU(SimpleMatrix inputVector);
 	
@@ -104,13 +110,21 @@ public abstract class SomBasics {
 	/**
 	 * Calculates the learning effect based on distance to the learning center.
 	 * The lower the distance, the higher the learning effect
-	 * @param squaredDistance
-	 * @param squaredRadius
-	 * @return
+	 * @param n
+	 * @param bmu
+	 * @return the learning effect. 0 if node n is outside of the neighborhood radius
 	 */
-	protected double learningEffect(double squaredDistance, double squaredRadius){
-		double d = Math.exp(-(squaredDistance / (2 * squaredRadius)));
-		return d;
+	protected double learningEffect(SomNode n, SomNode bmu){
+		double dist = n.distanceTo(bmu);
+		double squaredRadius = neighborhoodRadius * neighborhoodRadius;
+		double learningEffect;
+		if (dist <= squaredRadius){
+			learningEffect = Math.exp(-(dist / (2 * squaredRadius)));
+		} else {
+			learningEffect = 0;
+		}
+		
+		return learningEffect;
 	}
 	
 	/**
@@ -151,7 +165,7 @@ public abstract class SomBasics {
 		for (int col = colStart; col < colEnd; col++){
 			for (int row = rowStart; row < rowEnd; row++){
 				SomNode n = somMap.get(col, row);
-				n = weightAdjustment(n, bmu, inputVector, neighborhoodRadius, learningRate);
+				weightAdjustment(n, bmu, inputVector, neighborhoodRadius, learningRate);
 			}
 		}
 	}
@@ -178,14 +192,13 @@ public abstract class SomBasics {
 	
 	/**
 	 * Adjusts the weights of a single node
-	 * @param n
 	 * @param bmu
 	 * @param inputVector
 	 * @param neighborhoodRadius
 	 * @param learningRate
 	 * @return
 	 */
-	public abstract SomNode weightAdjustment(SomNode n, SomNode bmu, SimpleMatrix inputVector, double neighborhoodRadius, double learningRate );
+	public abstract void weightAdjustment(SomNode n, SomNode bmu, SimpleMatrix inputVector, double neighborhoodRadius, double learningRate );
 
 	public void setLearningRate(double learningRate) {
 		this.learningRate = learningRate;
