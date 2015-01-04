@@ -5,9 +5,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Random;
 
 import dk.stcl.som.RSOM;
+import dk.stcl.som.SomNode;
 
 public class ControllerBraveNewWorld {
 	private ArrayList<double[][]> sequences;
@@ -18,7 +21,8 @@ public class ControllerBraveNewWorld {
 	private final int SOM_SIZE = 10;
 	private final double INITIAL_LEARNING = 0.1;
 	private final double DECAY = 0.7;
-	private final int NUM_ITERATIONS = 10;
+	private final int NUM_ITERATIONS = 100;
+	private final double THRESHOLD = 0.9;
 
 	public static void main(String[] args) {
 		ControllerBraveNewWorld controller = new ControllerBraveNewWorld();
@@ -30,21 +34,32 @@ public class ControllerBraveNewWorld {
 	public void run(String textFilePath){
 		setup(textFilePath);
 		train();
+		visualizeMap();
 	}
 	
 	public void setup(String textFilePath){
+		text = new ArrayList<String>();
 		sequences = loadText(textFilePath);
+		System.out.println("Number of words: " + sequences.size());
 		rand = new Random();
 		rsom = new RSOM(SOM_SIZE, SOM_SIZE, 8, rand, INITIAL_LEARNING, SOM_SIZE / 2, DECAY);
+		
 	}
 	
 	public void train(){
 		for (int iteration = 1; iteration <= NUM_ITERATIONS; iteration++){
 			System.out.println("Starting training - iteration " + iteration);
 			for (double[][] word : sequences){
+				String s = "";
 				for (double[] letter : word){
 					rsom.step(letter);
+					for (double d : letter){
+						s += "" + d;
+					}
+					s = s + " ";
 				}
+				if (iteration == NUM_ITERATIONS) System.out.println("BMU for '" + s + "': " + rsom.getBMU().getId());
+				
 				rsom.flush();
 			}
 			rsom.sensitize(iteration, NUM_ITERATIONS);
@@ -53,12 +68,79 @@ public class ControllerBraveNewWorld {
 	
 	public void visualizeMap(){
 		rsom.setLearning(false);
-		ArrayList<ArrayList<String>> receptiveFields = new ArrayList<ArrayList<String>>();
+		
+		//Figure out where all the words are mapped to
+		String[][] receptiveFields = new String[SOM_SIZE][SOM_SIZE];		
+		Iterator<String> iterator = text.iterator();
 		
 		for (double[][] word : sequences){
-			String curWord ="";
+			String curWord = iterator.next();
 			for (double[] letter : word){
 				rsom.step(letter);				
+			}
+			SomNode bmu = rsom.getBMU();
+			String s = receptiveFields[bmu.getRow()][bmu.getCol()];
+			
+			if (s == null) s = "";
+			
+			if (!s.contains(curWord)){
+				s = s + " " + curWord;
+			}
+			
+			receptiveFields[bmu.getRow()][bmu.getCol()] = s;
+		}
+		
+		//Find the common end for the words at each
+		String[][] triggers = new String[SOM_SIZE][SOM_SIZE];	
+		for (int i = 0; i < SOM_SIZE; i++){
+			for (int j = 0; j < SOM_SIZE; j++){
+				String[] words = receptiveFields[i][j].split(" ");
+				
+				//Find max length
+				int max = Integer.MIN_VALUE;
+				for (String w : words){
+					if (w.length() > max) max = w.length();
+				}
+				
+				String trigger = "";
+				
+				HashMap<String, Integer> map = new HashMap<String, Integer>();
+				int k = 0;
+				boolean stop = false;
+				while ( k < max && !stop){
+					//Find possible endings
+					for (String w : words){
+						String tmp = "";
+						if (w.length() < k){
+							tmp = w.substring(w.length() - k);
+							int m = map.get(tmp);
+							map.put(tmp, m + 1);
+						}
+					}
+					
+					//Which ending is the most common
+					max = Integer.MIN_VALUE;
+					int total = 0;
+					String bestKey = "";
+					for (String s : map.keySet()){
+						int n = map.get(s);
+						if (n > max){
+							max = n;
+							bestKey = s;
+						}
+						total += n;						
+					}
+					
+					double percentage = (double) max / (double) total;
+					
+					if (percentage > THRESHOLD){
+						trigger += bestKey;
+					} else {
+						stop = true;
+					}
+					k++;
+				}
+				triggers[i][j] = trigger;				
 			}
 		}
 		
