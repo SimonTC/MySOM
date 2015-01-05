@@ -15,18 +15,18 @@ import dk.stcl.som.SomNode;
 public class ControllerBraveNewWorld {
 	private ArrayList<double[][]> sequences;
 	private RSOM rsom;
-	private Random rand;
+	private Random rand = new Random(1234);
 	private ArrayList<String> text;
 	
-	private final int SOM_SIZE = 10;
+	private final int SOM_SIZE = 20;
 	private final double INITIAL_LEARNING = 0.1;
-	private final double DECAY = 0.7;
+	private final double DECAY = 0.5;
 	private final int NUM_ITERATIONS = 100;
-	private final double THRESHOLD = 0.9;
+	private final double THRESHOLD = 0.7;
 
 	public static void main(String[] args) {
 		ControllerBraveNewWorld controller = new ControllerBraveNewWorld();
-		String path = "C:/Users/Simon/Documents/Experiments/RSOM/Brave_New_World/test.txt";
+		String path = "C:/Users/Simon/Documents/Experiments/RSOM/Brave_New_World/Brave_New_World.txt";
 		controller.run(path);
 
 	}
@@ -41,28 +41,22 @@ public class ControllerBraveNewWorld {
 		text = new ArrayList<String>();
 		sequences = loadText(textFilePath);
 		System.out.println("Number of words: " + sequences.size());
-		rand = new Random();
 		rsom = new RSOM(SOM_SIZE, SOM_SIZE, 8, rand, INITIAL_LEARNING, SOM_SIZE / 2, DECAY);
 		
 	}
 	
 	public void train(){
 		for (int iteration = 1; iteration <= NUM_ITERATIONS; iteration++){
-			System.out.println("Starting training - iteration " + iteration);
+			if (iteration % 1 == 0) System.out.println("Starting training - iteration " + iteration);
 			for (double[][] word : sequences){
-				String s = "";
 				for (double[] letter : word){
 					rsom.step(letter);
-					for (double d : letter){
-						s += "" + d;
-					}
-					s = s + " ";
 				}
-				if (iteration == NUM_ITERATIONS) System.out.println("BMU for '" + s + "': " + rsom.getBMU().getId());
+				if (iteration == NUM_ITERATIONS) System.out.println("BMU: " + rsom.getBMU().getId());
 				
 				rsom.flush();
 			}
-			rsom.sensitize(iteration, NUM_ITERATIONS);
+			rsom.sensitize(iteration, NUM_ITERATIONS,true, false);
 		}
 	}
 	
@@ -87,6 +81,8 @@ public class ControllerBraveNewWorld {
 				s = s + " " + curWord;
 			}
 			
+			s = s.trim();
+			
 			receptiveFields[bmu.getRow()][bmu.getCol()] = s;
 		}
 		
@@ -94,54 +90,76 @@ public class ControllerBraveNewWorld {
 		String[][] triggers = new String[SOM_SIZE][SOM_SIZE];	
 		for (int i = 0; i < SOM_SIZE; i++){
 			for (int j = 0; j < SOM_SIZE; j++){
-				String[] words = receptiveFields[i][j].split(" ");
-				
-				//Find max length
-				int max = Integer.MIN_VALUE;
-				for (String w : words){
-					if (w.length() > max) max = w.length();
-				}
-				
+				String field = receptiveFields[i][j];
 				String trigger = "";
-				
-				HashMap<String, Integer> map = new HashMap<String, Integer>();
-				int k = 0;
-				boolean stop = false;
-				while ( k < max && !stop){
-					//Find possible endings
+				if (field != null){
+					
+					String[] words = field.split(" ");
+					
+					//Find max length
+					int maxLength = Integer.MIN_VALUE;
 					for (String w : words){
-						String tmp = "";
-						if (w.length() < k){
-							tmp = w.substring(w.length() - k);
-							int m = map.get(tmp);
-							map.put(tmp, m + 1);
+						if (w.length() > maxLength) maxLength = w.length();
+					}
+					
+					
+					
+					HashMap<String, Integer> map = new HashMap<String, Integer>();
+					int k = 0;
+					boolean stop = false;
+					while ( k < maxLength && !stop){
+						
+						//Find possible endings
+						for (String w : words){
+							String tmp = "";
+							if (k < w.length()){
+								tmp = w.substring(w.length() - k - 1);
+								int m = 0;
+								if (map.containsKey(tmp)){
+									m = map.get(tmp);
+								}
+								map.put(tmp, m + 1);
+							}
 						}
-					}
-					
-					//Which ending is the most common
-					max = Integer.MIN_VALUE;
-					int total = 0;
-					String bestKey = "";
-					for (String s : map.keySet()){
-						int n = map.get(s);
-						if (n > max){
-							max = n;
-							bestKey = s;
+						
+						//Which ending is the most common
+						int maxVotes = Integer.MIN_VALUE;
+						int total = 0;
+						String bestKey = "";
+						for (String s : map.keySet()){
+							int n = map.get(s);
+							if (n > maxVotes){
+								maxVotes = n;
+								bestKey = s;
+							}
+							total += n;						
 						}
-						total += n;						
+						
+						double percentage = (double) maxVotes / (double) total;
+						
+						if (percentage > THRESHOLD){
+							trigger = bestKey;
+						} else {
+							stop = true;
+						}
+						k++;
 					}
-					
-					double percentage = (double) max / (double) total;
-					
-					if (percentage > THRESHOLD){
-						trigger += bestKey;
-					} else {
-						stop = true;
-					}
-					k++;
+				} else {
+					trigger = "-";
 				}
+				if (trigger.equalsIgnoreCase(" ")) trigger = "-";
 				triggers[i][j] = trigger;				
 			}
+		}
+		
+		//Print table
+		String s = "";
+		for (int  i = 0; i < triggers[0].length; i++){
+			s = s + "%15s";
+		}
+		s = s + "\n";
+		for (final Object[] row : triggers) {			
+		    System.out.format(s, row);
 		}
 		
 	}
@@ -157,7 +175,7 @@ public class ControllerBraveNewWorld {
 				//Split
 				line = line.trim();
 				String[] words = line.split(" ");
-				for (String w:words){
+				for (String w : words){
 					//Remove punctuations
 					w = w.replaceAll(regex, "");
 					
