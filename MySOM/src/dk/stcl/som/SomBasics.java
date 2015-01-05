@@ -103,14 +103,6 @@ public abstract class SomBasics {
 	}
 	
 	/**
-	 * Returns a matrix with the weights of all the nodes in the map
-	 * @return
-	 */
-	public SimpleMatrix[][] getWeightMatrix(){
-		return somMap.getWeightMatrix();
-	}
-	
-	/**
 	 * Calculates the learning effect based on distance to the learning center.
 	 * The lower the distance, the higher the learning effect
 	 * @param n

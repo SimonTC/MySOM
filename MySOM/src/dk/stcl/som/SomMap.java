@@ -8,7 +8,6 @@ public class SomMap {
 	
 	private int rows, columns;
 	private SomNode[] nodes; 
-	private SimpleMatrix[][] weightMatrix; //Contains pointers to the weight vectors of each node
 	
 	/**
 	 * Creates a new map where all node vector values are initialized to a random value between 0 and 1
@@ -41,7 +40,6 @@ public class SomMap {
 	 */
 	private void initializeMap(int inputLength, Random rand){
 		nodes = new SomNode[rows * columns];
-		weightMatrix = new SimpleMatrix[rows][columns];
 		
 		for (int row = 0; row < rows; row++){
 			for (int col = 0; col < columns; col++){
@@ -53,7 +51,6 @@ public class SomMap {
 				}
 					
 				nodes[coordinateToIndex(row, col)] = n;
-				weightMatrix[row][col] = n.getVector();
 			}
 		}
 	}
@@ -99,12 +96,6 @@ public class SomMap {
 		}
 	}
 	
-	/**
-	 * Returns a matrix of all the weight vectors of the nodes
-	 * @return
-	 */
-	public SimpleMatrix[][] getWeightMatrix(){
-		return weightMatrix;
-	}
+	
 
 }
