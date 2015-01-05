@@ -41,6 +41,7 @@ public class RSOM extends SomBasics {
 		SomNode BMU = null;
 		for (SomNode n : leakyNodes){
 			double value = n.getVector().elementSum();
+			value = Math.abs(value);
 			errorMatrix.set(n.getRow(), n.getCol(), value);
 			if (value < min) {
 				min = value;

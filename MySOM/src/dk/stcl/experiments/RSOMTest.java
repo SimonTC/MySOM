@@ -24,7 +24,7 @@ public class RSOMTest {
 	}
 	
 	private void buildSequences(){
-		sequences = new double[2][4];
+		sequences = new double[4][4];
 		
 		sequences[0][0] = 0;
 		sequences[0][1] = 0;
@@ -35,6 +35,16 @@ public class RSOMTest {
 		sequences[1][1] = 1;
 		sequences[1][2] = 0;
 		sequences[1][3] = 0;
+		
+		sequences[2][0] = 1;
+		sequences[2][1] = 1;
+		sequences[2][2] = 0;
+		sequences[2][3] = 1;
+		
+		sequences[3][0] = 0;
+		sequences[3][1] = 0;
+		sequences[3][2] = 1;
+		sequences[3][3] = 1;
 	}
 	
 	private void setupRSOM(){
