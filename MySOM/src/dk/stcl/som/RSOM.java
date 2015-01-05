@@ -83,7 +83,6 @@ public class RSOM extends SomBasics {
 	public SomNode step(SimpleMatrix inputVector, double learningRate,
 			double neighborhoodRadius) {
 		
-
 		updateLeakyDifferences(inputVector);
 		
 		//Find BMU

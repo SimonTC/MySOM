@@ -182,15 +182,36 @@ public abstract class SomBasics {
 	 * learning rate is updated by learning(t) = learning(0) * exp(-t/maxTimesteps)
 	 * 
 	 */
-	public void sensitize(int timestep, int maxTimesteps){
+	public void sensitize(int timestep, int maxTimesteps){		
+		sensitize(timestep, maxTimesteps, true, true);
+	}
+	
+	/**
+	 * Updates the learning rate and the neighborhood radius based on the current timestep.
+	 * 
+	 * radius is update by: sigma(t) = sigma(0) * exp (-t/lambda)
+	 * 	where sigma(t) is the width of the neigborhood radius at time t and lambda is a time constant = maxTimesteps / log(sigma(0)
+	 * 
+	 * learning rate is updated by learning(t) = learning(0) * exp(-t/maxTimesteps)
+	 * 
+	 * @param timestep
+	 * @param maxTimesteps
+	 * @param doNeighborhood if false neighborhood radius will not be updated
+	 * @param doLearningRate if false learning rate will not be updated
+	 */
+	public void sensitize(int timestep, int maxTimesteps, boolean doNeighborhood, boolean doLearningRate){
 		
-		//Update neighborhood readius
-		double lambda = (double) maxTimesteps / Math.log(initialNeighborhoodRadius);		
-		neighborhoodRadius = initialNeighborhoodRadius * Math.exp(-(double)timestep / lambda);
+		if (doNeighborhood){
+			//Update neighborhood radius
+			double lambda = (double) maxTimesteps / Math.log(initialNeighborhoodRadius);		
+			neighborhoodRadius = initialNeighborhoodRadius * Math.exp(-(double)timestep / lambda);
+		}
 		
-		//Update learning rate
-		learningRate = initialLearningRate * Math.exp((double) -timestep / maxTimesteps);
-		if (learningRate < 0.01) learningRate = 0.01;
+		if (doLearningRate){
+			//Update learning rate
+			learningRate = initialLearningRate * Math.exp((double) -timestep / maxTimesteps);
+			if (learningRate < 0.01) learningRate = 0.01;
+		}
 	}
 	
 	/**
