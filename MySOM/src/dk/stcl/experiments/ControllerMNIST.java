@@ -9,6 +9,7 @@ import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.gui.SomActivationDrawer;
 import dk.stcl.gui.SomModelDrawer;
+import dk.stcl.som.PLSOM;
 import dk.stcl.som.SOM;
 import dk.stcl.som.SomNode;
 import dk.stcl.utils.DataLoader;
@@ -29,12 +30,16 @@ public class ControllerMNIST {
 	private final int SOM_SIZE = 10;
 	private final double INITIAL_LEARNING = 0.1;
 	private final int MAX_ITERATIONS = 1000;
+	private final boolean CLASSIFY_NEW_DATA = false;
+	private final boolean USE_PLSOM = true;
+	private final String DELIMITER = ";";
+	private final int PRINT_EVERY = 100;
 	/**
 	 * @throws IOException ******************************************/
 	
 	public static void main(String[] args) throws IOException{
-		String dataPathTrain ="C:/Users/Simon/Documents/Experiments/SOM/MNIST/training.csv";
-		String dataPathValidation ="C:/Users/Simon/Documents/Experiments/SOM/MNIST/validation.csv";
+		String dataPathTrain ="C:/Users/Simon/Documents/Experiments/SOM/MNIST/small/train_small.csv";
+		String dataPathValidation ="C:/Users/Simon/Documents/Experiments/SOM/MNIST/small/validation_small.csv";
 		String dataPathTest ="C:/Users/Simon/Documents/Experiments/SOM/MNIST/test.csv";
 		String filepathTestLabels = "C:/Users/Simon/Documents/Experiments/SOM/MNIST/test_output.csv";
 		
@@ -60,10 +65,10 @@ public class ControllerMNIST {
 		
 		//Initialize data loaders
 		trainLoader = new DataLoader();
-		trainLoader.init(trainFilePath, ",");
+		trainLoader.init(trainFilePath, DELIMITER);
 		
 	    validationLoader = new DataLoader();
-	    validationLoader.init(validationFilePath, ",");
+	    validationLoader.init(validationFilePath, DELIMITER);
 	    
 	    testLoader = new DataLoader();
 	    testLoader.init(testFilePath, ",");
@@ -77,7 +82,12 @@ public class ControllerMNIST {
 		//int inputLength = data.numCols();
 		int inputLength = trainLoader.getNumColumns() - 1;
 		int size = SOM_SIZE;
-		som = new SOM(size, size, inputLength, rand, INITIAL_LEARNING, size / 2);
+		if (USE_PLSOM){
+			som = new PLSOM(size, size, inputLength, rand, INITIAL_LEARNING, size / 2);
+		} else {
+			som = new SOM(size, size, inputLength, rand, INITIAL_LEARNING, size / 2);
+		}
+		
 				
 		/*
 		//Create GUI
@@ -108,12 +118,12 @@ public class ControllerMNIST {
 	    int iteration = 1;
 	    trainLoader.readline(); //Jump over headlines
 	    while ((line = trainLoader.readline()) != null){
-	    	if (iteration % 1000 == 0){
+	    	if (iteration % PRINT_EVERY == 0){
 	    		System.out.println("Clustering - Iteration: " + iteration + " / " + maxIterations);
 	    	}
 	    	
 	    	//Get sample
-	    	String[] content = line.split(",");
+	    	String[] content = line.split(DELIMITER);
 	    	double[] sample = new double[content.length - 1];
 			for (int i = 1; i < content.length; i++){
 				double d =Double.parseDouble(content[i]); //We don't want to include the label in column 1
@@ -183,13 +193,14 @@ public class ControllerMNIST {
 	    System.out.println("Voting on labels");
 	    iteration = 1;
 	    trainLoader.readline(); //Jump over headlines
+	    som.setLearning(false);
 	    while ((line = trainLoader.readline()) != null){
-	    	if (iteration % 1000 == 0){
+	    	if (iteration % PRINT_EVERY == 0){
 	    		System.out.println("Voting - Iteration: " + iteration + " / " + maxIterations);
 	    	}
 	    	
 	    	//Get sample
-	    	String[] content = line.split(",");
+	    	String[] content = line.split(DELIMITER);
 	    	double[] sample = new double[content.length - 1];
 			for (int i = 1; i < content.length; i++){
 				double d =Double.parseDouble(content[i]); //We don't want to include the label in column 1
@@ -201,7 +212,7 @@ public class ControllerMNIST {
 			SomNode bmu = som.getBMU(inputVector);
 			int id = bmu.getId();
 			int label = (int) Integer.parseInt(content[0]);
-			System.out.println("Label: " + label);
+			//System.out.println("Label: " + label);
 			labelVoting[id][label]++;	
 			iteration++;
 	    }
@@ -218,7 +229,7 @@ public class ControllerMNIST {
 					label = i;
 				}
 			}
-			System.out.println("Setting label to:" + label);
+			//System.out.println("Setting label to:" + label);
 			n.setLabel("" + label);
 		}
 	    trainLoader.close();
@@ -231,12 +242,12 @@ public class ControllerMNIST {
 	    int correct = 0;
 	    
 	    while ((line = validationLoader.readline()) != null){
-	    	if (iteration % 1000 == 0){
+	    	if (iteration % PRINT_EVERY == 0){
 	    		System.out.println("validating - Iteration: " + iteration + " / " + totalSamples);
 	    	}
 	    	
 	    	//Get sample
-	    	String[] content = line.split(",");
+	    	String[] content = line.split(DELIMITER);
 	    	double[] sample = new double[content.length - 1];
 			for (int i = 1; i < content.length; i++){
 				double d =Double.parseDouble(content[i]); //We don't want to include the label in column 1
@@ -253,7 +264,7 @@ public class ControllerMNIST {
 				correct++;
 			}		
 			
-			System.out.println("Classified|Corect: " + bmuLabel + "|" + label);
+			//System.out.println("Classified|Corect: " + bmuLabel + "|" + label);
 			iteration++;
 	    }
 	    
@@ -262,43 +273,44 @@ public class ControllerMNIST {
 	    System.out.println("Accuracy on validation set: " + accuracy);
 	    validationLoader.close();
 	    
-	    
-	    //Classify the test data
-	    System.out.println("Classify test data");
-	    iteration = 1;
-	    testLoader.readline(); //Jump headline
-	    totalSamples = testLoader.getNumLines() - 1;
-	    String classes ="";
-	    while ((line = testLoader.readline()) != null){
-	    	if (iteration % 1000 == 0){
-	    		System.out.println("Analysing test - Iteration: " + iteration + " / " + totalSamples);
-	    	}
-	    	
-	    	//Get sample
-	    	String[] content = line.split(",");
-	    	double[] sample = new double[content.length];
-			for (int i = 0; i < content.length; i++){
-				double d =Double.parseDouble(content[i]); //No labels in the test data
-				d = d / (double) 255; //Normalization
-				sample[i] = d;
+	    if (CLASSIFY_NEW_DATA) {
+		    //Classify the test data
+		    System.out.println("Classify test data");
+		    iteration = 1;
+		    testLoader.readline(); //Jump headline
+		    totalSamples = testLoader.getNumLines() - 1;
+		    String classes ="";
+		    while ((line = testLoader.readline()) != null){
+		    	if (iteration % PRINT_EVERY == 0){
+		    		System.out.println("Analysing test - Iteration: " + iteration + " / " + totalSamples);
+		    	}
+		    	
+		    	//Get sample
+		    	String[] content = line.split(",");
+		    	double[] sample = new double[content.length];
+				for (int i = 0; i < content.length; i++){
+					double d =Double.parseDouble(content[i]); //No labels in the test data
+					d = d / (double) 255; //Normalization
+					sample[i] = d;
+				}
+				
+				SimpleMatrix inputVector = new SimpleMatrix(1, content.length, true, sample);
+				SomNode bmu = som.getBMU(inputVector);
+				String bmuLabel = bmu.getLabel();
+				classes += iteration + "," + bmuLabel + "\n";
+				
+				
+				iteration++;
+		    }
+		    
+		    try {
+				writer.write(classes);
+				writer.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			
-			SimpleMatrix inputVector = new SimpleMatrix(1, content.length, true, sample);
-			SomNode bmu = som.getBMU(inputVector);
-			String bmuLabel = bmu.getLabel();
-			classes += iteration + "," + bmuLabel + "\n";
-			
-			
-			iteration++;
 	    }
-	    
-	    try {
-			writer.write(classes);
-			writer.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	private void visualizeSom(int iteration, int maxIterations){

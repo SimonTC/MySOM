@@ -11,11 +11,12 @@ public class PLSOM extends SOM {
 	private ArrayList<SimpleMatrix> inputSpaceMembers;
 	private int inputSpaceDimensions;
 	private double neighborHoodRange;
+	private double curFitness;
 
 	public PLSOM(int columns, int rows, int inputLength, Random rand) {
 		super(columns, rows, inputLength, rand);
 		setupDiameterCalculation(inputLength);
-		neighborHoodRange = (double) rows; //TODO: change to input parameter
+		neighborHoodRange = (double) rows / 2; //TODO: change to input parameter
 	}
 
 	public PLSOM(int columns, int rows, int inputLength, Random rand,
@@ -23,7 +24,7 @@ public class PLSOM extends SOM {
 		super(columns, rows, inputLength, rand, initialLearningrate,
 				initialNeighborhodRadius);
 		setupDiameterCalculation(inputLength);
-		neighborHoodRange = (double) rows; //TODO: change to input parameter
+		neighborHoodRange = (double) rows / 2; //TODO: change to input parameter
 	}
 	
 	private void setupDiameterCalculation(int inputLength){
@@ -101,12 +102,14 @@ public class PLSOM extends SOM {
 		double size = determineInputSpaceSize(inputVector);
 		
 		//Calculate how fit the SOM is (Big is bad)
-		double fitness = Math.min(error / size, 1);
+		curFitness = Math.min(error / size, 1);
 		
 		//Update weights
+		//TODO: make this more effiient by only looking at nodes within a certain range. Could be achieved by solving the neighborhood effect formula with respect to distance
 		for (SomNode n : somMap.getNodes()){
-			double neighborhoodEffect = calculateNeighborhoodEffect(bmu, n, fitness);
-			adjustNodeWeights(n, inputVector, fitness, neighborhoodEffect);			
+			double neighborhoodEffect = calculateNeighborhoodEffect(bmu, n, curFitness);
+			//System.out.println("" + neighborhoodEffect);
+			adjustNodeWeights(n, inputVector, curFitness, neighborhoodEffect);			
 		}
 		
 		
@@ -133,7 +136,7 @@ public class PLSOM extends SOM {
 		
 		//Multiply by som fitness and neighborhood effect
 		SimpleMatrix tmp = new SimpleMatrix(diff.numRows(), diff.numCols());
-		tmp.set(somFitness * somFitness);
+		tmp.set(somFitness * neighborhoodEffect);
 		diff = diff.elementMult(tmp);
 		
 		//Add the dist-values to the value vector
@@ -142,6 +145,9 @@ public class PLSOM extends SOM {
 		n.setVector(valueVector);
 	}
 	
+	public double getFitness(){
+		return curFitness;
+	}
 	
 
 }
