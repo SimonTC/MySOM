@@ -53,7 +53,12 @@ public abstract class SomBasics {
 	 */
 	public SimpleMatrix computeActivationMatrix(){
 		double maxError = errorMatrix.elementMaxAbs();
-		SimpleMatrix m = errorMatrix.divide(maxError);
+		SimpleMatrix m;
+		if (maxError == 0){
+			m = errorMatrix;
+		} else {
+			m = errorMatrix.divide(maxError);
+		}		 
 		SimpleMatrix activation = new SimpleMatrix(errorMatrix.numRows(), errorMatrix.numCols());
 		activation.set(1);
 		activation = activation.minus(m);	

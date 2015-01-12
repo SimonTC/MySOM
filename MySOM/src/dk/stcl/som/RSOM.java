@@ -120,7 +120,7 @@ public class RSOM extends SomBasics {
 	
 	/**
 	 * Resets the leaky difference vector. 
-	 * Used between sequences when trining
+	 * Used between sequences when training
 	 */
 	public void flush(){
 		setupLeakyDifferences();

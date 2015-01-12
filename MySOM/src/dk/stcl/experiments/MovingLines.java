@@ -2,12 +2,16 @@ package dk.stcl.experiments;
 
 import java.util.Random;
 
+import javax.swing.JFrame;
+
 import org.ejml.simple.SimpleMatrix;
 
+import dk.stcl.gui.MovingLinesGUI;
 import dk.stcl.gui.SomModelDrawer;
 import dk.stcl.som.PLSOM;
 import dk.stcl.som.RSOM;
 import dk.stcl.som.SOM;
+import dk.stcl.som.SomNode;
 
 	
 
@@ -15,8 +19,9 @@ public class MovingLines {
 	
 	private SimpleMatrix[][] sequences;
 	private SOM spatialPooler;
+	private SOM possibleInputs;
 	private RSOM temporalPooler;
-	private SomModelDrawer gui;
+	private MovingLinesGUI frame;
 	private final int GUI_SIZE = 500;
 	private final int MAX_ITERTIONS = 500;
 	private final boolean USE_PLSOM = true;
@@ -35,7 +40,7 @@ public class MovingLines {
 	}
 	
 	private void runExperiment(int maxIterations, boolean visualize, Random rand){
-		int FRAMES_PER_SECOND = 40;
+		int FRAMES_PER_SECOND = 30;
 	    int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 	    SimpleMatrix[] seq;
 	    
@@ -44,12 +49,22 @@ public class MovingLines {
 	    	seq = sequences[rand.nextInt(sequences.length)];
 	    	
 	    	for (SimpleMatrix m : seq){
+	    		//Spatial classification
 	    		spatialPooler.step(m.getMatrix().data);
+	    		SimpleMatrix spatialActivation = spatialPooler.computeActivationMatrix();
+	    		
+	    		//Transform spatial output matrix to vector
+	    		double[] spatialOutputVector = spatialActivation.getMatrix().data;
+	    		
+	    		//Orthogonalize output
+	    		double[] orthogonalized = orthogonalize(spatialOutputVector);
+	    		
+	    		//Temporal classification
+	    		temporalPooler.step(orthogonalized);	    		
 	    		
 	    		if (visualize){
 					//Visualize
-					visualizeSom(i, maxIterations);
-					
+	    			updateGraphics(m,i);					
 					try {
 						Thread.sleep(SKIP_TICKS);
 					} catch (InterruptedException e) {
@@ -59,14 +74,34 @@ public class MovingLines {
 				}
 	    		spatialPooler.sensitize(i, maxIterations);
 	    	}
+	    	temporalPooler.sensitize(i, maxIterations);
+	    	temporalPooler.flush();
 	    }
 	}
 	
-	private void visualizeSom(int iteration, int maxIterations){
-		gui.setTitle("Visualiztion - Iteration: " + iteration + " / " + maxIterations);
-		gui.updateData();
-		gui.revalidate();
-		gui.repaint();
+	private double[] orthogonalize(double[] vector){
+		int maxID = -1;
+		double maxValue = Double.NEGATIVE_INFINITY;
+		
+		for (int i = 0; i < vector.length; i++){
+			double d = vector[i];
+			if (d > maxValue){
+				maxValue = d;
+				maxID = i;
+			}
+		}
+		
+		double[] newVector = new double[vector.length];
+		newVector[maxID] = 1;
+		return newVector;
+	}
+	
+	private void updateGraphics(SimpleMatrix inputVector, int iteration){
+		frame.updateData(inputVector, spatialPooler, temporalPooler);
+		frame.setTitle("Visualiztion - Iteration: " + iteration);
+		frame.revalidate();
+		frame.repaint();
+
 	}
 	
 	private void setupExperiment(Random rand, boolean visualize){
@@ -79,23 +114,36 @@ public class MovingLines {
 	
 	private void setupVisualization(SOM som, int GUI_SIZE){
 		//Create GUI
-		//System.out.println("Creating gui");
-		gui = new SomModelDrawer(som, GUI_SIZE);
-		gui.setTitle("Visualization");
-		gui.pack();
-		gui.setVisible(true);		
+		frame = new MovingLinesGUI(som, possibleInputs);
+		frame.setTitle("Visualiztion");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		updateGraphics(sequences[2][0],0); //Give a blank
+		frame.pack();
+		frame.setVisible(true);	
 	}
 	
-	private void setupPoolers(Random rand){
+	private void setupPoolers(Random rand){		
+		//Spatia pooler
+		int spatialInputLength = 9;
+		int spatialMapSize = 5;
+		
 		if (USE_PLSOM){
-			spatialPooler = new PLSOM(3, 3, 9, rand);
+			spatialPooler = new PLSOM(spatialMapSize, spatialMapSize, spatialInputLength, rand);
 		} else {
-			spatialPooler = new SOM(3, 3, 9, rand);
+			spatialPooler = new SOM(spatialMapSize, spatialMapSize, spatialInputLength, rand);
 		}
+		
+		//Temporal pooler
+		int temporalInputLength = spatialMapSize * spatialMapSize;
+		int temporalMapSize = 2;
+		double decayFactor = 0.7;
+		temporalPooler = new RSOM(temporalMapSize, temporalMapSize, temporalInputLength, rand, decayFactor);
 	}
 	
 	private void buildSequences(){
 		sequences = new SimpleMatrix[3][3];
+		possibleInputs = new SOM(3, 3, 9, new Random());
+		SomNode[] nodes = possibleInputs.getNodes();
 		
 		SimpleMatrix m;
 		
@@ -107,6 +155,7 @@ public class MovingLines {
 		m = new SimpleMatrix(hor1);
 		m.reshape(1, 9);
 		sequences[0][0] = m;
+		nodes[0] = new SomNode(m);
 		
 		double[][] hor2 = {
 				{0,0,0},
@@ -115,6 +164,7 @@ public class MovingLines {
 		m = new SimpleMatrix(hor2);
 		m.reshape(1, 9);
 		sequences[0][1] = m;
+		nodes[1] = new SomNode(m);
 		
 		double[][] hor3 = {
 				{0,0,0},
@@ -123,6 +173,7 @@ public class MovingLines {
 		m = new SimpleMatrix(hor3);
 		m.reshape(1, 9);
 		sequences[0][2] = m;
+		nodes[2] = new SomNode(m);
 		
 		//Vertical right
 		double[][] ver1 = {
@@ -132,6 +183,7 @@ public class MovingLines {
 		m = new SimpleMatrix(ver1);
 		m.reshape(1, 9);
 		sequences[1][0] = m;
+		nodes[3] = new SomNode(m);
 		
 		double[][] ver2 = {
 				{0,1,0},
@@ -140,6 +192,7 @@ public class MovingLines {
 		m = new SimpleMatrix(ver2);
 		m.reshape(1, 9);
 		sequences[1][1] = m;
+		nodes[4] = new SomNode(m);
 		
 		double[][] ver3 = {
 				{0,0,1},
@@ -148,6 +201,7 @@ public class MovingLines {
 		m = new SimpleMatrix(ver3);
 		m.reshape(1, 9);
 		sequences[1][2] = m;
+		nodes[5] = new SomNode(m);
 		
 		//Blank
 		double[][] blank = {
@@ -159,6 +213,9 @@ public class MovingLines {
 		sequences[2][0] = m;
 		sequences[2][1] = m;
 		sequences[2][2] = m;
+		nodes[6] = new SomNode(m);
+		nodes[7] = new SomNode(m);
+		nodes[8] = new SomNode(m);
 	}
 
 }
