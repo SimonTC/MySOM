@@ -3,31 +3,40 @@ package dk.stcl.experiments;
 import java.util.ArrayList;
 import java.util.Random;
 
-import dk.stcl.som.RSOM;
+import dk.stcl.som.PLSOM;
+import dk.stcl.som.SOM;
 
-public class RSOMTest {
-	private Random rand = new Random(1234);
-	private RSOM rsom;
-	private final int NUM_ITERATIONS = 1000;
-	private final double DECAY = 1;
-	private final int SIZE = 3;
-	private final boolean USE_SIMPLE_SEQUENCES = false;
+public class SOMTEST {
 	
 	private ArrayList<double[][]> sequences;
 	
+	private final int SOM_SIZE = 3;
+	private final boolean USE_PLSOM = true;
+	private final double INITIAL_LEARNING = 0.1;
+	private Random rand = new Random(1234);
+	private final boolean USE_SIMPLE_SEQUENCES = false;
+	private final int NUM_ITERATIONS = 1000;
+	
+	private SOM som;
+	
+	
+	
+	public SOMTEST() {
+		// TODO Auto-generated constructor stub
+	}
 
 	public static void main(String[] args) {
-		RSOMTest runner = new RSOMTest();
+		SOMTEST runner = new SOMTEST();
 		runner.run();
 
 	}
-
+	
 	public void run(){
 		buildSequences(USE_SIMPLE_SEQUENCES);
-		setupRSOM();
+		setupSOM();
 		train();
 	}
-	
+
 	private void buildSequences(boolean simple){
 		if (simple) {
 			sequences = simpleSequences();
@@ -36,6 +45,35 @@ public class RSOMTest {
 		}
 		
 		
+	}
+	
+	private void setupSOM(){
+		int inputLength = sequences.get(0)[0].length;
+		int size = SOM_SIZE;
+		if (USE_PLSOM){
+			som = new PLSOM(size, size, inputLength, rand, INITIAL_LEARNING, size / 2);
+		} else {
+			som = new SOM(size, size, inputLength, rand, INITIAL_LEARNING, size / 2);
+		}
+	}
+	
+	public void train(){
+		for (int i = 1; i < NUM_ITERATIONS; i++){
+			System.out.println("-----------------------------");
+			System.out.println("Iteration: " + i);
+			for (double[][] seq : sequences){
+				String s = "";
+				for (double[] d : seq){
+					double[] inputVector = d;
+					som.step(inputVector);
+					s += som.getBMU().getId() + " ";
+				}
+				System.out.println(s);
+			}
+			
+			som.sensitize(i, NUM_ITERATIONS, true, false);
+			
+		}
 	}
 	
 	private ArrayList<double[][]> simpleSequences(){
@@ -76,30 +114,5 @@ public class RSOMTest {
 		complex.add(blank);
 		
 		return complex;
-	}
-	
-	private void setupRSOM(){
-		int inputSize = sequences.get(0)[0].length;
-		
-		rsom = new RSOM(SIZE, SIZE, inputSize, rand, 0.1, (double) SIZE / 2, DECAY);
-	}
-	
-	public void train(){
-		for (int i = 1; i < NUM_ITERATIONS; i++){
-			System.out.println("-----------------------------");
-			System.out.println("Iteration: " + i);
-			rsom.sensitize(i, NUM_ITERATIONS, true, false);
-			for (double[][] seq : sequences){
-				String s = "";
-				for (double[] d : seq){
-					double[] inputVector = d;
-					rsom.step(inputVector);
-					s += rsom.getBMU().getId() + " ";
-				}
-				System.out.println(s);
-				rsom.flush();
-			}
-			
-		}
 	}
 }

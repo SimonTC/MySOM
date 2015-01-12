@@ -32,7 +32,9 @@ public abstract class SomBasics {
 		errorMatrix = new SimpleMatrix(rows, columns);
 		learning = true;
 		this.initialLearningRate = initialLearningrate;
+		this.learningRate = initialLearningrate;
 		this.initialNeighborhoodRadius = initialNeighborhodRadius;
+		this.neighborhoodRadius = initialNeighborhodRadius;
 		
 	}
 	

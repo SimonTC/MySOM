@@ -103,7 +103,11 @@ public class PLSOM extends SOM {
 		double size = determineInputSpaceSize(inputVector);
 		
 		//Calculate how fit the SOM is (Big is bad)
-		curFitness = Math.min(error / size, 1);
+		if (error == 0){
+			curFitness = 0;
+		} else {
+			curFitness = Math.min(error / size, 1);
+		}
 		
 		//Update weights
 		//TODO: make this more effiient by only looking at nodes within a certain range. Could be achieved by solving the neighborhood effect formula with respect to distance
