@@ -9,7 +9,7 @@ public class RSOMTest {
 	private Random rand = new Random(1234);
 	private RSOM rsom;
 	private final int NUM_ITERATIONS = 1000;
-	private final double DECAY = 1;
+	private final double DECAY = 0.1;
 	private final int SIZE = 3;
 	private final boolean USE_SIMPLE_SEQUENCES = false;
 	

@@ -23,7 +23,7 @@ public class MovingLines {
 	private RSOM temporalPooler;
 	private MovingLinesGUI frame;
 	private final int GUI_SIZE = 500;
-	private final int MAX_ITERTIONS = 500;
+	private final int MAX_ITERTIONS = 1000;
 	private final boolean USE_PLSOM = true;
 
 
@@ -48,7 +48,7 @@ public class MovingLines {
 	    	//Choose sequence
 	    	seq = sequences[rand.nextInt(sequences.length)];
 	    	
-	    	temporalPooler.sensitize(i, maxIterations);
+	    	//temporalPooler.sensitize(i, maxIterations);
 	    	
 	    	for (SimpleMatrix m : seq){
 	    		//Spatial classification
