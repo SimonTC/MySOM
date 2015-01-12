@@ -93,7 +93,9 @@ public class PLSOM extends SOM {
 	
 	private int calculateMaxDistance(double somFitness, double minLEarningEffect){
 		double neighborhoodSize = calculateNeighborhoodSize(somFitness);
-		double maxDistance = Math.ceil(Math.sqrt(-Math.log(minLEarningEffect) * Math.pow(neighborhoodSize, 2)));
+		double maxDistance = Math.sqrt(-Math.log(minLEarningEffect) * Math.pow(neighborhoodSize, 2));
+		
+		maxDistance = Math.ceil(Math.sqrt(maxDistance));
 		
 		return (int) maxDistance;
 	}
@@ -107,7 +109,6 @@ public class PLSOM extends SOM {
 	 * @param neighborhoodRadius - Not used
 	 */
 	protected void updateWeights(SomNode bmu,SimpleMatrix inputVector, double learningRate, double neighborhoodRadius){
-		
 		//Calculate error between BMU and input
 		double error = bmu.squaredDifference(inputVector);
 		
@@ -143,7 +144,6 @@ public class PLSOM extends SOM {
 					for (int row = rowStart; row < rowEnd; row++){
 						SomNode n = somMap.get(col, row);
 						double neighborhoodEffect = calculateNeighborhoodEffect(bmu, n, curFitness);
-						System.out.println("Neighborhood effect: " + neighborhoodEffect); //TODO: Remove
 						adjustNodeWeights(n, inputVector, curFitness, neighborhoodEffect);	
 					}
 				}
