@@ -88,7 +88,7 @@ public class RSOMTest {
 		for (int i = 1; i < NUM_ITERATIONS; i++){
 			System.out.println("-----------------------------");
 			System.out.println("Iteration: " + i);
-			rsom.sensitize(i, NUM_ITERATIONS, true, false);
+			//rsom.sensitize(i, NUM_ITERATIONS, true, false);
 			for (double[][] seq : sequences){
 				String s = "";
 				for (double[] d : seq){

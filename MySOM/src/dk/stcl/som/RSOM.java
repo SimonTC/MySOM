@@ -104,6 +104,7 @@ public class RSOM extends PLSOM {
 		return bmu;
 	}
 
+	/*
 	@Override
 	public void weightAdjustment(SomNode n, SomNode bmu,
 			SimpleMatrix inputVector, double neighborhoodRadius,
@@ -116,6 +117,26 @@ public class RSOM extends PLSOM {
 		weightVector = weightVector.plus(delta);
 		n.setVector(weightVector);
 
+	}
+	*/
+	
+	@Override
+	/**
+	 * Adjust the weights of the nodes based on the difference between the valueVectors of this node and input vector
+	 * @param n node which weight vector should be adjusted
+	 * @param inputVector
+	 * @param learningRate
+	 * @param learningEffect How effective the learning is. This is dependant on the distance to the bmu
+	 */
+	protected void adjustNodeWeights(SomNode n, SimpleMatrix inputVector, double somFitness, double neighborhoodEffect){
+		SimpleMatrix weightVector = n.getVector();
+		
+		SomNode leakyDifferenceNode = leakyDifferencesMap.get(n.getCol(), n.getRow());
+		
+		SimpleMatrix delta = leakyDifferenceNode.getVector().scale(somFitness * neighborhoodEffect);
+		
+		weightVector = weightVector.plus(delta);
+		n.setVector(weightVector);
 	}
 	
 	/**

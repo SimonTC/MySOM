@@ -133,7 +133,7 @@ public class PLSOM extends SOM {
 	 * @param learningRate
 	 * @param learningEffect How effective the learning is. This is dependant on the distance to the bmu
 	 */
-	private void adjustNodeWeights(SomNode n, SimpleMatrix inputVector, double somFitness, double neighborhoodEffect){
+	protected void adjustNodeWeights(SomNode n, SimpleMatrix inputVector, double somFitness, double neighborhoodEffect){
 		SimpleMatrix valueVector = n.getVector();
 		
 		//Calculate difference between input and current values
