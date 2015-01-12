@@ -19,7 +19,7 @@ public class ControllerMNIST {
 	private SimpleMatrix data;
 	private SOM som;
 	private SomModelDrawer gui;
-	private Random rand;
+	private Random rand = new Random(1234);
 	private DataLoader trainLoader, validationLoader, testLoader;
 	private FileWriter writer;
 	
@@ -30,29 +30,31 @@ public class ControllerMNIST {
 	private final int SOM_SIZE = 10;
 	private final double INITIAL_LEARNING = 0.1;
 	private final int MAX_ITERATIONS = 1000;
-	private final boolean CLASSIFY_NEW_DATA = false;
-	private final boolean USE_PLSOM = true;
-	private final String DELIMITER = ";";
+	private final boolean CLASSIFY_NEW_DATA = true;
+	private final boolean USE_PLSOM = false;
+	private final String DELIMITER = ",";
 	private final int PRINT_EVERY = 100;
+	
+	private static final boolean VISUALIZE = true;
 	/**
 	 * @throws IOException ******************************************/
 	
 	public static void main(String[] args) throws IOException{
-		String dataPathTrain ="C:/Users/Simon/Documents/Experiments/SOM/MNIST/small/train_small.csv";
-		String dataPathValidation ="C:/Users/Simon/Documents/Experiments/SOM/MNIST/small/validation_small.csv";
+		String dataPathTrain ="C:/Users/Simon/Documents/Experiments/SOM/MNIST/train_normal.csv";
+		String dataPathValidation ="C:/Users/Simon/Documents/Experiments/SOM/MNIST/validation_normal.csv";
 		String dataPathTest ="C:/Users/Simon/Documents/Experiments/SOM/MNIST/test.csv";
 		String filepathTestLabels = "C:/Users/Simon/Documents/Experiments/SOM/MNIST/test_output.csv";
 		
 		ControllerMNIST c = new ControllerMNIST();
-		c.setupExperiment(dataPathTrain, dataPathValidation, dataPathTest, filepathTestLabels);
-		c.run(false);
+		c.setupExperiment(dataPathTrain, dataPathValidation, dataPathTest, filepathTestLabels, VISUALIZE);
+		c.run(VISUALIZE);
 	}
 	
 	public ControllerMNIST() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void setupExperiment(String trainFilePath, String validationFilePath, String testFilePath, String filpathTestLabels) throws IOException{
+	public void setupExperiment(String trainFilePath, String validationFilePath, String testFilePath, String filpathTestLabels, boolean visualize) throws IOException{
 		
 		System.out.println("Importing data");
 		
@@ -78,7 +80,6 @@ public class ControllerMNIST {
 		
 		//Create SOM
 		System.out.println("Creating som");
-		rand = new Random();
 		//int inputLength = data.numCols();
 		int inputLength = trainLoader.getNumColumns() - 1;
 		int size = SOM_SIZE;
@@ -89,14 +90,14 @@ public class ControllerMNIST {
 		}
 		
 				
-		/*
-		//Create GUI
-		System.out.println("Creating gui");
-		gui = new SomModelDrawer(som, GUI_SIZE);
-		gui.setTitle("Visualization");
-		gui.pack();
-		gui.setVisible(true);
-		*/
+		if (visualize){
+			//Create GUI
+			System.out.println("Creating gui");
+			gui = new SomModelDrawer(som, GUI_SIZE);
+			gui.setTitle("Visualization");
+			gui.pack();
+			gui.setVisible(true);
+		}
 		
 	}
 	

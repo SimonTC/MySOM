@@ -12,11 +12,12 @@ public class PLSOM extends SOM {
 	private int inputSpaceDimensions;
 	private double neighborHoodRange;
 	private double curFitness;
+	private final double rangeFactor = 1;
 
 	public PLSOM(int columns, int rows, int inputLength, Random rand) {
 		super(columns, rows, inputLength, rand);
 		setupDiameterCalculation(inputLength);
-		neighborHoodRange = (double) rows / 2; //TODO: change to input parameter
+		neighborHoodRange = (double) rows * rangeFactor; //TODO: change to input parameter
 	}
 
 	public PLSOM(int columns, int rows, int inputLength, Random rand,
@@ -24,7 +25,7 @@ public class PLSOM extends SOM {
 		super(columns, rows, inputLength, rand, initialLearningrate,
 				initialNeighborhodRadius);
 		setupDiameterCalculation(inputLength);
-		neighborHoodRange = (double) rows / 2; //TODO: change to input parameter
+		neighborHoodRange = (double) rows * rangeFactor; //TODO: change to input parameter
 	}
 	
 	private void setupDiameterCalculation(int inputLength){

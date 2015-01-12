@@ -30,7 +30,8 @@ public class SomModelDrawer extends JFrame {
 		//Create panels
 		panels = new ArrayList<SomModelDrawer.MapPanel>();
 		for (SomNode n : som.getNodes()){
-			MapPanel p = new MapPanel(n, (int) Math.sqrt(n.getVector().numCols()));
+			int modelSize = (int) Math.sqrt(n.getVector().numCols());
+			MapPanel p = new MapPanel(n, modelSize);
 			panels.add(p);
 			add(p);
 		}
