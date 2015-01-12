@@ -4,7 +4,7 @@ import java.util.Random;
 
 import org.ejml.simple.SimpleMatrix;
 
-public class RSOM extends SomBasics {
+public class RSOM extends PLSOM {
 	
 	private SomMap leakyDifferencesMap;
 	private double decayFactor;

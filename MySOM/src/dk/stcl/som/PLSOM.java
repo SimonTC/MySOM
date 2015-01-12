@@ -96,7 +96,7 @@ public class PLSOM extends SOM {
 	 */
 	protected void updateWeights(SomNode bmu,SimpleMatrix inputVector, double learningRate, double neighborhoodRadius){
 		
-		//Calculate error between BU and input
+		//Calculate error between BMU and input
 		double error = bmu.squaredDifference(inputVector);
 		
 		//Calculate current size of input space

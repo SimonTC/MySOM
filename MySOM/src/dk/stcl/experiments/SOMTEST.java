@@ -11,7 +11,7 @@ public class SOMTEST {
 	private ArrayList<double[][]> sequences;
 	
 	private final int SOM_SIZE = 3;
-	private final boolean USE_PLSOM = true;
+	private final boolean USE_PLSOM = false;
 	private final double INITIAL_LEARNING = 0.1;
 	private Random rand = new Random(1234);
 	private final boolean USE_SIMPLE_SEQUENCES = false;
