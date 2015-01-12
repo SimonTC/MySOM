@@ -48,8 +48,11 @@ public class MovingLines {
 	    	//Choose sequence
 	    	seq = sequences[rand.nextInt(sequences.length)];
 	    	
+	    	temporalPooler.sensitize(i, maxIterations);
+	    	
 	    	for (SimpleMatrix m : seq){
 	    		//Spatial classification
+	    		spatialPooler.sensitize(i, maxIterations);
 	    		spatialPooler.step(m.getMatrix().data);
 	    		SimpleMatrix spatialActivation = spatialPooler.computeActivationMatrix();
 	    		
@@ -72,9 +75,7 @@ public class MovingLines {
 						e.printStackTrace();
 					}
 				}
-	    		spatialPooler.sensitize(i, maxIterations);
 	    	}
-	    	temporalPooler.sensitize(i, maxIterations);
 	    	temporalPooler.flush();
 	    }
 	}
