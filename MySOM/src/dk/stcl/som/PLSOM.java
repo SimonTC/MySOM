@@ -79,11 +79,23 @@ public class PLSOM extends SOM {
 	}
 	
 	private double calculateNeighborhoodEffect(SomNode bmu, SomNode node, double somFitness){
-		double neighborHoodRadius = neighborHoodRange * (Math.log(1 + somFitness * (Math.E - 1)));
+		double neighborhoodSize = calculateNeighborhoodSize(somFitness);
 		double distance = bmu.distanceTo(node);
-		double neighborhoodEffect = Math.exp(-Math.pow(distance, 2) / Math.pow(neighborHoodRadius, 2));
+		double neighborhoodEffect = Math.exp(-Math.pow(distance, 2) / Math.pow(neighborhoodSize, 2));
 		return neighborhoodEffect;
 		
+	}
+	
+	private double calculateNeighborhoodSize(double somFitness){
+		double neighborhoodSize = neighborHoodRange * (Math.log(1 + somFitness * (Math.E - 1)));
+		return neighborhoodSize;
+	}
+	
+	private int calculateMaxDistance(double somFitness, double minLEarningEffect){
+		double neighborhoodSize = calculateNeighborhoodSize(somFitness);
+		double maxDistance = Math.ceil(Math.sqrt(-Math.log(minLEarningEffect) * Math.pow(neighborhoodSize, 2)));
+		
+		return (int) maxDistance;
 	}
 	
 	@Override
@@ -109,14 +121,43 @@ public class PLSOM extends SOM {
 			curFitness = Math.min(error / size, 1);
 		}
 		
+		//Calculate max distance to bmu 
+		int maxDistance = calculateMaxDistance(curFitness, 0.001); //TODO: Change the 0.001 to a parameter
+		
+		//Calculate start and end coordinates for the weight updates
+				int bmuCol = bmu.getCol();
+				int bmuRow = bmu.getRow();
+				int colStart = (int) (bmuCol - maxDistance);
+				int rowStart = (int) (bmuRow - maxDistance );
+				int colEnd = (int) (bmuCol + maxDistance);
+				int rowEnd = (int) (bmuRow + maxDistance );
+				
+				//Make sure we don't get out of bounds errors
+				if (colStart < 0) colStart = 0;
+				if (rowStart < 0) rowStart = 0;
+				if (colEnd > somMap.getWidth()) colEnd = somMap.getWidth();
+				if (rowEnd > somMap.getHeight()) rowEnd = somMap.getHeight();
+				
+				//Adjust weights
+				for (int col = colStart; col < colEnd; col++){
+					for (int row = rowStart; row < rowEnd; row++){
+						SomNode n = somMap.get(col, row);
+						double neighborhoodEffect = calculateNeighborhoodEffect(bmu, n, curFitness);
+						System.out.println("Neighborhood effect: " + neighborhoodEffect); //TODO: Remove
+						adjustNodeWeights(n, inputVector, curFitness, neighborhoodEffect);	
+					}
+				}
+		
+				/*
 		//Update weights
-		//TODO: make this more effiient by only looking at nodes within a certain range. Could be achieved by solving the neighborhood effect formula with respect to distance
+		//TODO: make this more efficient by only looking at nodes within a certain range. Could be achieved by solving the neighborhood effect formula with respect to distance
 		for (SomNode n : somMap.getNodes()){
 			double neighborhoodEffect = calculateNeighborhoodEffect(bmu, n, curFitness);
+			System.out.println("Neighborhood effect: " + neighborhoodEffect); //TODO: Remove
 			//System.out.println("" + neighborhoodEffect);
 			adjustNodeWeights(n, inputVector, curFitness, neighborhoodEffect);			
 		}
-		
+		*/
 		
 	}
 	

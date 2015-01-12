@@ -147,6 +147,9 @@ public class RSOM extends PLSOM {
 		setupLeakyDifferences();
 	}
 	
+	public SomMap getLeakyDifferencesMap(){
+		return leakyDifferencesMap;
+	}
 	
 
 }
