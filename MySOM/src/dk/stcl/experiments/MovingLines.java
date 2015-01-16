@@ -8,10 +8,10 @@ import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.gui.MovingLinesGUI;
 import dk.stcl.gui.SomModelDrawer;
-import dk.stcl.som.PLSOM;
 import dk.stcl.som.RSOM;
-import dk.stcl.som.SOM;
-import dk.stcl.som.SomNode;
+import dk.stcl.som.containers.SomNode;
+import dk.stcl.som.online.PLSOM;
+import dk.stcl.som.standard.SOM;
 
 	
 

@@ -4,6 +4,9 @@ import java.util.Random;
 
 import org.ejml.simple.SimpleMatrix;
 
+import dk.stcl.som.containers.SomMap;
+import dk.stcl.som.containers.SomNode;
+
 public abstract class SomBasics {
 
 	protected SomMap somMap;
@@ -116,7 +119,7 @@ public abstract class SomBasics {
 	 * @param bmu
 	 * @return the learning effect. 0 if node n is outside of the neighborhood radius
 	 */
-	protected double learningEffect(SomNode n, SomNode bmu){
+	protected double neighborhoodEffect(SomNode n, SomNode bmu){
 		double dist = n.distanceTo(bmu);
 		double squaredRadius = neighborhoodRadius * neighborhoodRadius;
 		double learningEffect;

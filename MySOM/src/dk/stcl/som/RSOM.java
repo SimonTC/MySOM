@@ -4,6 +4,10 @@ import java.util.Random;
 
 import org.ejml.simple.SimpleMatrix;
 
+import dk.stcl.som.containers.SomMap;
+import dk.stcl.som.containers.SomNode;
+import dk.stcl.som.online.PLSOM;
+
 public class RSOM extends PLSOM {
 	
 	private SomMap leakyDifferencesMap;

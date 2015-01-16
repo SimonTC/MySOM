@@ -1,10 +1,13 @@
-package dk.stcl.som;
+package dk.stcl.som.standard;
 
 import java.util.Random;
 import java.util.Vector;
 
 import org.ejml.data.MatrixIterator;
 import org.ejml.simple.SimpleMatrix;
+
+import dk.stcl.som.SomBasics;
+import dk.stcl.som.containers.SomNode;
 
 public class SOM extends SomBasics {
 	
@@ -82,7 +85,7 @@ public class SOM extends SomBasics {
 	 * Updates the weights of a single node
 	 */
 	public void weightAdjustment(SomNode n, SomNode bmu, SimpleMatrix inputVector, double neighborhoodRadius, double learningRate ){
-		double learningEffect = learningEffect(n,bmu);
+		double learningEffect = neighborhoodEffect(n,bmu);
 		adjustNodeWeights(n, inputVector, learningRate, learningEffect);					
 		
 	}

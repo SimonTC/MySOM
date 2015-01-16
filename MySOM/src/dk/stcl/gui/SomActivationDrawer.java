@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 
 import org.ejml.simple.SimpleMatrix;
 
-import dk.stcl.som.SOM;
+import dk.stcl.som.standard.SOM;
 
 /**
  * Visualizes the activation of a SOM map.

@@ -3,8 +3,8 @@ package dk.stcl.experiments;
 import java.util.ArrayList;
 import java.util.Random;
 
-import dk.stcl.som.PLSOM;
-import dk.stcl.som.SOM;
+import dk.stcl.som.online.PLSOM;
+import dk.stcl.som.standard.SOM;
 
 public class SOMTEST {
 	

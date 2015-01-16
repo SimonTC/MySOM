@@ -1,9 +1,12 @@
-package dk.stcl.som;
+package dk.stcl.som.online;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import org.ejml.simple.SimpleMatrix;
+
+import dk.stcl.som.containers.SomNode;
+import dk.stcl.som.standard.SOM;
 
 public class PLSOM extends SOM {
 	
@@ -111,6 +114,7 @@ public class PLSOM extends SOM {
 	protected void updateWeights(SomNode bmu,SimpleMatrix inputVector, double learningRate, double neighborhoodRadius){
 		//Calculate error between BMU and input
 		double error = bmu.squaredDifference(inputVector);
+		double avgError = error / inputVector.getMatrix().data.length; //TODO: Remove avgError if it doesnt help
 		
 		//Calculate current size of input space
 		double size = determineInputSpaceSize(inputVector);
@@ -119,7 +123,7 @@ public class PLSOM extends SOM {
 		if (error == 0){
 			curFitness = 0;
 		} else {
-			curFitness = Math.min(error / size, 1);
+			curFitness = Math.min(avgError / size, 1);
 		}
 		
 		//Calculate max distance to bmu 
