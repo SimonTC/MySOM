@@ -95,7 +95,7 @@ public class PLSOM extends SOM {
 		double neighborhoodSize = calculateNeighborhoodSize(somFitness);
 		double maxDistance = Math.sqrt(-Math.log(minLEarningEffect) * Math.pow(neighborhoodSize, 2));
 		
-		maxDistance = Math.ceil(Math.sqrt(maxDistance));
+		maxDistance = Math.floor(Math.sqrt(maxDistance)); //TODO: Change to ceiling
 		
 		return (int) maxDistance;
 	}
@@ -123,7 +123,7 @@ public class PLSOM extends SOM {
 		}
 		
 		//Calculate max distance to bmu 
-		int maxDistance = calculateMaxDistance(curFitness, 0.001); //TODO: Change the 0.001 to a parameter
+		int maxDistance = calculateMaxDistance(curFitness, 0.01); //TODO: Change the 0.001 to a parameter
 		
 		//Calculate start and end coordinates for the weight updates
 				int bmuCol = bmu.getCol();
@@ -148,12 +148,13 @@ public class PLSOM extends SOM {
 					}
 				}
 		
-				/*
+		
+		/*
 		//Update weights
 		//TODO: make this more efficient by only looking at nodes within a certain range. Could be achieved by solving the neighborhood effect formula with respect to distance
 		for (SomNode n : somMap.getNodes()){
 			double neighborhoodEffect = calculateNeighborhoodEffect(bmu, n, curFitness);
-			System.out.println("Neighborhood effect: " + neighborhoodEffect); //TODO: Remove
+			//System.out.println("Neighborhood effect: " + neighborhoodEffect); //TODO: Remove
 			//System.out.println("" + neighborhoodEffect);
 			adjustNodeWeights(n, inputVector, curFitness, neighborhoodEffect);			
 		}

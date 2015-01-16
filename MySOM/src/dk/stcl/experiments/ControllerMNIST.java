@@ -30,18 +30,18 @@ public class ControllerMNIST {
 	private final int SOM_SIZE = 10;
 	private final double INITIAL_LEARNING = 0.1;
 	private final int MAX_ITERATIONS = 1000;
-	private final boolean CLASSIFY_NEW_DATA = true;
-	private final boolean USE_PLSOM = false;
-	private final String DELIMITER = ",";
+	private final boolean CLASSIFY_NEW_DATA = false;
+	private final boolean USE_PLSOM = true;
+	private final String DELIMITER = ";";
 	private final int PRINT_EVERY = 100;
 	
-	private static final boolean VISUALIZE = true;
+	private static final boolean VISUALIZE = false;
 	/**
 	 * @throws IOException ******************************************/
 	
 	public static void main(String[] args) throws IOException{
-		String dataPathTrain ="C:/Users/Simon/Documents/Experiments/SOM/MNIST/train_normal.csv";
-		String dataPathValidation ="C:/Users/Simon/Documents/Experiments/SOM/MNIST/validation_normal.csv";
+		String dataPathTrain ="C:/Users/Simon/Documents/Experiments/SOM/MNIST/train_small.csv";
+		String dataPathValidation ="C:/Users/Simon/Documents/Experiments/SOM/MNIST/validation_small.csv";
 		String dataPathTest ="C:/Users/Simon/Documents/Experiments/SOM/MNIST/test.csv";
 		String filepathTestLabels = "C:/Users/Simon/Documents/Experiments/SOM/MNIST/test_output.csv";
 		
@@ -106,6 +106,7 @@ public class ControllerMNIST {
 	 * @param withLabels if true first value is removed from the sample
 	 */
 	public void run(boolean visualizeClustering){
+		long startTime = System.nanoTime();
 		System.out.println("Starting run");
 		int maxIterations = trainLoader.getNumLines(); // MAX_ITERATIONS;//data.size() * 3; //TODO: Should probably be something else
 		//int dataSize = data.numRows();
@@ -152,6 +153,12 @@ public class ControllerMNIST {
 				
 			iteration++;
 	    }
+	    
+	    long endTime = System.nanoTime();
+	    
+	    long totalTIme = (long) endTime - startTime;
+	    
+	    System.out.println("Time used: " + (totalTIme));
 		
 	    /*
 	    for (int iteration = 1; iteration <= maxIterations; iteration++){
