@@ -11,8 +11,8 @@ import dk.stcl.gui.SomActivationDrawer;
 import dk.stcl.gui.SomModelDrawer;
 import dk.stcl.som.SomBasics;
 import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.offline.SomOffline;
-import dk.stcl.som.online.PLSOM;
+import dk.stcl.som.offline.som.SomOffline;
+import dk.stcl.som.online.som.PLSOM;
 import dk.stcl.utils.DataLoader;
 
 public class ControllerMNIST {

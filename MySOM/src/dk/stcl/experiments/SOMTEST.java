@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import dk.stcl.som.SomBasics;
-import dk.stcl.som.offline.SomOffline;
-import dk.stcl.som.online.PLSOM;
+import dk.stcl.som.offline.som.SomOffline;
+import dk.stcl.som.online.som.PLSOM;
 
 public class SOMTEST {
 	

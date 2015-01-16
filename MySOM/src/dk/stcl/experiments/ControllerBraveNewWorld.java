@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.Random;
 
 import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.online.RSOM;
+import dk.stcl.som.online.rsom.RSOM;
 
 public class ControllerBraveNewWorld {
 	private ArrayList<double[][]> sequences;

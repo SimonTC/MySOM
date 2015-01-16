@@ -1,4 +1,4 @@
-package dk.stcl.som.online;
+package dk.stcl.som.online.som;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -6,6 +6,7 @@ import java.util.Random;
 import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.som.containers.SomNode;
+import dk.stcl.som.online.SomOnline;
 
 public class PLSOM extends SomOnline {
 	

@@ -1,4 +1,4 @@
-package dk.stcl.som.offline;
+package dk.stcl.som.offline.som;
 
 import java.util.Random;
 import java.util.Vector;

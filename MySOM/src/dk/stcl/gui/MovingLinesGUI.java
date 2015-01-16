@@ -11,8 +11,8 @@ import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.som.SomBasics;
 import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.offline.SomOffline;
-import dk.stcl.som.online.RSOM;
+import dk.stcl.som.offline.som.SomOffline;
+import dk.stcl.som.online.rsom.RSOM;
 
 
 

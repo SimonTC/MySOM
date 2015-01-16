@@ -3,7 +3,7 @@ package dk.stcl.experiments;
 import java.util.ArrayList;
 import java.util.Random;
 
-import dk.stcl.som.online.RSOM;
+import dk.stcl.som.online.rsom.RSOM;
 
 public class RSOMTest {
 	private Random rand = new Random(1234);

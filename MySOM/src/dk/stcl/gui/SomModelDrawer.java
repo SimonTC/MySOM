@@ -15,7 +15,7 @@ import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.som.SomBasics;
 import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.offline.SomOffline;
+import dk.stcl.som.offline.som.SomOffline;
 
 public class SomModelDrawer extends JFrame {
 
