@@ -53,6 +53,8 @@ public class SOM extends SomBasics {
 		
 		return bmu;
 	}
+	
+	
 		
 	/**
 	 * Returns the node which vector is least different from the vector of the input node. This method also updates the internal error matrix
