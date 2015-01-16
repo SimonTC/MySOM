@@ -118,7 +118,7 @@ public class PLSOM extends SomOnline {
 		tmp.set(somFitness * neighborhoodEffect);
 		diff = diff.elementMult(tmp);
 		
-		//Add the dist-values to the value vector
+		//Add the diff-values to the value vector
 		valueVector = valueVector.plus(diff);
 		
 		n.setVector(valueVector);

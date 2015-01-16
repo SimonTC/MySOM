@@ -93,7 +93,7 @@ public class SomNode {
 	}
 	
 	/**
-	 * Calculates the squared difference between the values of the two nodes.
+	 * Calculates the squared difference between the values of the vecto and thatVector
 	 * @param n
 	 * @return
 	 */
