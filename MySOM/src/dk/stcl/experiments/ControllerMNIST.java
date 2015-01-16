@@ -9,15 +9,16 @@ import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.gui.SomActivationDrawer;
 import dk.stcl.gui.SomModelDrawer;
+import dk.stcl.som.SomBasics;
 import dk.stcl.som.containers.SomNode;
+import dk.stcl.som.offline.SomOffline;
 import dk.stcl.som.online.PLSOM;
-import dk.stcl.som.standard.SOM;
 import dk.stcl.utils.DataLoader;
 
 public class ControllerMNIST {
 
 	private SimpleMatrix data;
-	private SOM som;
+	private SomBasics som;
 	private SomModelDrawer gui;
 	private Random rand = new Random(1234);
 	private DataLoader trainLoader, validationLoader, testLoader;
@@ -84,9 +85,9 @@ public class ControllerMNIST {
 		int inputLength = trainLoader.getNumColumns() - 1;
 		int size = SOM_SIZE;
 		if (USE_PLSOM){
-			som = new PLSOM(size, size, inputLength, rand, INITIAL_LEARNING, size / 2);
+			som = new PLSOM(size, size, inputLength, rand);
 		} else {
-			som = new SOM(size, size, inputLength, rand, INITIAL_LEARNING, size / 2);
+			som = new SomOffline(size, size, inputLength, rand, INITIAL_LEARNING, size / 2);
 		}
 		
 				
@@ -135,6 +136,7 @@ public class ControllerMNIST {
 			
 			//Sensitize som
 			som.sensitize(iteration, maxIterations);
+			
 			
 			//Present sample to som
 			som.step(sample);
@@ -217,7 +219,7 @@ public class ControllerMNIST {
 			}
 			
 			SimpleMatrix inputVector = new SimpleMatrix(1, content.length - 1, true, sample);
-			SomNode bmu = som.getBMU(inputVector);
+			SomNode bmu = som.findBMU(inputVector);
 			int id = bmu.getId();
 			int label = (int) Integer.parseInt(content[0]);
 			//System.out.println("Label: " + label);
@@ -264,7 +266,7 @@ public class ControllerMNIST {
 			}
 			
 			SimpleMatrix inputVector = new SimpleMatrix(1, content.length - 1, true, sample);
-			SomNode bmu = som.getBMU(inputVector);
+			SomNode bmu = som.findBMU(inputVector);
 			int bmuLabel = Integer.parseInt(bmu.getLabel());
 			int label = (int) Integer.parseInt(content[0]);
 			
@@ -303,7 +305,7 @@ public class ControllerMNIST {
 				}
 				
 				SimpleMatrix inputVector = new SimpleMatrix(1, content.length, true, sample);
-				SomNode bmu = som.getBMU(inputVector);
+				SomNode bmu = som.findBMU(inputVector);
 				String bmuLabel = bmu.getLabel();
 				classes += iteration + "," + bmuLabel + "\n";
 				

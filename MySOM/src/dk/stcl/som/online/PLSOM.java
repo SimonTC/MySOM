@@ -6,27 +6,17 @@ import java.util.Random;
 import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.standard.SOM;
 
-public class PLSOM extends SOM {
+public class PLSOM extends SomOnline {
 	
 	private double inputSpaceSize;
 	private ArrayList<SimpleMatrix> inputSpaceMembers;
 	private int inputSpaceDimensions;
 	private double neighborHoodRange;
-	private double curFitness;
 	private final double rangeFactor = 1;
 
 	public PLSOM(int columns, int rows, int inputLength, Random rand) {
 		super(columns, rows, inputLength, rand);
-		setupDiameterCalculation(inputLength);
-		neighborHoodRange = (double) rows * rangeFactor; //TODO: change to input parameter
-	}
-
-	public PLSOM(int columns, int rows, int inputLength, Random rand,
-			double initialLearningrate, double initialNeighborhodRadius) {
-		super(columns, rows, inputLength, rand, initialLearningrate,
-				initialNeighborhodRadius);
 		setupDiameterCalculation(inputLength);
 		neighborHoodRange = (double) rows * rangeFactor; //TODO: change to input parameter
 	}
@@ -81,105 +71,42 @@ public class PLSOM extends SOM {
 		return d;
 	}
 	
-	private double calculateNeighborhoodEffect(SomNode bmu, SomNode node, double somFitness){
-		double neighborhoodSize = calculateNeighborhoodSize(somFitness);
-		double distance = bmu.distanceTo(node);
-		double neighborhoodEffect = Math.exp(-Math.pow(distance, 2) / Math.pow(neighborhoodSize, 2));
-		return neighborhoodEffect;
-		
-	}
-	
 	private double calculateNeighborhoodSize(double somFitness){
 		double neighborhoodSize = neighborHoodRange * (Math.log(1 + somFitness * (Math.E - 1)));
 		return neighborhoodSize;
 	}
-	
-	private int calculateMaxDistance(double somFitness, double minLEarningEffect){
+
+	@Override
+	protected double calculateMaxRadius(SomNode bmu, SimpleMatrix inputVector, double minimumLearningEffect) {
 		double neighborhoodSize = calculateNeighborhoodSize(somFitness);
-		double maxDistance = Math.sqrt(-Math.log(minLEarningEffect) * Math.pow(neighborhoodSize, 2));
+		double maxRadius = Math.sqrt(-Math.log(minimumLearningEffect) * Math.pow(neighborhoodSize, 2));
 		
-		maxDistance = Math.floor(Math.sqrt(maxDistance)); //TODO: Change to ceiling
+		maxRadius = Math.floor(Math.sqrt(maxRadius)); //TODO: Decide whether to use floor or ceiling
 		
-		return (int) maxDistance;
+		return (int) maxRadius;
+
 	}
-	
+
+	@Override
+	protected double calculateNeighborhoodEffect(SomNode bmu, SomNode n) {
+		double neighborhoodSize = calculateNeighborhoodSize(somFitness);
+		double distance = bmu.distanceTo(n);
+		double neighborhoodEffect = Math.exp(-Math.pow(distance, 2) / Math.pow(neighborhoodSize, 2));
+		return neighborhoodEffect;
+
+	}
+
 	@Override
 	/**
-	 * Adjusts the weights of the nodes in the map
-	 * @param bmu
-	 * @param inputVector
-	 * @param learningRate - Not used
-	 * @param neighborhoodRadius - Not used
+	 * Learning rate is not used in PLSOM
 	 */
-	protected void updateWeights(SomNode bmu,SimpleMatrix inputVector, double learningRate, double neighborhoodRadius){
-		//Calculate error between BMU and input
-		double error = bmu.squaredDifference(inputVector);
-		double avgError = error / inputVector.getMatrix().data.length; //TODO: Remove avgError if it doesnt help
-		
-		//Calculate current size of input space
-		double size = determineInputSpaceSize(inputVector);
-		
-		//Calculate how fit the SOM is (Big is bad)
-		if (error == 0){
-			curFitness = 0;
-		} else {
-			curFitness = Math.min(avgError / size, 1);
-		}
-		
-		//Calculate max distance to bmu 
-		int maxDistance = calculateMaxDistance(curFitness, 0.01); //TODO: Change the 0.001 to a parameter
-		
-		//Calculate start and end coordinates for the weight updates
-				int bmuCol = bmu.getCol();
-				int bmuRow = bmu.getRow();
-				int colStart = (int) (bmuCol - maxDistance);
-				int rowStart = (int) (bmuRow - maxDistance );
-				int colEnd = (int) (bmuCol + maxDistance);
-				int rowEnd = (int) (bmuRow + maxDistance );
-				
-				//Make sure we don't get out of bounds errors
-				if (colStart < 0) colStart = 0;
-				if (rowStart < 0) rowStart = 0;
-				if (colEnd > somMap.getWidth()) colEnd = somMap.getWidth();
-				if (rowEnd > somMap.getHeight()) rowEnd = somMap.getHeight();
-				
-				//Adjust weights
-				for (int col = colStart; col < colEnd; col++){
-					for (int row = rowStart; row < rowEnd; row++){
-						SomNode n = somMap.get(col, row);
-						double neighborhoodEffect = calculateNeighborhoodEffect(bmu, n, curFitness);
-						adjustNodeWeights(n, inputVector, curFitness, neighborhoodEffect);	
-					}
-				}
-		
-		
-		/*
-		//Update weights
-		//TODO: make this more efficient by only looking at nodes within a certain range. Could be achieved by solving the neighborhood effect formula with respect to distance
-		for (SomNode n : somMap.getNodes()){
-			double neighborhoodEffect = calculateNeighborhoodEffect(bmu, n, curFitness);
-			//System.out.println("Neighborhood effect: " + neighborhoodEffect); //TODO: Remove
-			//System.out.println("" + neighborhoodEffect);
-			adjustNodeWeights(n, inputVector, curFitness, neighborhoodEffect);			
-		}
-		*/
-		
+	protected double calculateLearningRate(SomNode bmu, SimpleMatrix inputVector) {
+		return 0;
 	}
-	
+
 	@Override
-	public void weightAdjustment(SomNode n, SomNode bmu, SimpleMatrix inputVector, double neighborhoodRadius, double learningRate ){
-		assert false : "This method should never be called";
-	}
-	
-	
-	/**
-	 * Adjust the weights of the nodes based on the difference between the valueVectors of this node and input vector
-	 * @param n node which weight vector should be adjusted
-	 * @param inputVector
-	 * @param learningRate
-	 * @param learningEffect How effective the learning is. This is dependant on the distance to the bmu
-	 */
-	protected void adjustNodeWeights(SomNode n, SimpleMatrix inputVector, double somFitness, double neighborhoodEffect){
+	protected void adjustNodeWeights(SomNode n, double neighborhoodEffect,
+			double learningRate, double somFitness) {
 		SimpleMatrix valueVector = n.getVector();
 		
 		//Calculate difference between input and current values
@@ -194,11 +121,44 @@ public class PLSOM extends SOM {
 		valueVector = valueVector.plus(diff);
 		
 		n.setVector(valueVector);
+
 	}
-	
-	public double getFitness(){
+
+	@Override
+	public SomNode findBMU(SimpleMatrix inputVector){
+		SomNode BMU = null;
+		double minDiff = Double.POSITIVE_INFINITY;
+		for (SomNode n : somMap.getNodes()){
+			double diff = n.squaredDifference(inputVector);
+			if (diff < minDiff){
+				minDiff = diff;
+				BMU = n;
+			}			
+			errorMatrix.set(n.getRow(), n.getCol(), diff);
+		}
+		
+		assert (BMU != null): "No BMU was found";
+
+		return BMU;
+	}
+
+	@Override
+	protected double calculateSomFitness(SomNode bmu, SimpleMatrix inputVector) {
+		//Calculate error between BMU and input
+		double error = bmu.squaredDifference(inputVector);
+		double avgError = error / inputVector.getMatrix().data.length; //TODO: Remove avgError if it doesnt help
+		
+		//Calculate current size of input space
+		double size = determineInputSpaceSize(inputVector);
+		
+		//Calculate how fit the SOM is (Big is bad)
+		double curFitness;
+		if (error == 0){
+			curFitness = 0;
+		} else {
+			curFitness = Math.min(avgError / size, 1);
+		}
 		return curFitness;
 	}
-	
 
 }

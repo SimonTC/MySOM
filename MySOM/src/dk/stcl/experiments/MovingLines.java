@@ -8,18 +8,19 @@ import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.gui.MovingLinesGUI;
 import dk.stcl.gui.SomModelDrawer;
-import dk.stcl.som.RSOM;
+import dk.stcl.som.SomBasics;
 import dk.stcl.som.containers.SomNode;
+import dk.stcl.som.offline.SomOffline;
 import dk.stcl.som.online.PLSOM;
-import dk.stcl.som.standard.SOM;
+import dk.stcl.som.online.RSOM;
 
 	
 
 public class MovingLines {
 	
 	private SimpleMatrix[][] sequences;
-	private SOM spatialPooler;
-	private SOM possibleInputs;
+	private SomBasics spatialPooler;
+	private SomOffline possibleInputs;
 	private RSOM temporalPooler;
 	private MovingLinesGUI frame;
 	private final int GUI_SIZE = 500;
@@ -51,8 +52,7 @@ public class MovingLines {
 	    	//temporalPooler.sensitize(i, maxIterations);
 	    	
 	    	for (SimpleMatrix m : seq){
-	    		//Spatial classification
-	    		spatialPooler.sensitize(i, maxIterations);
+	    		//Spatial classification	    		
 	    		spatialPooler.step(m.getMatrix().data);
 	    		SimpleMatrix spatialActivation = spatialPooler.computeActivationMatrix();
 	    		
@@ -75,6 +75,9 @@ public class MovingLines {
 						e.printStackTrace();
 					}
 				}
+	    		
+	    		//Sensitize som
+	    		spatialPooler.sensitize(i, maxIterations);
 	    	}
 	    	temporalPooler.flush();
 	    }
@@ -113,7 +116,7 @@ public class MovingLines {
 		}
 	}
 	
-	private void setupVisualization(SOM som, int GUI_SIZE){
+	private void setupVisualization(SomBasics som, int GUI_SIZE){
 		//Create GUI
 		frame = new MovingLinesGUI(som, possibleInputs);
 		frame.setTitle("Visualiztion");
@@ -131,7 +134,7 @@ public class MovingLines {
 		if (USE_PLSOM){
 			spatialPooler = new PLSOM(spatialMapSize, spatialMapSize, spatialInputLength, rand);
 		} else {
-			spatialPooler = new SOM(spatialMapSize, spatialMapSize, spatialInputLength, rand);
+			spatialPooler = new SomOffline(spatialMapSize, spatialMapSize, spatialInputLength, rand);
 		}
 		
 		//Temporal pooler
@@ -143,7 +146,7 @@ public class MovingLines {
 	
 	private void buildSequences(){
 		sequences = new SimpleMatrix[3][3];
-		possibleInputs = new SOM(3, 3, 9, new Random());
+		possibleInputs = new SomOffline(3, 3, 9, new Random());
 		SomNode[] nodes = possibleInputs.getNodes();
 		
 		SimpleMatrix m;

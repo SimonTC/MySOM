@@ -9,9 +9,10 @@ import javax.swing.JFrame;
 
 import org.ejml.simple.SimpleMatrix;
 
-import dk.stcl.som.RSOM;
+import dk.stcl.som.SomBasics;
 import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.standard.SOM;
+import dk.stcl.som.offline.SomOffline;
+import dk.stcl.som.online.RSOM;
 
 
 
@@ -29,7 +30,7 @@ public class MovingLinesGUI extends JFrame {
 	private MatrixPanel rsomActivation3;
 	private MatrixPanel rsomActivation4;
 	
-	public MovingLinesGUI(SOM spatialSom, SOM possibleInputsSom) {
+	public MovingLinesGUI(SomBasics spatialSom, SomBasics possibleInputsSom) {
 		//Create overall grid layout
 		int rows = 3;
 		int cols = 4;
@@ -103,7 +104,7 @@ public class MovingLinesGUI extends JFrame {
 		add(rsomActivation4);		
 	}
 	
-	public void updateData(SimpleMatrix inputVector, SOM spatialPooler, RSOM temporalPooler){
+	public void updateData(SimpleMatrix inputVector, SomBasics spatialPooler, RSOM temporalPooler){
 		
 		//Update input area
 		SimpleMatrix inputMatrix = new SimpleMatrix(inputVector);
@@ -125,7 +126,7 @@ public class MovingLinesGUI extends JFrame {
 		highlights[maxID] = true;
 		
 		//Update Spatial models
-		SOM spatialSom = spatialPooler;
+		SomBasics spatialSom = spatialPooler;
 		spatialModels.updateData(spatialSom, highlights);
 		spatialModels.repaint();
 		spatialModels.revalidate();		

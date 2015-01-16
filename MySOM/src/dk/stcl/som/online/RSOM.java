@@ -1,4 +1,4 @@
-package dk.stcl.som;
+package dk.stcl.som.online;
 
 import java.util.Random;
 
@@ -6,21 +6,11 @@ import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.som.containers.SomMap;
 import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.online.PLSOM;
 
 public class RSOM extends PLSOM {
 	
 	private SomMap leakyDifferencesMap;
 	private double decayFactor;
-
-	public RSOM(int columns, int rows, int inputLength, Random rand,
-			double initialLearningrate, double initialNeighborhodRadius, double decayFactor) {
-		super(columns, rows, inputLength, rand, initialLearningrate,
-				initialNeighborhodRadius);
-		
-		setupLeakyDifferences();
-		this.decayFactor = decayFactor;		
-	}
 
 	public RSOM(int columns, int rows, int inputLength, Random rand, double decayFactor) {
 		super(columns, rows, inputLength, rand);
@@ -39,7 +29,7 @@ public class RSOM extends PLSOM {
 	 * @param inputVector Not used in the RSOM
 	 * @return
 	 */
-	public SomNode getBMU(SimpleMatrix inputVector) {		
+	public SomNode findBMU(SimpleMatrix inputVector) {		
 		double min = Double.POSITIVE_INFINITY;
 		SomNode[] leakyNodes = leakyDifferencesMap.getNodes();
 		SomNode BMU = null;
@@ -85,16 +75,15 @@ public class RSOM extends PLSOM {
 	}
 
 	@Override
-	public SomNode step(SimpleMatrix inputVector, double learningRate,
-			double neighborhoodRadius) {
+	public SomNode step(SimpleMatrix inputVector) {
 		
 		updateLeakyDifferences(inputVector);
 		
 		//Find BMU
-		bmu = getBMU(null);		
+		bmu = findBMU(null);		
 		
 		if (learning){
-			updateWeights(bmu, inputVector, learningRate, neighborhoodRadius);
+			updateWeights(bmu, inputVector);
 		}
 	
 		return bmu;
@@ -103,7 +92,7 @@ public class RSOM extends PLSOM {
 	public SomNode step(double[] inputVector){
 		SimpleMatrix vector = new SimpleMatrix(1, inputLength, true, inputVector);
 		
-		bmu = this.step(vector, this.learningRate, this.neighborhoodRadius);
+		bmu = this.step(vector);
 		
 		return bmu;
 	}
@@ -132,7 +121,8 @@ public class RSOM extends PLSOM {
 	 * @param learningRate
 	 * @param learningEffect How effective the learning is. This is dependant on the distance to the bmu
 	 */
-	protected void adjustNodeWeights(SomNode n, SimpleMatrix inputVector, double somFitness, double neighborhoodEffect){
+	protected void adjustNodeWeights(SomNode n, double neighborhoodEffect,
+			double learningRate, double somFitness){
 		SimpleMatrix weightVector = n.getVector();
 		
 		SomNode leakyDifferenceNode = leakyDifferencesMap.get(n.getCol(), n.getRow());

@@ -3,7 +3,7 @@ package dk.stcl.experiments;
 import java.util.ArrayList;
 import java.util.Random;
 
-import dk.stcl.som.RSOM;
+import dk.stcl.som.online.RSOM;
 
 public class RSOMTest {
 	private Random rand = new Random(1234);
@@ -81,7 +81,7 @@ public class RSOMTest {
 	private void setupRSOM(){
 		int inputSize = sequences.get(0)[0].length;
 		
-		rsom = new RSOM(SIZE, SIZE, inputSize, rand, 0.1, (double) SIZE / 2, DECAY);
+		rsom = new RSOM(SIZE, SIZE, inputSize, rand, DECAY);
 	}
 	
 	public void train(){

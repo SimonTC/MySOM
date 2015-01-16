@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 
-import dk.stcl.som.RSOM;
 import dk.stcl.som.containers.SomNode;
+import dk.stcl.som.online.RSOM;
 
 public class ControllerBraveNewWorld {
 	private ArrayList<double[][]> sequences;
@@ -41,7 +41,7 @@ public class ControllerBraveNewWorld {
 		text = new ArrayList<String>();
 		sequences = loadText(textFilePath);
 		System.out.println("Number of words: " + sequences.size());
-		rsom = new RSOM(SOM_SIZE, SOM_SIZE, 8, rand, INITIAL_LEARNING, SOM_SIZE / 2, DECAY);
+		rsom = new RSOM(SOM_SIZE, SOM_SIZE, 8, rand,  DECAY);
 		
 	}
 	
@@ -56,7 +56,7 @@ public class ControllerBraveNewWorld {
 				
 				rsom.flush();
 			}
-			rsom.sensitize(iteration, NUM_ITERATIONS,true, false);
+
 		}
 	}
 	

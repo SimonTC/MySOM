@@ -3,21 +3,22 @@ package dk.stcl.experiments;
 import java.util.ArrayList;
 import java.util.Random;
 
+import dk.stcl.som.SomBasics;
+import dk.stcl.som.offline.SomOffline;
 import dk.stcl.som.online.PLSOM;
-import dk.stcl.som.standard.SOM;
 
 public class SOMTEST {
 	
 	private ArrayList<double[][]> sequences;
 	
 	private final int SOM_SIZE = 3;
-	private final boolean USE_PLSOM = true;
+	private final boolean USE_PLSOM = false;
 	private final double INITIAL_LEARNING = 0.1;
 	private Random rand = new Random(1234);
 	private final boolean USE_SIMPLE_SEQUENCES = false;
 	private final int NUM_ITERATIONS = 1000;
 	
-	private SOM som;
+	private SomBasics som;
 	
 	
 	
@@ -51,9 +52,9 @@ public class SOMTEST {
 		int inputLength = sequences.get(0)[0].length;
 		int size = SOM_SIZE;
 		if (USE_PLSOM){
-			som = new PLSOM(size, size, inputLength, rand, INITIAL_LEARNING, size / 2);
+			som = new PLSOM(size, size, inputLength, rand);
 		} else {
-			som = new SOM(size, size, inputLength, rand, INITIAL_LEARNING, size / 2);
+			som = new SomOffline(size, size, inputLength, rand, INITIAL_LEARNING, size / 2);
 		}
 	}
 	
@@ -71,7 +72,9 @@ public class SOMTEST {
 				System.out.println(s);
 			}
 			
-			som.sensitize(i, NUM_ITERATIONS, true, false);
+    		
+    		//Sensitize som
+    		som.sensitize(i, NUM_ITERATIONS, true, false);
 			
 		}
 	}

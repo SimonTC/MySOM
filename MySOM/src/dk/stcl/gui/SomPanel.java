@@ -10,18 +10,19 @@ import javax.swing.JPanel;
 
 import org.ejml.simple.SimpleMatrix;
 
+import dk.stcl.som.SomBasics;
 import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.standard.SOM;
+import dk.stcl.som.offline.SomOffline;
 
 
 public class SomPanel extends JPanel {
 
-	private SOM som;
+	private SomBasics som;
 	private int somModelsRows;
 	private int somModelsColumns;
 	private MatrixPanel[] panels;
 	
-	public SomPanel(SOM som, int somModelsRows, int somModelsColumns) {
+	public SomPanel(SomBasics som, int somModelsRows, int somModelsColumns) {
 		this.som = som;
 		this.somModelsRows = somModelsRows;
 		this.somModelsColumns = somModelsColumns;
@@ -41,7 +42,7 @@ public class SomPanel extends JPanel {
 		
 	}
 	
-	public void updateData(SOM somModel){
+	public void updateData(SomBasics somModel){
 		this.som = somModel;		
 		for (int i = 0; i < som.getNodes().length; i++){
 			SomNode n = som.getNode(i);
@@ -54,7 +55,7 @@ public class SomPanel extends JPanel {
 		}
 	}
 	
-	public void updateData(SOM somModel, boolean[]highlightList){
+	public void updateData(SomBasics somModel, boolean[]highlightList){
 		this.som = somModel;		
 		for (int i = 0; i < som.getNodes().length; i++){
 			SomNode n = som.getNode(i);
