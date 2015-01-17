@@ -76,14 +76,6 @@ public class RSOM extends PLSOM {
 			}
 		}
 	}
-	
-	public SomNode step(double[] inputVector){
-		SimpleMatrix vector = new SimpleMatrix(1, inputLength, true, inputVector);
-		
-		bmu = this.step(vector);
-		
-		return bmu;
-	}
 
 	/*
 	@Override

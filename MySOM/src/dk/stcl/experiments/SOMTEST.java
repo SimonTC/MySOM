@@ -15,7 +15,7 @@ public class SOMTEST {
 	private final boolean USE_PLSOM = false;
 	private final double INITIAL_LEARNING = 0.1;
 	private Random rand = new Random(1234);
-	private final boolean USE_SIMPLE_SEQUENCES = false;
+	private final boolean USE_SIMPLE_SEQUENCES = true;
 	private final int NUM_ITERATIONS = 1000;
 	
 	private SomBasics som;

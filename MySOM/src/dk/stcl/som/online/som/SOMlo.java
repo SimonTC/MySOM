@@ -13,13 +13,13 @@ import dk.stcl.som.online.SomOnline;
  *
  */
 //TODO: Better citation
-public class SOM extends SomOnline {
+public class SOMlo extends SomOnline {
 	
 	private double learningRate;
 	private double stddev; //TODO: Give a good real name
 	private double activationCodingFactor;
 	
-	public SOM(int columns, int rows, int inputLength, Random rand, double learningRate, double stddev, double activationCodingFactor) {
+	public SOMlo(int columns, int rows, int inputLength, Random rand, double learningRate, double stddev, double activationCodingFactor) {
 		super(columns, rows, inputLength, rand);
 		this.learningRate = learningRate;
 		this.stddev = stddev;
