@@ -36,7 +36,12 @@ public class SOMlo extends SomOnline {
 	protected double calculateNeighborhoodEffect(SomNode bmu, SomNode n) {
 		double dist = bmu.distanceTo(n);
 		double error = 1 - somFitness;
-		double effect = Math.exp(-dist / (error * Math.pow(stddev, 2)));
+		double effect;
+		if (error == 0){
+			effect = 0;
+		} else {
+			effect = Math.exp(-dist / (error * Math.pow(stddev, 2)));
+		}
 		
 		return effect;
 	}
@@ -93,7 +98,8 @@ public class SOMlo extends SomOnline {
 	
 	@Override
 	public SimpleMatrix computeActivationMatrix(){
-		SimpleMatrix activation = errorMatrix.divide(2 * Math.pow(activationCodingFactor, 2));	 
+		SimpleMatrix activation = errorMatrix.divide(-2 * Math.pow(activationCodingFactor, 2));	 
+		activation = activation.elementExp();
 		return activation;
 	}
 

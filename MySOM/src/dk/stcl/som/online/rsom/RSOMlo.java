@@ -25,6 +25,7 @@ public class RSOMlo extends SOMlo {
 		super(columns, rows, inputLength, rand, learningRate, stddev,
 				activationCodingFactor);
 		this.decayFactor = decayFactor;
+		setupLeakyDifferences();
 	}
 	
 	private void setupLeakyDifferences(){
@@ -50,7 +51,11 @@ public class RSOMlo extends SOMlo {
 			errorMatrix.set(n.getRow(), n.getCol(), value);
 			if (value < min) {
 				min = value;
-				BMU = n;
+				//TODO: is BMU the node from the som map or from leaky differences?
+				int col = n.getCol();
+				int row = n.getRow();
+				BMU = somMap.get(col, row);
+				//BMU = n;
 			}
 		}		
 		
