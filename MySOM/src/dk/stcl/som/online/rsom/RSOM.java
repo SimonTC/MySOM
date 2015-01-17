@@ -27,10 +27,12 @@ public class RSOM extends PLSOM {
 	@Override
 	/**
 	 * 
-	 * @param inputVector Not used in the RSOM
+	 * @param inputVector
 	 * @return
 	 */
 	public SomNode findBMU(SimpleMatrix inputVector) {		
+		updateLeakyDifferences(inputVector);
+		
 		double min = Double.POSITIVE_INFINITY;
 		SomNode[] leakyNodes = leakyDifferencesMap.getNodes();
 		SomNode BMU = null;
@@ -73,21 +75,6 @@ public class RSOM extends PLSOM {
 				leakyDifferencesMap.set(col, row, leakyDifferenceNode);
 			}
 		}
-	}
-
-	@Override
-	public SomNode step(SimpleMatrix inputVector) {
-		
-		updateLeakyDifferences(inputVector);
-		
-		//Find BMU
-		bmu = findBMU(null);		
-		
-		if (learning){
-			updateWeights(bmu, inputVector);
-		}
-	
-		return bmu;
 	}
 	
 	public SomNode step(double[] inputVector){

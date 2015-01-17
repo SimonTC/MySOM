@@ -25,7 +25,7 @@ public class MovingLines {
 	private MovingLinesGUI frame;
 	private final int GUI_SIZE = 500;
 	private final int MAX_ITERTIONS = 1000;
-	private final boolean USE_PLSOM = true;
+	private final boolean USE_PLSOM = false;
 
 
 	public static void main(String[] args){
