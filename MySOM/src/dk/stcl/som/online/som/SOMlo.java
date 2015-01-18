@@ -60,9 +60,9 @@ public class SOMlo extends SomOnline {
 		SimpleMatrix diff = inputVector.minus(valueVector);
 		
 		//Multiply by som fitness and neighborhood effect
-		SimpleMatrix tmp = new SimpleMatrix(diff.numRows(), diff.numCols());
-		tmp.set(learningRate * neighborhoodEffect);
-		diff = diff.elementMult(tmp);
+		SimpleMatrix learningEffect = new SimpleMatrix(diff.numRows(), diff.numCols());
+		learningEffect.set(learningRate * neighborhoodEffect);
+		diff = diff.elementMult(learningEffect);
 		
 		//Add the diff-values to the value vector
 		valueVector = valueVector.plus(diff);

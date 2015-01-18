@@ -8,7 +8,7 @@ public class SomNode {
 	
 	private SimpleMatrix valueVector;
 	private int col, row; // Coordinates of the node
-	private String label;
+	private int label;
 	private int id;
 	
 	/**
@@ -23,6 +23,7 @@ public class SomNode {
 		valueVector.set(0);
 		setCoordinate(col, row);
 		this.id = id;
+		this.label = -1;
 	}
 	
 	/**
@@ -37,6 +38,7 @@ public class SomNode {
 		valueVector = SimpleMatrix.random(1, vectorSize, 0, 1, rand);	
 		setCoordinate(col, row);
 		this.id = id;
+		this.label = -1;
 	}
 	
 	/**
@@ -49,6 +51,7 @@ public class SomNode {
 		this.valueVector = vector;
 		setCoordinate(col, row);
 		this.id = id;
+		this.label = -1;
 	}
 	
 	/**
@@ -68,6 +71,7 @@ public class SomNode {
 		setCoordinate(col, row);
 		
 		this.id = id;
+		this.label = -1;
 	}
 	
 	
@@ -137,11 +141,11 @@ public class SomNode {
 		return row;
 	}
 
-	public String getLabel() {
+	public int getLabel() {
 		return label;
 	}
 
-	public void setLabel(String label) {
+	public void setLabel(int label) {
 		this.label = label;
 	}
 

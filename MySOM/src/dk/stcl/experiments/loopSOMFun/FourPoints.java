@@ -1,12 +1,17 @@
 package dk.stcl.experiments.loopSOMFun;
 
+import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.JFrame;
 import javax.xml.crypto.NodeSetData;
 
 import org.ejml.simple.SimpleMatrix;
 
+import dk.stcl.experiments.movinglines.MovingLinesGUI;
+import dk.stcl.som.SomBasics;
 import dk.stcl.som.containers.SomNode;
+import dk.stcl.som.offline.som.SomOffline;
 import dk.stcl.som.online.rsom.RSOMlo;
 import dk.stcl.som.online.som.SOMlo;
 
@@ -44,6 +49,8 @@ public class FourPoints {
 		}
 	}
 	
+
+	
 	private void createTrainingSet(){
 		double[][] tmp = {
 				{0,0},
@@ -59,10 +66,18 @@ public class FourPoints {
 		
 		for (int i = 1; i <= iterations; i++){
 			curPairIndex = chooseNextPair(curPairIndex);
-			double[] pair = trainingSet[curPairIndex];
-			
+			double[] pair = trainingSet[curPairIndex];			
 			step(pair);
+			printInfo(i, curPairIndex);
 		}
+	}
+	
+	private void printInfo(int iteration, int pairID){
+		int groupID = pairID < 2 ? 0 : 1;
+		int somModel = som.getBMU().getId();
+		int rsomModel = rsom.getBMU().getId();
+		
+		System.out.println(iteration + ": In " + pairID + " SOM " + somModel + " Group " + groupID +  " RSOM " + rsomModel);
 	}
 	
 	private void step(double[] input){
