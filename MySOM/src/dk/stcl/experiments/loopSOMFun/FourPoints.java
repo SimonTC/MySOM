@@ -1,4 +1,4 @@
-package dk.stcl.experiments.LoopSOMFun;
+package dk.stcl.experiments.loopSOMFun;
 
 import java.util.Random;
 

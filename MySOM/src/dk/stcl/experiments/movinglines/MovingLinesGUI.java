@@ -1,4 +1,4 @@
-package dk.stcl.gui;
+package dk.stcl.experiments.movinglines;
 
 import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
@@ -9,6 +9,8 @@ import javax.swing.JFrame;
 
 import org.ejml.simple.SimpleMatrix;
 
+import dk.stcl.gui.MatrixPanel;
+import dk.stcl.gui.SomPanel;
 import dk.stcl.som.SomBasics;
 import dk.stcl.som.containers.SomNode;
 import dk.stcl.som.offline.som.SomOffline;

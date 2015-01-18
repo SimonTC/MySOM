@@ -1,4 +1,4 @@
-package dk.stcl.experiments;
+package dk.stcl.experiments.movinglines;
 
 import java.util.Random;
 
@@ -6,7 +6,6 @@ import javax.swing.JFrame;
 
 import org.ejml.simple.SimpleMatrix;
 
-import dk.stcl.gui.MovingLinesGUI;
 import dk.stcl.gui.SomModelDrawer;
 import dk.stcl.som.SomBasics;
 import dk.stcl.som.containers.SomNode;
