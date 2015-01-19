@@ -4,11 +4,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import javax.swing.JFrame;
+
+import org.ejml.simple.SimpleMatrix;
+
+import dk.stcl.experiments.movinglines.MovingLinesGUI;
 import dk.stcl.som.IRSOM;
+import dk.stcl.som.ISOM;
 import dk.stcl.som.ISomBasics;
 import dk.stcl.som.containers.SomNode;
 import dk.stcl.som.online.rsom.RSOM;
 import dk.stcl.som.online.rsom.RSOMlo;
+import dk.stcl.som.online.som.SOMlo;
 
 public class RSOMTest {
 	private Random rand = new Random();
@@ -23,6 +30,8 @@ public class RSOMTest {
 	
 	private double[][] hor, ver, blank;
 	
+	private SOMlo spatialDummy = new SOMlo(3, 3, 3, rand, 0, 0, 0);
+	
 	
 	private ArrayList<double[][]> sequences;
 	
@@ -31,6 +40,11 @@ public class RSOMTest {
 	private final int MAX_SEQUENCE_LENGTH = 3;
 	private final boolean DIFFERENT_LENGTH = true;
 	private final int NUM_SEQUENCES = 100;
+	
+	private MovingLinesGUI frame;
+	private final int GUI_SIZE = 500;
+	private final int FRAMES_PER_SECOND = 10;
+	private final boolean VISUALIZE = true;
 	
 
 	public static void main(String[] args) {
@@ -54,6 +68,42 @@ public class RSOMTest {
 		fitness = fitness / 10;
 		System.out.println("Fitness: " + fitness);
 		
+		if (VISUALIZE) visualRun(rand);
+		
+	}
+	
+	private void visualRun( Random rand){
+		setupVisualization(spatialDummy, GUI_SIZE);
+		for (int i = 1; i < 500;i++){
+			double[][] seq = null;
+			int id = rand.nextInt(3);
+			if (id ==0) seq = hor;
+			if (id == 1) seq = ver;
+			if (id == 2) seq = blank;
+			doSequence(seq, true);
+
+		}
+	}
+	
+	private void setupVisualization(ISomBasics som, int GUI_SIZE){
+		//Create GUI
+		
+		frame = new MovingLinesGUI(som, spatialDummy);
+		frame.setTitle("Visualiztion");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		SimpleMatrix tmp = new SimpleMatrix(3, 3, true, sequences.get(0)[0]);
+		updateGraphics(tmp,0); //Give a blank
+		frame.pack();
+		frame.setVisible(true);	
+	}
+	
+	private void updateGraphics(SimpleMatrix inputVector, int iteration){
+		spatialDummy.step(inputVector.getMatrix().data);
+		frame.updateData(inputVector, spatialDummy, rsom);
+		frame.setTitle("Visualiztion - Iteration: " + iteration);
+		frame.revalidate();
+		frame.repaint();
+
 	}
 	
 	private void buildSequences (int inputLength, int maxSequenceLength, boolean differentLength, int numSequences){
@@ -91,7 +141,7 @@ public class RSOMTest {
 		
 		for (double[][] seq : sequences){
 			int hash = toHash(seq);
-			SomNode bmu = doSequence(seq);
+			SomNode bmu = doSequence(seq, false);
 			rsom.flush();
 			if (labelMap.containsKey(hash)){
 				curLabel = labelMap.get(hash);
@@ -112,7 +162,7 @@ public class RSOMTest {
 		for (double[][] seq : sequences){
 			total++;
 			int hash = toHash(seq);
-			SomNode bmu = doSequence(seq);
+			SomNode bmu = doSequence(seq, false);
 			curlabel = labelMap.get(hash);
 			if (bmu.getLabel() == curlabel) correct++;	
 			rsom.flush();
@@ -198,11 +248,11 @@ public class RSOMTest {
 					if (id ==0) seq = hor;
 					if (id == 1) seq = ver;
 					if (id == 2) seq = blank;
-					doSequence(seq);
+					doSequence(seq, false);
 				}
 			} else {
 				for (double[][] seq : sequences){
-					doSequence(seq);
+					doSequence(seq, false);
 					//rsom.flush();
 				}
 			}
@@ -210,10 +260,23 @@ public class RSOMTest {
 		}
 	}
 	
-	private SomNode doSequence(double[][] seq){
+	private SomNode doSequence(double[][] seq, boolean visualize){
+		int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 		SomNode bmu = null;
 		for (double[] d : seq){
 			bmu = rsom.step(d);
+			
+			if (visualize){
+				//Visualize
+				SimpleMatrix m = new SimpleMatrix(3, 3, true, d);
+    			updateGraphics(m,1);					
+				try {
+					Thread.sleep(SKIP_TICKS);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 		return bmu;
 	}

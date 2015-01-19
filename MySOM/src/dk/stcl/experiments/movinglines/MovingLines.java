@@ -57,7 +57,7 @@ public class MovingLines {
 		System.out.println("SOM fitness: " + fitness[0]);
 		System.out.println("RSOM fitness: " + fitness[1]);
 		
-		//visualRun(rand);
+		visualRun(rand);
 	}
 	
 	private void visualRun( Random rand){
