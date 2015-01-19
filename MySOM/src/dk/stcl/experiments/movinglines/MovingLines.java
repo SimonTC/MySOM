@@ -1,5 +1,6 @@
 package dk.stcl.experiments.movinglines;
 
+import java.util.HashMap;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -27,6 +28,9 @@ public class MovingLines {
 	private final RSOMTYPES rsomType = RSOMTYPES.RSOMlo;
 	private final SOMTYPES somType = SOMTYPES.SOMlo;
 	
+	private HashMap<Integer, Integer> somLabelMap;
+	private HashMap<Integer, Integer> rsomLabelMap;
+	
 	private SimpleMatrix[][] sequences;
 	private ISOM spatialPooler;
 	private SomOffline possibleInputs;
@@ -34,7 +38,9 @@ public class MovingLines {
 	private MovingLinesGUI frame;
 	private final int GUI_SIZE = 500;
 	private final int MAX_ITERTIONS = 1000;
-	private final int FRAMES_PER_SECOND = 20;
+	private final int FRAMES_PER_SECOND = 10;
+	
+	private final double DECAY = 0.1;
 
 
 	public static void main(String[] args){
@@ -43,58 +49,144 @@ public class MovingLines {
 	}
 	
 	private void run(){
-		boolean visualize = true;
+		boolean visualize = false;
 		Random rand = new Random(1234);
 		setupExperiment(rand, visualize);
 		runExperiment(MAX_ITERTIONS, visualize, rand);
+		temporalPooler.flush();
+		temporalPooler.setLearning(false);
+		spatialPooler.setLearning(false);
+		label();
+		double[] fitness = validate();
+		System.out.println("SOM fitness: " + fitness[0]);
+		System.out.println("RSOM fitness: " + fitness[1]);
+		
+		visualRun(rand);
+	}
+	
+	private void visualRun( Random rand){
+		setupVisualization(spatialPooler, GUI_SIZE);
+		for (int i = 1; i < 500;i++){
+			SimpleMatrix[] seq;
+			seq = sequences[rand.nextInt(sequences.length)];	    	
+	    	doSequence(seq, true, i);
+		}
 	}
 	
 	private void runExperiment(int maxIterations, boolean visualize, Random rand){
 		
-	    int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 	    SimpleMatrix[] seq;
 	    
 	    for (int i = 1; i <= maxIterations; i++){
 	    	//Choose sequence
-	    	seq = sequences[rand.nextInt(sequences.length)];
-	    	
-	    	//temporalPooler.sensitize(i, maxIterations);
-	    	
-	    	for (SimpleMatrix m : seq){
-	    		//Spatial classification	    		
-	    		spatialPooler.step(m.getMatrix().data);
-	    		SimpleMatrix spatialActivation = spatialPooler.computeActivationMatrix();
-	    		
-	    		//Transform spatial output matrix to vector
-	    		double[] spatialOutputVector = spatialActivation.getMatrix().data;
-	    		
-	    		double[] orthogonalized;
-	    		if (somType != SOMTYPES.SOMlo){
-	    			//Orthogonalize output
-	    			orthogonalized = orthogonalize(spatialOutputVector);
-	    		}else {
-	    			orthogonalized = spatialOutputVector;
-	    		}
-	    		
-	    		//Temporal classification
-	    		temporalPooler.step(orthogonalized);	    		
-	    		
-	    		if (visualize){
-					//Visualize
-	    			updateGraphics(m,i);					
-					try {
-						Thread.sleep(SKIP_TICKS);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-	    		
-	    		//Sensitize som
-	    		spatialPooler.sensitize(i, maxIterations);
-	    	}
-	    	temporalPooler.flush();
+	    	seq = sequences[rand.nextInt(sequences.length)];	    	
+	    	doSequence(seq, visualize, i);
 	    }
+	}
+	
+	private void label(){
+		int nextFreeSOMLabel = 0;
+		int curSOMLabel = -1;
+		
+		int nextFreeRSOMLabel = 0;
+		int curRSOMLabel = -1;
+		somLabelMap = new HashMap<Integer, Integer>();
+		rsomLabelMap = new HashMap<Integer, Integer>();
+		
+		for (SimpleMatrix[] sequence : sequences){
+			int hash = toHash(sequence);
+			doSequence(sequence, false, 0);
+			temporalPooler.flush();
+			
+			if (somLabelMap.containsKey(hash)){
+				curSOMLabel = somLabelMap.get(hash);
+			} else {
+				curSOMLabel = nextFreeSOMLabel++;
+				somLabelMap.put(hash, curSOMLabel);
+			}
+			
+			if (rsomLabelMap.containsKey(hash)){
+				curRSOMLabel = rsomLabelMap.get(hash);
+			} else {
+				curRSOMLabel = nextFreeRSOMLabel++;
+				rsomLabelMap.put(hash, curRSOMLabel);
+			}
+			
+			SomNode somBMU = spatialPooler.getBMU();
+			SomNode rsomBMU = temporalPooler.getBMU();
+			
+			somBMU.setLabel(curSOMLabel);
+			rsomBMU.setLabel(curRSOMLabel);			
+		}
+	}
+	
+	private double[] validate(){
+		double[] fitness = new double[2];
+		
+		int somCorrect = 0;
+		int rsomCorrect = 0;
+		int total = 0;
+		
+		for (SimpleMatrix[] sequence : sequences){
+			total++;
+			int hash = toHash(sequence);
+			doSequence(sequence, false, 0);
+			temporalPooler.flush();
+			SomNode somBMU = spatialPooler.getBMU();
+			SomNode rsomBMU = temporalPooler.getBMU();
+			
+			if (somBMU.getLabel() == somLabelMap.get(hash)) somCorrect++;
+			if (rsomBMU.getLabel() == rsomLabelMap.get(hash)) rsomCorrect++;
+		}
+		
+		fitness[0] = (double) somCorrect / total;
+		fitness[1] = (double) rsomCorrect / total;
+		
+		return fitness;
+	}
+	
+	private int toHash(SimpleMatrix[] input){
+		String s = "";
+		for (SimpleMatrix m : input){
+			for (double d : m.getMatrix().data){
+				s = s + (int) d;
+			}
+		}
+		return s.hashCode();
+	}
+	
+	private void doSequence(SimpleMatrix[] sequence, boolean visualize, int iteration){
+		int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
+		for (SimpleMatrix m : sequence){
+    		//Spatial classification	    		
+    		spatialPooler.step(m.getMatrix().data);
+    		SimpleMatrix spatialActivation = spatialPooler.computeActivationMatrix();
+    		
+    		//Transform spatial output matrix to vector
+    		double[] spatialOutputVector = spatialActivation.getMatrix().data;
+    		
+    		double[] orthogonalized;
+    		if (somType != SOMTYPES.SOMlo){
+    			//Orthogonalize output
+    			orthogonalized = orthogonalize(spatialOutputVector);
+    		}else {
+    			orthogonalized = spatialOutputVector;
+    		}
+    		
+    		//Temporal classification
+    		temporalPooler.step(orthogonalized);	    		
+    		
+    		if (visualize){
+				//Visualize
+    			updateGraphics(m,iteration);					
+				try {
+					Thread.sleep(SKIP_TICKS);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+    	}
 	}
 	
 	private double[] orthogonalize(double[] vector){
@@ -159,12 +251,12 @@ public class MovingLines {
 		//Temporal pooler
 		int temporalInputLength = spatialMapSize * spatialMapSize;
 		int temporalMapSize = 2;
-		double decayFactor = 0.7;
+		
 		
 		switch (rsomType){
-		case RSOM: temporalPooler = new RSOM(temporalMapSize, temporalMapSize, temporalInputLength, rand, decayFactor);
+		case RSOM: temporalPooler = new RSOM(temporalMapSize, temporalMapSize, temporalInputLength, rand, DECAY);
 			break;
-		case RSOMlo: temporalPooler = new RSOMlo(temporalMapSize, temporalMapSize, temporalInputLength, rand, 0.1, 1, 0.125, decayFactor);
+		case RSOMlo: temporalPooler = new RSOMlo(temporalMapSize, temporalMapSize, temporalInputLength, rand, 0.1, 1, 0.125, DECAY);
 			break;
 		default:
 			break;
