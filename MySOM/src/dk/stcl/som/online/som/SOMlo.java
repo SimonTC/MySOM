@@ -34,8 +34,9 @@ public class SOMlo extends SomOnline implements ISOM {
 	}
 
 	@Override
-	protected double calculateNeighborhoodEffect(SomNode bmu, SomNode n) {
-		double dist = bmu.distanceTo(n);
+	protected double calculateNeighborhoodEffect(SomNode bmu, SomNode n) {		
+		//double dist = bmu.distanceTo(n);
+		double dist = Math.pow(bmu.normDistanceTo(n),2);
 		double error = 1 - somFitness;
 		double effect;
 		if (error == 0){
@@ -74,7 +75,9 @@ public class SOMlo extends SomOnline implements ISOM {
 
 	@Override
 	protected double calculateSomFitness(SomNode bmu, SimpleMatrix inputVector) {
-		double error = bmu.squaredDifference(inputVector);
+		SimpleMatrix bmuVector = bmu.getVector();
+		SimpleMatrix diff = bmuVector.minus(inputVector);
+		double error = Math.pow(diff.normF(), 2);
 		double avgError = error / inputLength;
 		return 1 - avgError;
 	}
@@ -84,7 +87,9 @@ public class SOMlo extends SomOnline implements ISOM {
 		SomNode BMU = null;
 		double minDiff = Double.POSITIVE_INFINITY;
 		for (SomNode n : somMap.getNodes()){
-			double diff = n.squaredDifference(inputVector);
+			SimpleMatrix weightVector = n.getVector();
+			SimpleMatrix diffVector = inputVector.minus(weightVector);
+			double diff = diffVector.normF();
 			if (diff < minDiff){
 				minDiff = diff;
 				BMU = n;
@@ -99,7 +104,8 @@ public class SOMlo extends SomOnline implements ISOM {
 	
 	@Override
 	public SimpleMatrix computeActivationMatrix(){
-		SimpleMatrix activation = errorMatrix.divide(-2 * Math.pow(activationCodingFactor, 2));	 
+		SimpleMatrix activation = errorMatrix.elementPower(2); 
+		activation = activation.divide(-2 * Math.pow(activationCodingFactor, 2));	 
 		activation = activation.elementExp();
 		return activation;
 	}

@@ -133,6 +133,27 @@ public class SomNode {
 		return diffX + diffY;
 	}
 	
+	/**
+	 * Uses the frobenius norm to calculate distance
+	 * @param n
+	 * @return
+	 */
+	public double normDistanceTo(SomNode n){
+		int thatX = n.getCol();
+		int thatY = n.getRow();
+		int myX = col;
+		int myY = row;
+		
+		double diffX = thatX - myX;
+		diffX = Math.pow(Math.abs(diffX), 2);
+		
+		double diffY = thatY - myY;
+		diffY = Math.pow(Math.abs(diffY), 2);
+		
+		return Math.sqrt(diffX + diffY);
+
+	}
+	
 	public int getCol(){
 		return col;
 	}

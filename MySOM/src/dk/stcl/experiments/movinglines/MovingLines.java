@@ -40,7 +40,7 @@ public class MovingLines {
 	private final int MAX_ITERTIONS = 1000;
 	private final int FRAMES_PER_SECOND = 10;
 	
-	private final double DECAY = 0.1;
+	private final double DECAY = 1;
 
 
 	public static void main(String[] args){
@@ -61,7 +61,7 @@ public class MovingLines {
 		System.out.println("SOM fitness: " + fitness[0]);
 		System.out.println("RSOM fitness: " + fitness[1]);
 		
-		visualRun(rand);
+		//visualRun(rand);
 	}
 	
 	private void visualRun( Random rand){
@@ -172,7 +172,7 @@ public class MovingLines {
     		}else {
     			orthogonalized = spatialOutputVector;
     		}
-    		
+    	
     		//Temporal classification
     		temporalPooler.step(orthogonalized);	    		
     		
