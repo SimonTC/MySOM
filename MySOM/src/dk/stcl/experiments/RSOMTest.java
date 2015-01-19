@@ -60,7 +60,10 @@ public class RSOMTest {
 		sequences = new ArrayList<double[][]>();
 		
 		if (USE_LINE_SEQUENCES){
-			sequences = lineSequences();
+			lineSequences();
+			sequences.add(hor);
+			sequences.add(ver);
+			sequences.add(blank);
 		} else {
 			for (int seq = 0; seq < numSequences; seq++){
 				int length = 0;
@@ -146,31 +149,26 @@ public class RSOMTest {
 		return simple;
 	}
 	
-	private ArrayList<double[][]> lineSequences(){
-		ArrayList<double[][]> complex = new ArrayList<double[][]>();
+	private void lineSequences(){
 		double[][] hor = {
 				{0,0,1,0,0,0,0,0,0},
 				{1,0,0,0,0,0,0,0,0},
 				{0,1,0,0,0,0,0,0,0}};
+		this.hor = hor;
 		
 		double[][] ver = {
 				{0,0,0,0,0,0,1,0,0},
 				{0,0,0,0,0,0,0,0,1},
 				{0,0,0,0,0,0,0,1,0}};
+		this.ver = ver;
 		
 		double[][] blank = {
 				{0,0,0,1,0,0,0,0,0},
 				{0,0,0,1,0,0,0,0,0},
 				{0,0,0,1,0,0,0,0,0}};
+		this.blank = blank;
+	
 		
-		for ( int i = 0; i < NUM_SEQUENCES; i++){
-			int id = rand.nextInt(3);
-			if (id == 0) complex.add(hor);
-			if (id == 1) complex.add(ver);
-			if (id == 2) complex.add(blank);
-		}		
-		
-		return complex;
 	}
 	
 	private void setupRSOM(){
@@ -193,9 +191,20 @@ public class RSOMTest {
 			//System.out.println("-----------------------------");
 			//System.out.println("Iteration: " + i);
 			//rsom.sensitize(i, NUM_ITERATIONS, true, false);
-			for (double[][] seq : sequences){
-				doSequence(seq);
-				//rsom.flush();
+			if (USE_LINE_SEQUENCES){
+				for ( int j = 0; j < NUM_SEQUENCES; j++){
+					double[][] seq = null;
+					int id = rand.nextInt(3);
+					if (id ==0) seq = hor;
+					if (id == 1) seq = ver;
+					if (id == 2) seq = blank;
+					doSequence(seq);
+				}
+			} else {
+				for (double[][] seq : sequences){
+					doSequence(seq);
+					//rsom.flush();
+				}
 			}
 			
 		}
