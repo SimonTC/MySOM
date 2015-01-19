@@ -7,16 +7,12 @@ import javax.swing.JFrame;
 
 import org.ejml.simple.SimpleMatrix;
 
-import dk.stcl.gui.SomModelDrawer;
 import dk.stcl.som.IRSOM;
-import dk.stcl.som.ISOM;
 import dk.stcl.som.ISomBasics;
 import dk.stcl.som.containers.SomNode;
 import dk.stcl.som.offline.som.SomOffline;
 import dk.stcl.som.online.rsom.RSOM;
 import dk.stcl.som.online.rsom.RSOMlo;
-import dk.stcl.som.online.som.PLSOM;
-import dk.stcl.som.online.som.SOMlo;
 
 	
 
@@ -172,7 +168,13 @@ public class MovingLines {
     		}else {
     			orthogonalized = spatialOutputVector;
     		}
-    	
+    		
+    		/*
+    		System.out.println();
+    		System.out.println("Iteration " + iteration);
+    		spatialActivation.print();
+    		 */
+    		
     		//Temporal classification
     		temporalPooler.step(orthogonalized);	    		
     		

@@ -13,13 +13,15 @@ import dk.stcl.som.online.rsom.RSOMlo;
 public class RSOMTest {
 	private Random rand = new Random();
 	private IRSOM rsom;
-	private final int NUM_ITERATIONS = 20000;
+	private final int NUM_ITERATIONS = 1000;
 	private final double DECAY = 0.3;
-	private final int SIZE = 3;
+	private final int SIZE = 2;
 	private final boolean USE_LINE_SEQUENCES = true;
 	private enum RSOMTYPES {RSOM,RSOMlo};
 	private final RSOMTYPES type = RSOMTYPES.RSOMlo; 
 	private HashMap<Integer, Integer> labelMap;
+	
+	private double[][] hor, ver, blank;
 	
 	
 	private ArrayList<double[][]> sequences;
@@ -161,9 +163,12 @@ public class RSOMTest {
 				{0,0,0,1,0,0,0,0,0},
 				{0,0,0,1,0,0,0,0,0}};
 		
-		complex.add(hor);
-		complex.add(ver);
-		complex.add(blank);
+		for ( int i = 0; i < NUM_SEQUENCES; i++){
+			int id = rand.nextInt(3);
+			if (id == 0) complex.add(hor);
+			if (id == 1) complex.add(ver);
+			if (id == 2) complex.add(blank);
+		}		
 		
 		return complex;
 	}
@@ -190,7 +195,7 @@ public class RSOMTest {
 			//rsom.sensitize(i, NUM_ITERATIONS, true, false);
 			for (double[][] seq : sequences){
 				doSequence(seq);
-				rsom.flush();
+				//rsom.flush();
 			}
 			
 		}
