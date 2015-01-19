@@ -32,7 +32,7 @@ public class MovingLines {
 	private HashMap<Integer, Integer> rsomLabelMap;
 	
 	private SimpleMatrix[][] sequences;
-	private ISOM spatialPooler;
+	private IRSOM spatialPooler;
 	private SomOffline possibleInputs;
 	private IRSOM temporalPooler;
 	private MovingLinesGUI frame;
@@ -237,6 +237,8 @@ public class MovingLines {
 		int spatialInputLength = 9;
 		int spatialMapSize = 5;
 		
+		spatialPooler = new RSOMlo(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, 1, 0.125, 1);
+		/*
 		switch(somType){
 		case PLSOM: spatialPooler = new PLSOM(spatialMapSize, spatialMapSize, spatialInputLength, rand);
 			break;
@@ -247,6 +249,7 @@ public class MovingLines {
 		default:
 			break;		
 		}		
+		*/
 		
 		//Temporal pooler
 		int temporalInputLength = spatialMapSize * spatialMapSize;

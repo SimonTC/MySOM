@@ -47,8 +47,7 @@ public class RSOMlo extends SOMlo implements IRSOM {
 		SomNode[] leakyNodes = leakyDifferencesMap.getNodes();
 		SomNode BMU = null;
 		for (SomNode n : leakyNodes){
-			double value = n.getVector().elementSum();
-			value = Math.abs(value);
+			double value = n.getVector().normF();
 			errorMatrix.set(n.getRow(), n.getCol(), value);
 			if (value < min) {
 				min = value;
@@ -77,7 +76,8 @@ public class RSOMlo extends SOMlo implements IRSOM {
 				SomNode weightNode = somMap.get(col, row);
 				
 				//Calculate difference between input vector and weight vector
-				SimpleMatrix weightDiff = inputVector.minus(weightNode.getVector());
+				SimpleMatrix weightVector = weightNode.getVector();
+				SimpleMatrix weightDiff = inputVector.minus(weightVector);
 				weightDiff = weightDiff.scale(decayFactor);
 				
 				SimpleMatrix leakyDifferenceVector = leakyDifferenceNode.getVector();
