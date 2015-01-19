@@ -5,10 +5,11 @@ import java.util.Random;
 
 import org.ejml.simple.SimpleMatrix;
 
+import dk.stcl.som.ISOM;
 import dk.stcl.som.containers.SomNode;
 import dk.stcl.som.online.SomOnline;
 
-public class PLSOM extends SomOnline {
+public class PLSOM extends SomOnline implements ISOM {
 	
 	private double inputSpaceSize;
 	private ArrayList<SimpleMatrix> inputSpaceMembers;

@@ -6,6 +6,7 @@ import java.util.Vector;
 import org.ejml.data.MatrixIterator;
 import org.ejml.simple.SimpleMatrix;
 
+import dk.stcl.som.ISOM;
 import dk.stcl.som.SomBasics;
 import dk.stcl.som.containers.SomNode;
 /**
@@ -13,7 +14,7 @@ import dk.stcl.som.containers.SomNode;
  * @author Simon
  *
  */
-public class SomOffline extends SomBasics {
+public class SomOffline extends SomBasics implements ISOM {
 	
 	private double initialLearningRate, initialNeighborhoodRadius;
 	private double learningRate, neighborhoodRadius;

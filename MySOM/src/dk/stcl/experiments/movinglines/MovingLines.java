@@ -7,24 +7,34 @@ import javax.swing.JFrame;
 import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.gui.SomModelDrawer;
+import dk.stcl.som.IRSOM;
+import dk.stcl.som.ISOM;
 import dk.stcl.som.ISomBasics;
 import dk.stcl.som.containers.SomNode;
 import dk.stcl.som.offline.som.SomOffline;
 import dk.stcl.som.online.rsom.RSOM;
+import dk.stcl.som.online.rsom.RSOMlo;
 import dk.stcl.som.online.som.PLSOM;
+import dk.stcl.som.online.som.SOMlo;
 
 	
 
 public class MovingLines {
 	
+	private enum RSOMTYPES {RSOM, RSOMlo};
+	private enum SOMTYPES {PLSOM, SOMlo, NORMALSOM};
+	
+	private final RSOMTYPES rsomType = RSOMTYPES.RSOMlo;
+	private final SOMTYPES somType = SOMTYPES.SOMlo;
+	
 	private SimpleMatrix[][] sequences;
-	private ISomBasics spatialPooler;
+	private ISOM spatialPooler;
 	private SomOffline possibleInputs;
-	private RSOM temporalPooler;
+	private IRSOM temporalPooler;
 	private MovingLinesGUI frame;
 	private final int GUI_SIZE = 500;
 	private final int MAX_ITERTIONS = 1000;
-	private final boolean USE_PLSOM = false;
+	private final int FRAMES_PER_SECOND = 20;
 
 
 	public static void main(String[] args){
@@ -40,7 +50,7 @@ public class MovingLines {
 	}
 	
 	private void runExperiment(int maxIterations, boolean visualize, Random rand){
-		int FRAMES_PER_SECOND = 30;
+		
 	    int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 	    SimpleMatrix[] seq;
 	    
@@ -58,8 +68,13 @@ public class MovingLines {
 	    		//Transform spatial output matrix to vector
 	    		double[] spatialOutputVector = spatialActivation.getMatrix().data;
 	    		
-	    		//Orthogonalize output
-	    		double[] orthogonalized = orthogonalize(spatialOutputVector);
+	    		double[] orthogonalized;
+	    		if (somType != SOMTYPES.SOMlo){
+	    			//Orthogonalize output
+	    			orthogonalized = orthogonalize(spatialOutputVector);
+	    		}else {
+	    			orthogonalized = spatialOutputVector;
+	    		}
 	    		
 	    		//Temporal classification
 	    		temporalPooler.step(orthogonalized);	    		
@@ -126,21 +141,37 @@ public class MovingLines {
 	}
 	
 	private void setupPoolers(Random rand){		
-		//Spatia pooler
+		//Spatial pooler
 		int spatialInputLength = 9;
 		int spatialMapSize = 5;
 		
-		if (USE_PLSOM){
-			spatialPooler = new PLSOM(spatialMapSize, spatialMapSize, spatialInputLength, rand);
-		} else {
-			spatialPooler = new SomOffline(spatialMapSize, spatialMapSize, spatialInputLength, rand);
-		}
+		switch(somType){
+		case PLSOM: spatialPooler = new PLSOM(spatialMapSize, spatialMapSize, spatialInputLength, rand);
+			break;
+		case SOMlo: spatialPooler = new SOMlo(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, 1, 0.125);
+			break;
+		case NORMALSOM: spatialPooler =  new SomOffline(spatialMapSize, spatialMapSize, spatialInputLength, rand);
+			break;
+		default:
+			break;		
+		}		
 		
 		//Temporal pooler
 		int temporalInputLength = spatialMapSize * spatialMapSize;
 		int temporalMapSize = 2;
 		double decayFactor = 0.7;
-		temporalPooler = new RSOM(temporalMapSize, temporalMapSize, temporalInputLength, rand, decayFactor);
+		
+		switch (rsomType){
+		case RSOM: temporalPooler = new RSOM(temporalMapSize, temporalMapSize, temporalInputLength, rand, decayFactor);
+			break;
+		case RSOMlo: temporalPooler = new RSOMlo(temporalMapSize, temporalMapSize, temporalInputLength, rand, 0.1, 1, 0.125, decayFactor);
+			break;
+		default:
+			break;
+		
+		}
+		
+		
 	}
 	
 	private void buildSequences(){

@@ -11,6 +11,7 @@ import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.gui.MatrixPanel;
 import dk.stcl.gui.SomPanel;
+import dk.stcl.som.IRSOM;
 import dk.stcl.som.ISomBasics;
 import dk.stcl.som.containers.SomNode;
 import dk.stcl.som.offline.som.SomOffline;
@@ -106,7 +107,7 @@ public class MovingLinesGUI extends JFrame {
 		add(rsomActivation4);		
 	}
 	
-	public void updateData(SimpleMatrix inputVector, ISomBasics spatialPooler, RSOM temporalPooler){
+	public void updateData(SimpleMatrix inputVector, ISomBasics spatialPooler, IRSOM temporalPooler){
 		
 		//Update input area
 		SimpleMatrix inputMatrix = new SimpleMatrix(inputVector);
@@ -177,7 +178,7 @@ public class MovingLinesGUI extends JFrame {
 		
 	}
 	
-	private boolean[] getSpatialModelsInTemporalModel(RSOM temporalModels, int modelID){
+	private boolean[] getSpatialModelsInTemporalModel(IRSOM temporalModels, int modelID){
 		//Collect Model
 		SomNode model = temporalModels.getNode(modelID);
 		

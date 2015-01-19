@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.ejml.simple.SimpleMatrix;
 
+import dk.stcl.som.ISOM;
 import dk.stcl.som.containers.SomNode;
 import dk.stcl.som.online.SomOnline;
 
@@ -13,7 +14,7 @@ import dk.stcl.som.online.SomOnline;
  *
  */
 //TODO: Better citation
-public class SOMlo extends SomOnline {
+public class SOMlo extends SomOnline implements ISOM {
 	
 	private double learningRate;
 	private double stddev; //TODO: Give a good real name
