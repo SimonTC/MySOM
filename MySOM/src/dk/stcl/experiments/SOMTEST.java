@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import dk.stcl.som.SomBasics;
+import dk.stcl.som.ISomBasics;
 import dk.stcl.som.containers.SomNode;
 import dk.stcl.som.offline.som.SomOffline;
 import dk.stcl.som.online.som.PLSOM;
@@ -14,17 +14,18 @@ public class SOMTEST {
 	
 	private ArrayList<double[][]> sequences;
 	private HashMap<Integer, Integer> labelMap;
+	double[] fitnessScores;
 	
 	private enum somTypes {NORMAL, PLSOM, SOMlo};
 	
 	private final int SOM_SIZE = 3;
-	private final somTypes type = somTypes.SOMlo;
+	private final somTypes type = somTypes.NORMAL;
 	private final double INITIAL_LEARNING = 0.1;
 	private Random rand = new Random();
 	private final boolean USE_SIMPLE_SEQUENCES = false;
 	private final int NUM_ITERATIONS = 1000;
 	
-	private SomBasics som;
+	private ISomBasics som;
 	
 	
 	
@@ -42,12 +43,16 @@ public class SOMTEST {
 		//buildSequences(USE_SIMPLE_SEQUENCES);
 		sequences = buildSequences(4, 100);
 		for (int i = 0; i < sequences.size(); i++){
-			double[][] trainingSet = sequences.get(i);
-			setupSOM(trainingSet);
-			train(trainingSet);
-			som.setLearning(false);
-			label(trainingSet);
-			double fitness = validate(trainingSet);
+			double fitness = 0;
+			for (int j = 0; j < 10; j++){
+				double[][] trainingSet = sequences.get(i);
+				setupSOM(trainingSet);
+				train(trainingSet);
+				som.setLearning(false);
+				label(trainingSet);
+				fitness+= validate(trainingSet);
+		}
+			fitness = fitness / 10;
 			System.out.println("Fitness, length " + (i+1) + ": " + fitness);
 		}
 		

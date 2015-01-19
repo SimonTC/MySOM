@@ -13,16 +13,16 @@ import javax.swing.JPanel;
 
 import org.ejml.simple.SimpleMatrix;
 
-import dk.stcl.som.SomBasics;
+import dk.stcl.som.ISomBasics;
 import dk.stcl.som.containers.SomNode;
 import dk.stcl.som.offline.som.SomOffline;
 
 public class SomModelDrawer extends JFrame {
 
-	private SomBasics som;
+	private ISomBasics som;
 	private ArrayList<MapPanel> panels;
 	
-	public SomModelDrawer(SomBasics som, int totalSize) throws HeadlessException {
+	public SomModelDrawer(ISomBasics som, int totalSize) throws HeadlessException {
 		this.som = som;
 		
 		setPreferredSize(new Dimension(totalSize, totalSize));

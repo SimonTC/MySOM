@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.gui.SomModelDrawer;
-import dk.stcl.som.SomBasics;
+import dk.stcl.som.ISomBasics;
 import dk.stcl.som.containers.SomNode;
 import dk.stcl.som.offline.som.SomOffline;
 import dk.stcl.som.online.rsom.RSOM;
@@ -18,7 +18,7 @@ import dk.stcl.som.online.som.PLSOM;
 public class MovingLines {
 	
 	private SimpleMatrix[][] sequences;
-	private SomBasics spatialPooler;
+	private ISomBasics spatialPooler;
 	private SomOffline possibleInputs;
 	private RSOM temporalPooler;
 	private MovingLinesGUI frame;
@@ -115,7 +115,7 @@ public class MovingLines {
 		}
 	}
 	
-	private void setupVisualization(SomBasics som, int GUI_SIZE){
+	private void setupVisualization(ISomBasics som, int GUI_SIZE){
 		//Create GUI
 		frame = new MovingLinesGUI(som, possibleInputs);
 		frame.setTitle("Visualiztion");

@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.ejml.simple.SimpleMatrix;
 
+import dk.stcl.som.IRSOM;
 import dk.stcl.som.containers.SomMap;
 import dk.stcl.som.containers.SomNode;
 import dk.stcl.som.online.som.PLSOM;
@@ -15,7 +16,7 @@ import dk.stcl.som.online.som.SOMlo;
  *
  */
 //TODO: Better citation
-public class RSOMlo extends SOMlo {
+public class RSOMlo extends SOMlo implements IRSOM {
 	
 	private SomMap leakyDifferencesMap;
 	private double decayFactor;

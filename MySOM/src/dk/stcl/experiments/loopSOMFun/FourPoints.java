@@ -43,6 +43,7 @@ public class FourPoints {
 		train(5000);
 		som.setLearning(false);
 		rsom.setLearning(false);
+		rsom.flush();
 		labelRSOM();
 		for (SomNode n : rsom.getNodes()){
 			System.out.println("Node " + n.getId() + " responds to group " + n.getLabel());
@@ -106,7 +107,7 @@ public class FourPoints {
 				step(input);
 			}
 			SomNode bmu = rsom.getBMU();
-			bmu.setLabel("" + group);
+			bmu.setLabel(group);
 			rsom.flush();			
 		}
 	}

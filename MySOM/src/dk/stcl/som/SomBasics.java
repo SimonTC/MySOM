@@ -7,7 +7,7 @@ import org.ejml.simple.SimpleMatrix;
 import dk.stcl.som.containers.SomMap;
 import dk.stcl.som.containers.SomNode;
 
-public abstract class SomBasics {
+public abstract class SomBasics implements ISomBasics {
 
 	protected SomMap somMap;
 	protected SimpleMatrix errorMatrix; //Contains the differences between the input weights and the node weights
@@ -32,10 +32,10 @@ public abstract class SomBasics {
 		
 	}	
 	
-	/**
-	 * The activation matrix is computed as 1 - (Ei / Emax)
-	 * @return
+	/* (non-Javadoc)
+	 * @see dk.stcl.som.ISomBasics#computeActivationMatrix()
 	 */
+	@Override
 	public SimpleMatrix computeActivationMatrix(){
 		double maxError = errorMatrix.elementMaxAbs();
 		SimpleMatrix m;
@@ -50,56 +50,98 @@ public abstract class SomBasics {
 		return activation;
 	}
 	
+	/* (non-Javadoc)
+	 * @see dk.stcl.som.ISomBasics#getBMU()
+	 */
+	@Override
 	public SomNode getBMU(){
 		return bmu;
 	}
 	
+	/* (non-Javadoc)
+	 * @see dk.stcl.som.ISomBasics#getErrorMatrix()
+	 */
+	@Override
 	public SimpleMatrix getErrorMatrix(){
 		return errorMatrix;
 	}
 	
+	/* (non-Javadoc)
+	 * @see dk.stcl.som.ISomBasics#getHeight()
+	 */
+	@Override
 	public int getHeight(){
 		return somMap.getHeight();
 	}
 	
+	/* (non-Javadoc)
+	 * @see dk.stcl.som.ISomBasics#getSomMap()
+	 */
+	@Override
 	public SomMap getSomMap(){
 		return somMap;
 	}
 	
+	/* (non-Javadoc)
+	 * @see dk.stcl.som.ISomBasics#getNode(int)
+	 */
+	@Override
 	public SomNode getNode(int id){
 		return somMap.get(id);
 	}
 	
+	/* (non-Javadoc)
+	 * @see dk.stcl.som.ISomBasics#getNode(int, int)
+	 */
+	@Override
 	public SomNode getNode(int row, int col){
 		return somMap.get(col, row);
 	}
 	
+	/* (non-Javadoc)
+	 * @see dk.stcl.som.ISomBasics#getNodes()
+	 */
+	@Override
 	public SomNode[] getNodes(){
 		return somMap.getNodes();
 	}
 	
+	/* (non-Javadoc)
+	 * @see dk.stcl.som.ISomBasics#getWidth()
+	 */
+	@Override
 	public int getWidth(){
 		return somMap.getWidth();
 	}
 	
+	/* (non-Javadoc)
+	 * @see dk.stcl.som.ISomBasics#getLearning()
+	 */
+	@Override
 	public boolean getLearning(){
 		return learning;
 	}
 	
+	/* (non-Javadoc)
+	 * @see dk.stcl.som.ISomBasics#setLearning(boolean)
+	 */
+	@Override
 	public void setLearning(boolean learning){
 		this.learning = learning;
 	}
 	
-	/**
-	 * Place the node n at coordinate (row,column) in the som map
-	 * @param n
-	 * @param row
-	 * @param column
+	/* (non-Javadoc)
+	 * @see dk.stcl.som.ISomBasics#setNode(dk.stcl.som.containers.SomNode, int, int)
 	 */
+	@Override
 	public void setNode(SomNode n, int row, int column){
 		somMap.set(column, row, n);
 	}
 	
+	/* (non-Javadoc)
+	 * @see dk.stcl.som.ISomBasics#step(double[])
+	 */
+	@Override
 	public SomNode step(double[] inputVector){
 		SimpleMatrix vector = new SimpleMatrix(1, inputLength, true, inputVector);
 		
@@ -108,20 +150,16 @@ public abstract class SomBasics {
 		return bmu;
 	}
 	
-	/**
-	 * Finds the BMU to the given input node and updates the vectors of all the nodes
-	 * @param inputNode
-	 * @param learningRate
-	 * @param neighborhoodRadius
-	 * @return
+	/* (non-Javadoc)
+	 * @see dk.stcl.som.ISomBasics#step(org.ejml.simple.SimpleMatrix)
 	 */
+	@Override
 	public abstract SomNode step (SimpleMatrix inputVector);
 	
-	/**
-	 * Finds the best matching unit
-	 * @param inputVector
-	 * @return
+	/* (non-Javadoc)
+	 * @see dk.stcl.som.ISomBasics#findBMU(org.ejml.simple.SimpleMatrix)
 	 */
+	@Override
 	public abstract SomNode findBMU(SimpleMatrix inputVector);
 	
 	/**
@@ -131,22 +169,18 @@ public abstract class SomBasics {
 	 */
 	protected abstract void updateWeights(SomNode bmu, SimpleMatrix inputVector);
 	
-	/**
-	 * Updates both the learning rate and the neighborhood radius based on the current timestep.
-	 * @param iteration
-	 * @param maxIterations
+	/* (non-Javadoc)
+	 * @see dk.stcl.som.ISomBasics#sensitize(int, int)
 	 */
+	@Override
 	public void sensitize(int timestep, int maxTimesteps){
 		this.sensitize(timestep, maxTimesteps, true, true);
 	}
 	
-	/**
-	 * Updates the learning rate and the neighborhood radius based on the current timestep.
-	 * @param timestep
-	 * @param maxTimesteps
-	 * @param doNeighborhood if false neighborhood radius will not be updated
-	 * @param doLearningRate if false learning rate will not be updated
+	/* (non-Javadoc)
+	 * @see dk.stcl.som.ISomBasics#sensitize(int, int, boolean, boolean)
 	 */
+	@Override
 	public abstract void sensitize(int timestep, int maxTimesteps, boolean doNeighborhood, boolean doLearningRate);
 	
 

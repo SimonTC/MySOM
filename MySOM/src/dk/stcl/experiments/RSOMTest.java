@@ -3,15 +3,20 @@ package dk.stcl.experiments;
 import java.util.ArrayList;
 import java.util.Random;
 
+import dk.stcl.som.IRSOM;
+import dk.stcl.som.ISomBasics;
 import dk.stcl.som.online.rsom.RSOM;
+import dk.stcl.som.online.rsom.RSOMlo;
 
 public class RSOMTest {
 	private Random rand = new Random(1234);
-	private RSOM rsom;
+	private IRSOM rsom;
 	private final int NUM_ITERATIONS = 1000;
 	private final double DECAY = 0.1;
 	private final int SIZE = 3;
 	private final boolean USE_SIMPLE_SEQUENCES = true;
+	private enum RSOMTYPES {RSOM,RSOMlo};
+	private final RSOMTYPES type = RSOMTYPES.RSOMlo; 
 	
 	private ArrayList<double[][]> sequences;
 	
@@ -81,7 +86,16 @@ public class RSOMTest {
 	private void setupRSOM(){
 		int inputSize = sequences.get(0)[0].length;
 		
-		rsom = new RSOM(SIZE, SIZE, inputSize, rand, DECAY);
+		switch (type){
+		case RSOM: rsom = new RSOM(SIZE, SIZE, inputSize, rand, DECAY);
+			break;
+		case RSOMlo: rsom = new RSOMlo(SIZE, SIZE, inputSize, rand, 0.1, 1, 0.3, DECAY);
+			break;
+		default:
+			break;
+		
+		}
+		
 	}
 	
 	public void train(){

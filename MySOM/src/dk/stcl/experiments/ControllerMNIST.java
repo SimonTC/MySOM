@@ -9,7 +9,7 @@ import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.gui.SomActivationDrawer;
 import dk.stcl.gui.SomModelDrawer;
-import dk.stcl.som.SomBasics;
+import dk.stcl.som.ISomBasics;
 import dk.stcl.som.containers.SomNode;
 import dk.stcl.som.offline.som.SomOffline;
 import dk.stcl.som.online.som.PLSOM;
@@ -18,7 +18,7 @@ import dk.stcl.utils.DataLoader;
 public class ControllerMNIST {
 
 	private SimpleMatrix data;
-	private SomBasics som;
+	private ISomBasics som;
 	private SomModelDrawer gui;
 	private Random rand = new Random(1234);
 	private DataLoader trainLoader, validationLoader, testLoader;
@@ -240,7 +240,7 @@ public class ControllerMNIST {
 				}
 			}
 			//System.out.println("Setting label to:" + label);
-			n.setLabel("" + label);
+			n.setLabel(label);
 		}
 	    trainLoader.close();
 	    
@@ -267,7 +267,7 @@ public class ControllerMNIST {
 			
 			SimpleMatrix inputVector = new SimpleMatrix(1, content.length - 1, true, sample);
 			SomNode bmu = som.findBMU(inputVector);
-			int bmuLabel = Integer.parseInt(bmu.getLabel());
+			int bmuLabel = bmu.getLabel();
 			int label = (int) Integer.parseInt(content[0]);
 			
 			if (bmuLabel == label){
@@ -306,7 +306,7 @@ public class ControllerMNIST {
 				
 				SimpleMatrix inputVector = new SimpleMatrix(1, content.length, true, sample);
 				SomNode bmu = som.findBMU(inputVector);
-				String bmuLabel = bmu.getLabel();
+				int bmuLabel = bmu.getLabel();
 				classes += iteration + "," + bmuLabel + "\n";
 				
 				
