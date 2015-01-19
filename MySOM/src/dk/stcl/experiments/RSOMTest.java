@@ -11,19 +11,20 @@ import dk.stcl.som.online.rsom.RSOM;
 import dk.stcl.som.online.rsom.RSOMlo;
 
 public class RSOMTest {
-	private Random rand = new Random(1234);
+	private Random rand = new Random();
 	private IRSOM rsom;
-	private final int NUM_ITERATIONS = 1000;
+	private final int NUM_ITERATIONS = 20000;
 	private final double DECAY = 0.3;
-	private final int SIZE = 3;
-	private final boolean USE_SIMPLE_SEQUENCES = true;
+	private final int SIZE = 2;
+	private final boolean USE_LINE_SEQUENCES = true;
 	private enum RSOMTYPES {RSOM,RSOMlo};
 	private final RSOMTYPES type = RSOMTYPES.RSOMlo; 
 	private HashMap<Integer, Integer> labelMap;
 	
+	
 	private ArrayList<double[][]> sequences;
 	
-	
+	private final double LEARNING_RATE = 0.1;
 	private final int INPUTLENGTH = 1;
 	private final int MAX_SEQUENCE_LENGTH = 3;
 	private final boolean DIFFERENT_LENGTH = true;
@@ -53,31 +54,29 @@ public class RSOMTest {
 		
 	}
 	
-	private void buildSequences(boolean simple){
-		if (simple) {
-			sequences = simpleSequences();
-		} else {
-			sequences = complexSequences();
-		}	
-	}
-	
 	private void buildSequences (int inputLength, int maxSequenceLength, boolean differentLength, int numSequences){
 		sequences = new ArrayList<double[][]>();
-		for (int seq = 0; seq < numSequences; seq++){
-			int length = 0;
-			if (differentLength){
-				length = rand.nextInt(maxSequenceLength) + 1;
-			} else {
-				length = maxSequenceLength;
-			}
-			double[][] sequence = new double[length][inputLength];
-			for (int part = 0; part < length; part++){
-				for (int i = 0; i < inputLength; i++){
-					sequence[part][i] = rand.nextInt(2);
+		
+		if (USE_LINE_SEQUENCES){
+			sequences = lineSequences();
+		} else {
+			for (int seq = 0; seq < numSequences; seq++){
+				int length = 0;
+				if (differentLength){
+					length = rand.nextInt(maxSequenceLength) + 1;
+				} else {
+					length = maxSequenceLength;
 				}
+				double[][] sequence = new double[length][inputLength];
+				for (int part = 0; part < length; part++){
+					for (int i = 0; i < inputLength; i++){
+						sequence[part][i] = rand.nextInt(2);
+					}
+				}
+				sequences.add(sequence);
 			}
-			sequences.add(sequence);
 		}
+		
 	}
 	
 	private void label(){
@@ -145,17 +144,17 @@ public class RSOMTest {
 		return simple;
 	}
 	
-	private ArrayList<double[][]> complexSequences(){
+	private ArrayList<double[][]> lineSequences(){
 		ArrayList<double[][]> complex = new ArrayList<double[][]>();
 		double[][] hor = {
 				{0,0,1,0,0,0,0,0,0},
-				{0,0,0,0,0,1,0,0,0},
+				{1,0,0,0,0,0,0,0,0},
 				{0,1,0,0,0,0,0,0,0}};
 		
 		double[][] ver = {
-				{1,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,1,0,0},
 				{0,0,0,0,0,0,0,0,1},
-				{0,0,0,0,1,0,0,0,0}};
+				{0,0,0,0,0,0,0,1,0}};
 		
 		double[][] blank = {
 				{0,0,0,1,0,0,0,0,0},
@@ -175,7 +174,7 @@ public class RSOMTest {
 		switch (type){
 		case RSOM: rsom = new RSOM(SIZE, SIZE, inputSize, rand, DECAY);
 			break;
-		case RSOMlo: rsom = new RSOMlo(SIZE, SIZE, inputSize, rand, 0.1, 1, 0.3, DECAY);
+		case RSOMlo: rsom = new RSOMlo(SIZE, SIZE, inputSize, rand, LEARNING_RATE, 1, 0.3, DECAY);
 			break;
 		default:
 			break;

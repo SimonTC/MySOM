@@ -19,7 +19,7 @@ import dk.stcl.som.online.som.SOMlo;
 
 	
 
-public class MovingLines {
+public class CopyOfMovingLines {
 	
 	private enum RSOMTYPES {RSOM, RSOMlo};
 	private enum SOMTYPES {PLSOM, SOMlo, NORMALSOM};
@@ -38,7 +38,7 @@ public class MovingLines {
 
 
 	public static void main(String[] args){
-		MovingLines runner = new MovingLines();
+		CopyOfMovingLines runner = new CopyOfMovingLines();
 		runner.run();
 	}
 	
