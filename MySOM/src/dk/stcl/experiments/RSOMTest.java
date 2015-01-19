@@ -15,7 +15,7 @@ public class RSOMTest {
 	private IRSOM rsom;
 	private final int NUM_ITERATIONS = 20000;
 	private final double DECAY = 0.3;
-	private final int SIZE = 2;
+	private final int SIZE = 3;
 	private final boolean USE_LINE_SEQUENCES = true;
 	private enum RSOMTYPES {RSOM,RSOMlo};
 	private final RSOMTYPES type = RSOMTYPES.RSOMlo; 

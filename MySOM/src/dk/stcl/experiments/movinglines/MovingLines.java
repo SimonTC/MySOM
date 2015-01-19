@@ -40,7 +40,7 @@ public class MovingLines {
 	private final int MAX_ITERTIONS = 1000;
 	private final int FRAMES_PER_SECOND = 10;
 	
-	private final double DECAY = 1;
+	private final double DECAY = 0.3;
 
 
 	public static void main(String[] args){

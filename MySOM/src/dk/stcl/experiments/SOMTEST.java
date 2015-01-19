@@ -7,6 +7,7 @@ import java.util.Random;
 import dk.stcl.som.ISomBasics;
 import dk.stcl.som.containers.SomNode;
 import dk.stcl.som.offline.som.SomOffline;
+import dk.stcl.som.online.rsom.RSOMlo;
 import dk.stcl.som.online.som.PLSOM;
 import dk.stcl.som.online.som.SOMlo;
 
@@ -16,10 +17,10 @@ public class SOMTEST {
 	private HashMap<Integer, Integer> labelMap;
 	double[] fitnessScores;
 	
-	private enum somTypes {NORMAL, PLSOM, SOMlo};
+	private enum somTypes {NORMAL, PLSOM, SOMlo, RSOMlo};
 	
 	private final int SOM_SIZE = 3;
-	private final somTypes type = somTypes.NORMAL;
+	private final somTypes type = somTypes.RSOMlo;
 	private final double INITIAL_LEARNING = 0.1;
 	private Random rand = new Random();
 	private final boolean USE_SIMPLE_SEQUENCES = false;
@@ -129,8 +130,11 @@ public class SOMTEST {
 			break;
 		case SOMlo: som = new SOMlo(size, size, inputLength, rand, INITIAL_LEARNING, 1, 0.125);
 			break;
+		case RSOMlo: som = new RSOMlo(size, size, inputLength, rand, INITIAL_LEARNING, 1, 0.125, 1);
+			break;
 		default:
 			break;
+		
 		
 		}
 		
