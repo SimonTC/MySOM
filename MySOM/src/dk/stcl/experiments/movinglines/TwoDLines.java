@@ -81,7 +81,7 @@ public class TwoDLines {
 	}
 	
 	private void runExperiment(int maxIterations, boolean visualize, Random rand){
-		int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
+		int SKIP_TICKS = 1000 / FRAMES_PER_SECOND; 
 	    SimpleMatrix[] seq;
 	    int curSeqID = 0;
 	    
