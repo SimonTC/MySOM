@@ -4,6 +4,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
 
+import javax.swing.JFrame;
+
 import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.gui.SomModelDrawer;
@@ -33,7 +35,7 @@ public class ControllerMNIST {
 	private final String DELIMITER = ";";
 	private final int PRINT_EVERY = 100;
 	
-	private static final boolean VISUALIZE = false;
+	private static final boolean VISUALIZE = true;
 	/**
 	 * @throws IOException ******************************************/
 	
@@ -81,13 +83,14 @@ public class ControllerMNIST {
 		//int inputLength = data.numCols();
 		int inputLength = trainLoader.getNumColumns() - 1;
 		int size = SOM_SIZE;
-		som = new SOM(size, size, inputLength, rand, 0.1, 1, 0.125);
+		som = new SOM(size, size, inputLength, rand, INITIAL_LEARNING, 1, 0.125);
 				
 		if (visualize){
 			//Create GUI
 			System.out.println("Creating gui");
 			gui = new SomModelDrawer(som, GUI_SIZE);
 			gui.setTitle("Visualization");
+			gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			gui.pack();
 			gui.setVisible(true);
 		}
