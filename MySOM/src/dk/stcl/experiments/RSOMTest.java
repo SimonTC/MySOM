@@ -20,10 +20,14 @@ import dk.stcl.som.online.som.SOMlo;
 public class RSOMTest {
 	private Random rand = new Random();
 	private IRSOM rsom;
-	private final int NUM_ITERATIONS = 1000;
+	private final int NUM_ITERATIONS = 40000;
 	private final double DECAY = 0.3;
 	private final int SIZE = 2;
+	
 	private final boolean USE_LINE_SEQUENCES = true;
+	private final boolean USE_LINE_SEQUENCES_Random = true;
+	
+	
 	private enum RSOMTYPES {RSOM,RSOMlo};
 	private final RSOMTYPES type = RSOMTYPES.RSOMlo; 
 	private HashMap<Integer, Integer> labelMap;
@@ -44,7 +48,7 @@ public class RSOMTest {
 	private MovingLinesGUI frame;
 	private final int GUI_SIZE = 500;
 	private final int FRAMES_PER_SECOND = 10;
-	private final boolean VISUALIZE = true;
+	private final boolean VISUALIZE = false;
 	
 
 	public static void main(String[] args) {
@@ -237,22 +241,43 @@ public class RSOMTest {
 	}
 	
 	public void train(){
+		int curSeqID = 0;
+		int curInputID = Integer.MAX_VALUE;
+		double[][] seq = null;
 		for (int i = 1; i < NUM_ITERATIONS; i++){
-			//System.out.println("-----------------------------");
-			//System.out.println("Iteration: " + i);
-			//rsom.sensitize(i, NUM_ITERATIONS, true, false);
 			if (USE_LINE_SEQUENCES){
-				for ( int j = 0; j < NUM_SEQUENCES; j++){
-					double[][] seq = null;
-					int id = rand.nextInt(3);
-					if (id ==0) seq = hor;
-					if (id == 1) seq = ver;
-					if (id == 2) seq = blank;
-					doSequence(seq, false);
+				if (!USE_LINE_SEQUENCES_Random){
+					if (curInputID >= hor.length){
+						curSeqID = rand.nextInt(3);
+						if (curSeqID == 0) seq = hor;
+						if (curSeqID == 1) seq = ver;
+						if (curSeqID == 2) seq = blank;
+						curInputID = 0;
+					}
+					step(seq[curInputID]);
+					curInputID++;
+				} else {
+					boolean change = rand.nextDouble() > 0.9 ? true : false;
+					if (change){
+						boolean choose = rand.nextBoolean();
+						switch (curSeqID){
+						case 0 : curSeqID = choose ? 1 : 2; break;
+						case 1 : curSeqID = choose ? 2 : 0; break;
+						case 2 : curSeqID = choose ? 0 : 1; break;
+						}
+					} 
+					curInputID = rand.nextInt(3);
+					if (curSeqID == 0) seq = hor;
+					if (curSeqID == 1) seq = ver;
+					if (curSeqID == 2) seq = blank;
+					
+					step(seq[curInputID]);
 				}
+				
+				
 			} else {
-				for (double[][] seq : sequences){
-					doSequence(seq, false);
+				for (double[][] sequence : sequences){
+					doSequence(sequence, false);
 					//rsom.flush();
 				}
 			}
@@ -260,11 +285,16 @@ public class RSOMTest {
 		}
 	}
 	
+	private SomNode step(double[] input){
+		SomNode bmu = rsom.step(input);
+		return bmu;
+	}
+	
 	private SomNode doSequence(double[][] seq, boolean visualize){
 		int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 		SomNode bmu = null;
 		for (double[] d : seq){
-			bmu = rsom.step(d);
+			bmu = step(d);
 			
 			if (visualize){
 				//Visualize
