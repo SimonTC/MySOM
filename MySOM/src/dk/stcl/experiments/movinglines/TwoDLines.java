@@ -28,12 +28,14 @@ public class TwoDLines {
 	private IRSOM temporalPooler;
 	private MovingLinesGUI frame;
 	private final int GUI_SIZE = 500;
-	private final int MAX_ITERTIONS = 20000;
+	private final int MAX_ITERTIONS = 10000;
 	private final int FRAMES_PER_SECOND = 10;
 	
 	private final double DECAY = 0.3;
 	
 	private final boolean VISUAL_RUN = true;
+	
+	private final boolean VISUAL_TRAINING = false;
 	
 	private Random rand = new Random();
 	
@@ -48,7 +50,7 @@ public class TwoDLines {
 	}
 	
 	private void run(){
-		boolean visualize = false;
+		boolean visualize = VISUAL_TRAINING;
 		double[] fitness = new double[2];
 		
 		for (int i = 0; i < 10; i++){
@@ -79,9 +81,13 @@ public class TwoDLines {
 	}
 	
 	private void runExperiment(int maxIterations, boolean visualize, Random rand){
-		
+		int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 	    SimpleMatrix[] seq;
 	    int curSeqID = 0;
+	    
+	    if (visualize){
+	    	setupVisualization(spatialPooler, GUI_SIZE);
+	    }
 	    
 	    for (int i = 1; i <= maxIterations; i++){
 	    	//Choose sequence
@@ -100,6 +106,22 @@ public class TwoDLines {
 			
 			SimpleMatrix input = seq[curInputID];
 			step(input);
+			
+			if (visualize){
+				//Visualize
+    			updateGraphics(input,i);					
+				try {
+					Thread.sleep(SKIP_TICKS);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+	    }
+	    
+	    if (visualize){
+		    frame.setVisible(false);
+		    frame.dispose();
 	    }
 	}
 
