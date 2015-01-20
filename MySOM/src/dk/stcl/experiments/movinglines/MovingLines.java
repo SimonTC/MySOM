@@ -12,6 +12,7 @@ import dk.stcl.som.ISOM;
 import dk.stcl.som.ISomBasics;
 import dk.stcl.som.containers.SomNode;
 import dk.stcl.som.rsom.RSOM;
+import dk.stcl.som.som.PLSOM;
 import dk.stcl.som.som.SOM;
 
 	
@@ -37,6 +38,8 @@ public class MovingLines {
 	private final int FRAMES_PER_SECOND = 10;
 	
 	private final double DECAY = 0.3;
+	
+	private final boolean USE_PLSOM = true;
 
 
 	public static void main(String[] args){
@@ -239,8 +242,11 @@ public class MovingLines {
 		int spatialInputLength = 9;
 		int spatialMapSize = 5;
 		
-		spatialPooler = new SOM(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, 1, 0.125);
-		
+		if (USE_PLSOM){
+			spatialPooler = new PLSOM(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, 1, 0.125);
+		} else {
+			spatialPooler = new SOM(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, 1, 0.125);
+		}
 		
 		//Temporal pooler
 		int temporalInputLength = spatialMapSize * spatialMapSize;

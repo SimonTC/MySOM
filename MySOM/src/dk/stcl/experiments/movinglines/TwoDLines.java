@@ -12,6 +12,7 @@ import dk.stcl.som.ISOM;
 import dk.stcl.som.ISomBasics;
 import dk.stcl.som.containers.SomNode;
 import dk.stcl.som.rsom.RSOM;
+import dk.stcl.som.som.PLSOM;
 import dk.stcl.som.som.SOM;
 
 	
@@ -33,14 +34,16 @@ public class TwoDLines {
 	private IRSOM temporalPooler;
 	private MovingLinesGUI frame;
 	private final int GUI_SIZE = 500;
-	private final int MAX_ITERTIONS = 10000;
+	private final int MAX_ITERTIONS = 20000;
 	private final int FRAMES_PER_SECOND = 10;
 	
 	private final double DECAY = 0.3;
 	
-	private final boolean VISUAL_RUN = true;
+	private final boolean VISUAL_RUN = false;
 	
 	private Random rand = new Random();
+	
+	private final boolean USE_PLSOM = true;
 
 
 	public static void main(String[] args){
@@ -269,7 +272,11 @@ public class TwoDLines {
 		int spatialMapSize = 3;
 		
 		
-		spatialPooler = new SOM(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, 1, 0.3 );	
+		if (USE_PLSOM){
+			spatialPooler = new PLSOM(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, 1, 0.125);
+		} else {
+			spatialPooler = new SOM(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, 1, 0.125);
+		}	
 		
 		
 		//Temporal pooler

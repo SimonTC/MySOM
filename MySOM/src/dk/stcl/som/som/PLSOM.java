@@ -10,20 +10,29 @@ import dk.stcl.som.ISOM;
 import dk.stcl.som.SomBasics;
 import dk.stcl.som.containers.SomNode;
 
-public class PLSOM extends SomBasics implements ISOM {
+public class PLSOM extends SOM implements ISOM {
 	
+	public PLSOM(int columns, int rows, int inputLength, Random rand,
+			double learningRate, double stddev, double activationCodingFactor) {
+		super(columns, rows, inputLength, rand, learningRate, stddev,
+				activationCodingFactor);
+		setupDiameterCalculation(inputLength);
+		neighborHoodRange = (double) rows * rangeFactor; //TODO: change to input parameter
+	}
+
 	private double inputSpaceSize;
 	private ArrayList<SimpleMatrix> inputSpaceMembers;
 	private int inputSpaceDimensions;
 	private double neighborHoodRange;
 	private final double rangeFactor = 1;
 
+	/*
 	public PLSOM(int columns, int rows, int inputLength, Random rand) {
 		super(columns, rows, inputLength, rand);
 		setupDiameterCalculation(inputLength);
 		neighborHoodRange = (double) rows * rangeFactor; //TODO: change to input parameter
 	}
-	
+	*/
 	private void setupDiameterCalculation(int inputLength){
 		inputSpaceSize = -1;
 		inputSpaceMembers = new ArrayList<SimpleMatrix>();
@@ -44,7 +53,8 @@ public class PLSOM extends SomBasics implements ISOM {
 				double minDistance = Double.POSITIVE_INFINITY;
 				for (int i = 0; i < inputSpaceMembers.size(); i++){
 					SimpleMatrix m = inputSpaceMembers.get(i);
-					double d = calculateEuclideanDistance(inputVector, m);
+					SimpleMatrix diff = m.minus(inputVector);
+					double d = diff.normF();// calculateEuclideanDistance(inputVector, m);
 					if (d < minDistance){
 						minDistance = d;
 						id = i;
@@ -61,7 +71,8 @@ public class PLSOM extends SomBasics implements ISOM {
 	private double calculateDiameter(SimpleMatrix inputVector){
 		double maxDist = 0;
 		for (SimpleMatrix m : inputSpaceMembers){
-			double d =  calculateEuclideanDistance(m, inputVector);
+			SimpleMatrix diff = m.minus(inputVector);
+			double d =  diff.normF(); //calculateEuclideanDistance(m, inputVector);
 			if ( d > maxDist) maxDist = d;
 		}
 		return maxDist;

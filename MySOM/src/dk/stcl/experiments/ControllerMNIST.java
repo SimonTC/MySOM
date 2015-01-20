@@ -20,7 +20,7 @@ public class ControllerMNIST {
 	private SimpleMatrix data;
 	private ISomBasics som;
 	private SomModelDrawer gui;
-	private Random rand = new Random(1234);
+	private Random rand = new Random();
 	private DataLoader trainLoader, validationLoader, testLoader;
 	private FileWriter writer;
 	
@@ -31,12 +31,13 @@ public class ControllerMNIST {
 	private final int SOM_SIZE = 10;
 	private final double INITIAL_LEARNING = 0.1;
 	private final int MAX_ITERATIONS = 1000;
-	private final boolean CLASSIFY_NEW_DATA = false;
-	private final boolean USE_PLSOM = true;
 	private final String DELIMITER = ";";
 	private final int PRINT_EVERY = 100;
 	
-	private static final boolean VISUALIZE = false;
+	private final boolean CLASSIFY_NEW_DATA = false;
+	private final boolean USE_PLSOM = false;
+	private static final boolean VISUALIZE = true;
+	int FRAMES_PER_SECOND = 50;
 	/**
 	 * @throws IOException ******************************************/
 	
@@ -84,7 +85,12 @@ public class ControllerMNIST {
 		//int inputLength = data.numCols();
 		int inputLength = trainLoader.getNumColumns() - 1;
 		int size = SOM_SIZE;
-		som = new SOM(size, size, inputLength, rand, INITIAL_LEARNING, 1, 0.125);
+		if (USE_PLSOM){
+			som = new PLSOM(size, size, inputLength, rand, 0.1, 1, 0.125);
+		} else {
+			som = new SOM(size, size, inputLength, rand, 0.1, 1, 0.125);
+		}
+		//som = new SOM(size, size, inputLength, rand, INITIAL_LEARNING, 1, 0.125);
 		//som = new PLSOM(size, size, inputLength, rand);
 				
 		if (visualize){
@@ -109,7 +115,7 @@ public class ControllerMNIST {
 		int maxIterations = trainLoader.getNumLines(); // MAX_ITERATIONS;//data.size() * 3; //TODO: Should probably be something else
 		//int dataSize = data.numRows();
 		//int inputlength = data.numCols();
-		int FRAMES_PER_SECOND = 30;
+		
 	    int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 		
 	    //Clustering
