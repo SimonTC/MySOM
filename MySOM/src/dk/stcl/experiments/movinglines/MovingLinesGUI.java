@@ -9,9 +9,9 @@ import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.gui.MatrixPanel;
 import dk.stcl.gui.SomPanel;
-import dk.stcl.som.IRSOM;
-import dk.stcl.som.ISomBasics;
+import dk.stcl.som.basic.ISomBasics;
 import dk.stcl.som.containers.SomNode;
+import dk.stcl.som.rsom.IRSOM;
 
 
 

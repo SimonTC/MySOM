@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.gui.SomModelDrawer;
-import dk.stcl.som.ISomBasics;
+import dk.stcl.som.basic.ISomBasics;
 import dk.stcl.som.containers.SomNode;
 import dk.stcl.som.som.PLSOM;
 import dk.stcl.som.som.SOM;

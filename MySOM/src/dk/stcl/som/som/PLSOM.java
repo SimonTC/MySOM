@@ -6,8 +6,7 @@ import java.util.Random;
 
 import org.ejml.simple.SimpleMatrix;
 
-import dk.stcl.som.ISOM;
-import dk.stcl.som.SomBasics;
+import dk.stcl.som.basic.SomBasics;
 import dk.stcl.som.containers.SomNode;
 
 public class PLSOM extends SOM implements ISOM {

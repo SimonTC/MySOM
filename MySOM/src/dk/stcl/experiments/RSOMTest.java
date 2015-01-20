@@ -9,9 +9,9 @@ import javax.swing.JFrame;
 import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.experiments.movinglines.MovingLinesGUI;
-import dk.stcl.som.IRSOM;
-import dk.stcl.som.ISomBasics;
+import dk.stcl.som.basic.ISomBasics;
 import dk.stcl.som.containers.SomNode;
+import dk.stcl.som.rsom.IRSOM;
 import dk.stcl.som.rsom.RSOM;
 import dk.stcl.som.som.SOM;
 

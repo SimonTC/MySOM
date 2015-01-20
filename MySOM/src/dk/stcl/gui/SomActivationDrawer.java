@@ -4,7 +4,7 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
-import dk.stcl.som.ISOM;
+import dk.stcl.som.som.ISOM;
 
 /**
  * Visualizes the activation of a SOM map.

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import dk.stcl.som.ISomBasics;
+import dk.stcl.som.basic.ISomBasics;
 import dk.stcl.som.containers.SomNode;
 import dk.stcl.som.rsom.RSOM;
 import dk.stcl.som.som.SOM;
