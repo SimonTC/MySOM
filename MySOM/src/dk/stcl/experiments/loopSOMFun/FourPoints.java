@@ -1,25 +1,18 @@
 package dk.stcl.experiments.loopSOMFun;
 
-import java.util.ArrayList;
 import java.util.Random;
-
-import javax.swing.JFrame;
-import javax.xml.crypto.NodeSetData;
 
 import org.ejml.simple.SimpleMatrix;
 
-import dk.stcl.experiments.movinglines.MovingLinesGUI;
-import dk.stcl.som.SomBasics;
 import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.offline.som.SomOffline;
-import dk.stcl.som.online.rsom.RSOMlo;
-import dk.stcl.som.online.som.SOMlo;
+import dk.stcl.som.rsom.RSOM;
+import dk.stcl.som.som.SOM;
 
 public class FourPoints {
 
 	double[][] trainingSet;
-	SOMlo som;
-	RSOMlo rsom;
+	SOM som;
+	RSOM rsom;
 	Random rand = new Random(1234);
 	
 	public static void main(String[] args) {
@@ -33,8 +26,8 @@ public class FourPoints {
 	}
 	
 	private void createPoolers(){
-		som = new SOMlo(2, 2, 2, rand, 0.1, 1, 0.125);
-		rsom = new RSOMlo(2, 1, 4, rand, 0.01, 0.7, 0.125, 0.3);
+		som = new SOM(2, 2, 2, rand, 0.1, 1, 0.125);
+		rsom = new RSOM(2, 1, 4, rand, 0.01, 0.7, 0.125, 0.3);
 	}
 	
 	public void run(){

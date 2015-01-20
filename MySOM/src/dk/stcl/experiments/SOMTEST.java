@@ -6,10 +6,8 @@ import java.util.Random;
 
 import dk.stcl.som.ISomBasics;
 import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.offline.som.SomOffline;
-import dk.stcl.som.online.rsom.RSOMlo;
-import dk.stcl.som.online.som.PLSOM;
-import dk.stcl.som.online.som.SOMlo;
+import dk.stcl.som.rsom.RSOM;
+import dk.stcl.som.som.SOM;
 
 public class SOMTEST {
 	
@@ -17,7 +15,7 @@ public class SOMTEST {
 	private HashMap<Integer, Integer> labelMap;
 	double[] fitnessScores;
 	
-	private enum somTypes {NORMAL, PLSOM, SOMlo, RSOMlo};
+	private enum somTypes {SOMlo, RSOMlo};
 	
 	private final int SOM_SIZE = 3;
 	private final somTypes type = somTypes.RSOMlo;
@@ -124,13 +122,9 @@ public class SOMTEST {
 		int size = 3; //(int) Math.pow(2, inputLength);
 		
 		switch (type){
-		case NORMAL: som = new SomOffline(size, size, inputLength, rand, INITIAL_LEARNING, size / 2);
+		case SOMlo: som = new SOM(size, size, inputLength, rand, INITIAL_LEARNING, 1, 0.125);
 			break;
-		case PLSOM: som = new PLSOM(size, size, inputLength, rand);
-			break;
-		case SOMlo: som = new SOMlo(size, size, inputLength, rand, INITIAL_LEARNING, 1, 0.125);
-			break;
-		case RSOMlo: som = new RSOMlo(size, size, inputLength, rand, INITIAL_LEARNING, 1, 0.125, 1);
+		case RSOMlo: som = new RSOM(size, size, inputLength, rand, INITIAL_LEARNING, 1, 0.125, 1);
 			break;
 		default:
 			break;
@@ -150,9 +144,6 @@ public class SOMTEST {
 				s += som.getBMU().getId() + " ";
 			}
 			//System.out.println(s);		
-    		
-    		//Sensitize som
-    		som.sensitize(i, NUM_ITERATIONS, true, false);
 			
 		}
 	}

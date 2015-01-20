@@ -11,11 +11,8 @@ import dk.stcl.som.IRSOM;
 import dk.stcl.som.ISOM;
 import dk.stcl.som.ISomBasics;
 import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.offline.som.SomOffline;
-import dk.stcl.som.online.rsom.RSOM;
-import dk.stcl.som.online.rsom.RSOMlo;
-import dk.stcl.som.online.som.PLSOM;
-import dk.stcl.som.online.som.SOMlo;
+import dk.stcl.som.rsom.RSOM;
+import dk.stcl.som.som.SOM;
 
 	
 
@@ -32,7 +29,7 @@ public class TwoDLines {
 	
 	private SimpleMatrix[][] sequences;
 	private ISOM spatialPooler;
-	private SomOffline possibleInputs;
+	private ISOM possibleInputs;
 	private IRSOM temporalPooler;
 	private MovingLinesGUI frame;
 	private final int GUI_SIZE = 500;
@@ -272,16 +269,7 @@ public class TwoDLines {
 		int spatialMapSize = 3;
 		
 		
-		switch(somType){
-		case PLSOM: spatialPooler = new PLSOM(spatialMapSize, spatialMapSize, spatialInputLength, rand);
-			break;
-		case SOMlo: spatialPooler = new SOMlo(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, 1, 0.3 );
-			break;
-		case NORMALSOM: spatialPooler =  new SomOffline(spatialMapSize, spatialMapSize, spatialInputLength, rand);
-			break;
-		default:
-			break;		
-		}		
+		spatialPooler = new SOM(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, 1, 0.3 );	
 		
 		
 		//Temporal pooler
@@ -289,22 +277,14 @@ public class TwoDLines {
 		int temporalMapSize = 2;
 		
 		
-		switch (rsomType){
-		case RSOM: temporalPooler = new RSOM(temporalMapSize, temporalMapSize, temporalInputLength, rand, DECAY);
-			break;
-		case RSOMlo: temporalPooler = new RSOMlo(temporalMapSize, temporalMapSize, temporalInputLength, rand, 0.1, 1, 0.125, DECAY);
-			break;
-		default:
-			break;
-		
-		}
+		temporalPooler = new RSOM(temporalMapSize, temporalMapSize, temporalInputLength, rand, 0.1, 1, 0.125, DECAY);
 		
 		
 	}
 	
 	private void buildSequences(){
 		sequences = new SimpleMatrix[3][3];
-		possibleInputs = new SomOffline(3, 3, 9, new Random());
+		possibleInputs = new SOM(3, 3, 9, new Random(),0,0,0);
 		SomNode[] nodes = possibleInputs.getNodes();
 		
 		SimpleMatrix m;

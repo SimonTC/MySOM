@@ -1,14 +1,10 @@
 package dk.stcl.gui;
 
 import java.awt.Dimension;
-import java.awt.GraphicsConfiguration;
-import java.awt.HeadlessException;
 
 import javax.swing.JFrame;
 
-import org.ejml.simple.SimpleMatrix;
-
-import dk.stcl.som.offline.som.SomOffline;
+import dk.stcl.som.ISOM;
 
 /**
  * Visualizes the activation of a SOM map.
@@ -17,7 +13,7 @@ import dk.stcl.som.offline.som.SomOffline;
  */
 public class SomActivationDrawer extends JFrame {
 
-	private SomOffline som;
+	private ISOM som;
 	private MatrixPanel panel;
 	
 	/**
@@ -26,7 +22,7 @@ public class SomActivationDrawer extends JFrame {
 	 * @param som
 	 * @param scaled true if the values are scaled between 0 and 1
 	 */
-	public SomActivationDrawer(int frameSize, SomOffline som, boolean scaled){
+	public SomActivationDrawer(int frameSize, ISOM som, boolean scaled){
 		this.som = som;
 		
 		setPreferredSize(new Dimension(frameSize, frameSize));

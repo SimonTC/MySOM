@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 
 import org.ejml.ops.CommonOps;
 import org.ejml.simple.SimpleMatrix;

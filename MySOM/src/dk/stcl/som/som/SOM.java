@@ -1,12 +1,12 @@
-package dk.stcl.som.online.som;
+package dk.stcl.som.som;
 
 import java.util.Random;
 
 import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.som.ISOM;
+import dk.stcl.som.SomBasics;
 import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.online.SomOnline;
 
 /**
  * This implementation off an online som is based on the description in the LoopSom paper
@@ -14,13 +14,13 @@ import dk.stcl.som.online.SomOnline;
  *
  */
 //TODO: Better citation
-public class SOMlo extends SomOnline implements ISOM {
+public class SOM extends SomBasics implements ISOM {
 	
 	private double learningRate;
 	private double stddev; //TODO: Give a good real name
 	private double activationCodingFactor;
 	
-	public SOMlo(int columns, int rows, int inputLength, Random rand, double learningRate, double stddev, double activationCodingFactor) {
+	public SOM(int columns, int rows, int inputLength, Random rand, double learningRate, double stddev, double activationCodingFactor) {
 		super(columns, rows, inputLength, rand);
 		this.learningRate = learningRate;
 		this.stddev = stddev;

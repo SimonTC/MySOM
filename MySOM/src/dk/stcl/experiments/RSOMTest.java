@@ -10,12 +10,10 @@ import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.experiments.movinglines.MovingLinesGUI;
 import dk.stcl.som.IRSOM;
-import dk.stcl.som.ISOM;
 import dk.stcl.som.ISomBasics;
 import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.online.rsom.RSOM;
-import dk.stcl.som.online.rsom.RSOMlo;
-import dk.stcl.som.online.som.SOMlo;
+import dk.stcl.som.rsom.RSOM;
+import dk.stcl.som.som.SOM;
 
 public class RSOMTest {
 	private Random rand = new Random();
@@ -34,7 +32,7 @@ public class RSOMTest {
 	
 	private double[][] hor, ver, blank;
 	
-	private SOMlo spatialDummy = new SOMlo(3, 3, 3, rand, 0, 0, 0);
+	private SOM spatialDummy = new SOM(3, 3, 3, rand, 0, 0, 0);
 	
 	
 	private ArrayList<double[][]> sequences;
@@ -227,16 +225,7 @@ public class RSOMTest {
 	
 	private void setupRSOM(){
 		int inputSize = sequences.get(0)[0].length;
-		
-		switch (type){
-		case RSOM: rsom = new RSOM(SIZE, SIZE, inputSize, rand, DECAY);
-			break;
-		case RSOMlo: rsom = new RSOMlo(SIZE, SIZE, inputSize, rand, LEARNING_RATE, 1, 0.3, DECAY);
-			break;
-		default:
-			break;
-		
-		}
+		rsom = new RSOM(SIZE, SIZE, inputSize, rand, LEARNING_RATE, 1, 0.3, DECAY);
 		
 	}
 	

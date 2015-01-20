@@ -1,4 +1,4 @@
-package dk.stcl.som.online.rsom;
+package dk.stcl.som.rsom;
 
 import java.util.Random;
 
@@ -7,8 +7,7 @@ import org.ejml.simple.SimpleMatrix;
 import dk.stcl.som.IRSOM;
 import dk.stcl.som.containers.SomMap;
 import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.online.som.PLSOM;
-import dk.stcl.som.online.som.SOMlo;
+import dk.stcl.som.som.SOM;
 
 /**
  * This clas is an implementation of the RSOM from the LoopSOM paper
@@ -16,12 +15,12 @@ import dk.stcl.som.online.som.SOMlo;
  *
  */
 //TODO: Better citation
-public class RSOMlo extends SOMlo implements IRSOM {
+public class RSOM extends SOM implements IRSOM {
 	
 	private SomMap leakyDifferencesMap;
 	private double decayFactor;
 
-	public RSOMlo(int columns, int rows, int inputLength, Random rand,
+	public RSOM(int columns, int rows, int inputLength, Random rand,
 			double learningRate, double stddev, double activationCodingFactor, double decayFactor) {
 		super(columns, rows, inputLength, rand, learningRate, stddev,
 				activationCodingFactor);

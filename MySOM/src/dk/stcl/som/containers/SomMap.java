@@ -2,8 +2,6 @@ package dk.stcl.som.containers;
 
 import java.util.Random;
 
-import org.ejml.simple.SimpleMatrix;
-
 public class SomMap {
 	
 	private int rows, columns;

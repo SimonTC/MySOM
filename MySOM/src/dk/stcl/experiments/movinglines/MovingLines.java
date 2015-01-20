@@ -8,11 +8,11 @@ import javax.swing.JFrame;
 import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.som.IRSOM;
+import dk.stcl.som.ISOM;
 import dk.stcl.som.ISomBasics;
 import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.offline.som.SomOffline;
-import dk.stcl.som.online.rsom.RSOM;
-import dk.stcl.som.online.rsom.RSOMlo;
+import dk.stcl.som.rsom.RSOM;
+import dk.stcl.som.som.SOM;
 
 	
 
@@ -28,8 +28,8 @@ public class MovingLines {
 	private HashMap<Integer, Integer> rsomLabelMap;
 	
 	private SimpleMatrix[][] sequences;
-	private IRSOM spatialPooler;
-	private SomOffline possibleInputs;
+	private ISOM spatialPooler;
+	private ISomBasics possibleInputs;
 	private IRSOM temporalPooler;
 	private MovingLinesGUI frame;
 	private final int GUI_SIZE = 500;
@@ -239,41 +239,22 @@ public class MovingLines {
 		int spatialInputLength = 9;
 		int spatialMapSize = 5;
 		
-		spatialPooler = new RSOMlo(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, 1, 0.125, 1);
-		/*
-		switch(somType){
-		case PLSOM: spatialPooler = new PLSOM(spatialMapSize, spatialMapSize, spatialInputLength, rand);
-			break;
-		case SOMlo: spatialPooler = new SOMlo(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, 1, 0.3 );
-			break;
-		case NORMALSOM: spatialPooler =  new SomOffline(spatialMapSize, spatialMapSize, spatialInputLength, rand);
-			break;
-		default:
-			break;		
-		}		
-		*/
+		spatialPooler = new SOM(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, 1, 0.125);
+		
 		
 		//Temporal pooler
 		int temporalInputLength = spatialMapSize * spatialMapSize;
 		int temporalMapSize = 2;
 		
 		
-		switch (rsomType){
-		case RSOM: temporalPooler = new RSOM(temporalMapSize, temporalMapSize, temporalInputLength, rand, DECAY);
-			break;
-		case RSOMlo: temporalPooler = new RSOMlo(temporalMapSize, temporalMapSize, temporalInputLength, rand, 0.1, 1, 0.125, DECAY);
-			break;
-		default:
-			break;
-		
-		}
+		temporalPooler = new RSOM(temporalMapSize, temporalMapSize, temporalInputLength, rand, 0.1, 1, 0.125, DECAY);
 		
 		
 	}
 	
 	private void buildSequences(){
 		sequences = new SimpleMatrix[3][3];
-		possibleInputs = new SomOffline(3, 3, 9, new Random());
+		possibleInputs = new SOM(3, 3, 9, new Random(),0,0,0);
 		SomNode[] nodes = possibleInputs.getNodes();
 		
 		SimpleMatrix m;

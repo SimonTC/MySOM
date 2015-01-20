@@ -59,21 +59,4 @@ public interface ISomBasics {
 	 */
 	public abstract SomNode findBMU(SimpleMatrix inputVector);
 
-	/**
-	 * Updates both the learning rate and the neighborhood radius based on the current timestep.
-	 * @param iteration
-	 * @param maxIterations
-	 */
-	public abstract void sensitize(int timestep, int maxTimesteps);
-
-	/**
-	 * Updates the learning rate and the neighborhood radius based on the current timestep.
-	 * @param timestep
-	 * @param maxTimesteps
-	 * @param doNeighborhood if false neighborhood radius will not be updated
-	 * @param doLearningRate if false learning rate will not be updated
-	 */
-	public abstract void sensitize(int timestep, int maxTimesteps,
-			boolean doNeighborhood, boolean doLearningRate);
-
 }

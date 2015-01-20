@@ -1,9 +1,7 @@
 package dk.stcl.gui;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.GridLayout;
-import java.awt.LayoutManager;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -12,7 +10,6 @@ import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.som.ISomBasics;
 import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.offline.som.SomOffline;
 
 
 public class SomPanel extends JPanel {

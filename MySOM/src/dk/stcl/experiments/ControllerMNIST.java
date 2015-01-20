@@ -2,17 +2,14 @@ package dk.stcl.experiments;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Random;
 
 import org.ejml.simple.SimpleMatrix;
 
-import dk.stcl.gui.SomActivationDrawer;
 import dk.stcl.gui.SomModelDrawer;
 import dk.stcl.som.ISomBasics;
 import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.offline.som.SomOffline;
-import dk.stcl.som.online.som.PLSOM;
+import dk.stcl.som.som.SOM;
 import dk.stcl.utils.DataLoader;
 
 public class ControllerMNIST {
@@ -84,12 +81,7 @@ public class ControllerMNIST {
 		//int inputLength = data.numCols();
 		int inputLength = trainLoader.getNumColumns() - 1;
 		int size = SOM_SIZE;
-		if (USE_PLSOM){
-			som = new PLSOM(size, size, inputLength, rand);
-		} else {
-			som = new SomOffline(size, size, inputLength, rand, INITIAL_LEARNING, size / 2);
-		}
-		
+		som = new SOM(size, size, inputLength, rand, 0.1, 1, 0.125);
 				
 		if (visualize){
 			//Create GUI
@@ -133,9 +125,6 @@ public class ControllerMNIST {
 				d = d / (double) 255; //Normalization
 				sample[i-1] = d;
 			}
-			
-			//Sensitize som
-			som.sensitize(iteration, maxIterations);
 			
 			
 			//Present sample to som

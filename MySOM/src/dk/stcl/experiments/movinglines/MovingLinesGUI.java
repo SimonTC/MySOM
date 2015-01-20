@@ -1,9 +1,7 @@
 package dk.stcl.experiments.movinglines;
 
 import java.awt.Dimension;
-import java.awt.GraphicsConfiguration;
 import java.awt.GridLayout;
-import java.awt.HeadlessException;
 
 import javax.swing.JFrame;
 
@@ -14,8 +12,6 @@ import dk.stcl.gui.SomPanel;
 import dk.stcl.som.IRSOM;
 import dk.stcl.som.ISomBasics;
 import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.offline.som.SomOffline;
-import dk.stcl.som.online.rsom.RSOM;
 
 
 
