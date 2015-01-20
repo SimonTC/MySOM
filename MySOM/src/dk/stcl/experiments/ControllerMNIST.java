@@ -28,16 +28,17 @@ public class ControllerMNIST {
 	/*      Parameters used in the code         */
 	/********************************************/
 	private final int GUI_SIZE = 500;
-	private final int SOM_SIZE = 10;
+	private final int SOM_SIZE = 5;
 	private final double INITIAL_LEARNING = 0.1;
+	private final double STDDEV = 3;
 	private final int MAX_ITERATIONS = 1000;
 	private final String DELIMITER = ";";
 	private final int PRINT_EVERY = 100;
 	
 	private final boolean CLASSIFY_NEW_DATA = false;
 	private final boolean USE_PLSOM = false;
-	private static final boolean VISUALIZE = true;
-	int FRAMES_PER_SECOND = 50;
+	private static final boolean VISUALIZE = false;
+	int FRAMES_PER_SECOND = 100;
 	/**
 	 * @throws IOException ******************************************/
 	
@@ -86,9 +87,9 @@ public class ControllerMNIST {
 		int inputLength = trainLoader.getNumColumns() - 1;
 		int size = SOM_SIZE;
 		if (USE_PLSOM){
-			som = new PLSOM(size, size, inputLength, rand, 0.1, 1, 0.125);
+			som = new PLSOM(size, size, inputLength, rand, INITIAL_LEARNING, STDDEV, 0.125);
 		} else {
-			som = new SOM(size, size, inputLength, rand, 0.1, 1, 0.125);
+			som = new SOM(size, size, inputLength, rand, INITIAL_LEARNING, STDDEV, 0.125);
 		}
 		//som = new SOM(size, size, inputLength, rand, INITIAL_LEARNING, 1, 0.125);
 		//som = new PLSOM(size, size, inputLength, rand);
