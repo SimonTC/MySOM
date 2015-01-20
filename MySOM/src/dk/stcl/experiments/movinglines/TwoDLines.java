@@ -19,12 +19,6 @@ import dk.stcl.som.som.SOM;
 
 public class TwoDLines {
 	
-	private enum RSOMTYPES {RSOM, RSOMlo};
-	private enum SOMTYPES {PLSOM, SOMlo, NORMALSOM};
-	
-	private final RSOMTYPES rsomType = RSOMTYPES.RSOMlo;
-	private final SOMTYPES somType = SOMTYPES.SOMlo;
-	
 	private HashMap<Integer, Integer> somLabelMap;
 	private HashMap<Integer, Integer> rsomLabelMap;
 	
@@ -39,11 +33,13 @@ public class TwoDLines {
 	
 	private final double DECAY = 0.3;
 	
-	private final boolean VISUAL_RUN = false;
+	private final boolean VISUAL_RUN = true;
 	
 	private Random rand = new Random();
 	
-	private final boolean USE_PLSOM = true;
+	private final boolean USE_PLSOM = false;
+	private final int STDDEV = 2;
+	private final int SOM_SIZE = 5;
 
 
 	public static void main(String[] args){
@@ -186,22 +182,8 @@ public class TwoDLines {
 		//Transform spatial output matrix to vector
 		double[] spatialOutputVector = spatialActivation.getMatrix().data;
 		
-		double[] orthogonalized;
-		if (somType != SOMTYPES.SOMlo){
-			//Orthogonalize output
-			orthogonalized = orthogonalize(spatialOutputVector);
-		}else {
-			orthogonalized = spatialOutputVector;
-		}
-		
-		/*
-		System.out.println();
-		System.out.println("Iteration " + iteration);
-		spatialActivation.print();
-		 */
-		
 		//Temporal classification
-		temporalPooler.step(orthogonalized);	    	
+		temporalPooler.step(spatialOutputVector);	    	
 	}
 	
 	private void doSequence(SimpleMatrix[] sequence, boolean visualize, int iteration){
@@ -269,13 +251,13 @@ public class TwoDLines {
 	private void setupPoolers(Random rand){		
 		//Spatial pooler
 		int spatialInputLength = 9;
-		int spatialMapSize = 3;
+		int spatialMapSize = SOM_SIZE;
 		
 		
 		if (USE_PLSOM){
-			spatialPooler = new PLSOM(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, 1, 0.125);
+			spatialPooler = new PLSOM(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, STDDEV, 0.125);
 		} else {
-			spatialPooler = new SOM(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, 1, 0.125);
+			spatialPooler = new SOM(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, STDDEV, 0.125);
 		}	
 		
 		
@@ -284,7 +266,7 @@ public class TwoDLines {
 		int temporalMapSize = 2;
 		
 		
-		temporalPooler = new RSOM(temporalMapSize, temporalMapSize, temporalInputLength, rand, 0.1, 1, 0.125, DECAY);
+		temporalPooler = new RSOM(temporalMapSize, temporalMapSize, temporalInputLength, rand, 0.1, STDDEV, 0.125, DECAY);
 		
 		
 	}

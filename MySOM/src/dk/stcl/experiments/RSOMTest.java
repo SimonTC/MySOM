@@ -18,11 +18,11 @@ import dk.stcl.som.som.SOM;
 public class RSOMTest {
 	private Random rand = new Random();
 	private IRSOM rsom;
-	private final int NUM_ITERATIONS = 40000;
+	private final int NUM_ITERATIONS = 1000;
 	private final double DECAY = 0.3;
-	private final int SIZE = 2;
+	private final int SIZE = 5;
 	
-	private final boolean USE_LINE_SEQUENCES = true;
+	private final boolean USE_LINE_SEQUENCES = false;
 	private final boolean USE_LINE_SEQUENCES_Random = true;
 	
 	
@@ -34,6 +34,7 @@ public class RSOMTest {
 	
 	private SOM spatialDummy = new SOM(3, 3, 3, rand, 0, 0, 0);
 	
+	private final int STDDEV = 1;
 	
 	private ArrayList<double[][]> sequences;
 	
@@ -225,7 +226,7 @@ public class RSOMTest {
 	
 	private void setupRSOM(){
 		int inputSize = sequences.get(0)[0].length;
-		rsom = new RSOM(SIZE, SIZE, inputSize, rand, LEARNING_RATE, 1, 0.3, DECAY);
+		rsom = new RSOM(SIZE, SIZE, inputSize, rand, LEARNING_RATE, STDDEV, 0.3, DECAY);
 		
 	}
 	
