@@ -11,6 +11,7 @@ import org.ejml.simple.SimpleMatrix;
 import dk.stcl.gui.SomModelDrawer;
 import dk.stcl.som.ISomBasics;
 import dk.stcl.som.containers.SomNode;
+import dk.stcl.som.som.PLSOM;
 import dk.stcl.som.som.SOM;
 import dk.stcl.utils.DataLoader;
 
@@ -35,7 +36,7 @@ public class ControllerMNIST {
 	private final String DELIMITER = ";";
 	private final int PRINT_EVERY = 100;
 	
-	private static final boolean VISUALIZE = true;
+	private static final boolean VISUALIZE = false;
 	/**
 	 * @throws IOException ******************************************/
 	
@@ -84,6 +85,7 @@ public class ControllerMNIST {
 		int inputLength = trainLoader.getNumColumns() - 1;
 		int size = SOM_SIZE;
 		som = new SOM(size, size, inputLength, rand, INITIAL_LEARNING, 1, 0.125);
+		//som = new PLSOM(size, size, inputLength, rand);
 				
 		if (visualize){
 			//Create GUI
