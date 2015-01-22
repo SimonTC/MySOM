@@ -43,7 +43,7 @@ public class MatrixPanel extends JPanel {
 		for (int x=0; x<width; x++) {
 			for (int y=0; y<height; y++) {
 				
-				double value = matrix.get(y, x);				
+				double value = matrix.get(y, x);
 				int rgb;
 				if (scaled){
 					rgb = (int) ((1-value) * 255);

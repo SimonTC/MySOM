@@ -128,47 +128,50 @@ public class MovingLinesGUI extends JFrame {
 		ISomBasics spatialSom = spatialPooler;
 		spatialModels.updateData(spatialSom, highlights);
 		spatialModels.repaint();
-		spatialModels.revalidate();		
+		spatialModels.revalidate();	
 		
-		//Update RSOM activation
-		SimpleMatrix temporalActivationMatrix = temporalPooler.computeActivationMatrix();
-		double tmp1[][] = {{temporalActivationMatrix.get(0, 0)}};
-		rsomActivation1.registerMatrix(new SimpleMatrix(tmp1));
-		rsomActivation1.repaint();
-		rsomActivation1.revalidate();
+		if (temporalPooler != null){
 		
-		double tmp2[][] = {{temporalActivationMatrix.get(0, 1)}};
-		rsomActivation2.registerMatrix(new SimpleMatrix(tmp2));
-		rsomActivation2.repaint();
-		rsomActivation2.revalidate();
+			//Update RSOM activation
+			SimpleMatrix temporalActivationMatrix = temporalPooler.computeActivationMatrix();
+			double tmp1[][] = {{temporalActivationMatrix.get(0, 0)}};
+			rsomActivation1.registerMatrix(new SimpleMatrix(tmp1));
+			rsomActivation1.repaint();
+			rsomActivation1.revalidate();
+			
+			double tmp2[][] = {{temporalActivationMatrix.get(0, 1)}};
+			rsomActivation2.registerMatrix(new SimpleMatrix(tmp2));
+			rsomActivation2.repaint();
+			rsomActivation2.revalidate();
+			
+			double tmp3[][] = {{temporalActivationMatrix.get(1, 0)}};
+			rsomActivation3.registerMatrix(new SimpleMatrix(tmp3));
+			rsomActivation3.repaint();
+			rsomActivation3.revalidate();
+			
+			double tmp4[][] = {{temporalActivationMatrix.get(1, 1)}};
+			rsomActivation4.registerMatrix(new SimpleMatrix(tmp4));
+			rsomActivation4.repaint();
+			rsomActivation4.revalidate();
 		
-		double tmp3[][] = {{temporalActivationMatrix.get(1, 0)}};
-		rsomActivation3.registerMatrix(new SimpleMatrix(tmp3));
-		rsomActivation3.repaint();
-		rsomActivation3.revalidate();
-		
-		double tmp4[][] = {{temporalActivationMatrix.get(1, 1)}};
-		rsomActivation4.registerMatrix(new SimpleMatrix(tmp4));
-		rsomActivation4.repaint();
-		rsomActivation4.revalidate();
-		
-		//Update RSOM models
-		
-		rsomModel1.updateData(spatialSom, getSpatialModelsInTemporalModel(temporalPooler, 0));
-		rsomModel1.repaint();
-		rsomModel1.revalidate();
-		
-		rsomModel2.updateData(spatialSom, getSpatialModelsInTemporalModel(temporalPooler, 1));
-		rsomModel2.repaint();
-		rsomModel2.revalidate();
-		
-		rsomModel3.updateData(spatialSom, getSpatialModelsInTemporalModel(temporalPooler, 2));
-		rsomModel3.repaint();
-		rsomModel3.revalidate();
-		
-		rsomModel4.updateData(spatialSom, getSpatialModelsInTemporalModel(temporalPooler, 3));
-		rsomModel4.repaint();
-		rsomModel4.revalidate();
+			//Update RSOM models
+			
+			rsomModel1.updateData(spatialSom, getSpatialModelsInTemporalModel(temporalPooler, 0));
+			rsomModel1.repaint();
+			rsomModel1.revalidate();
+			
+			rsomModel2.updateData(spatialSom, getSpatialModelsInTemporalModel(temporalPooler, 1));
+			rsomModel2.repaint();
+			rsomModel2.revalidate();
+			
+			rsomModel3.updateData(spatialSom, getSpatialModelsInTemporalModel(temporalPooler, 2));
+			rsomModel3.repaint();
+			rsomModel3.revalidate();
+			
+			rsomModel4.updateData(spatialSom, getSpatialModelsInTemporalModel(temporalPooler, 3));
+			rsomModel4.repaint();
+			rsomModel4.revalidate();
+		}
 		
 		
 		
