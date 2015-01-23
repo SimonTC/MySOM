@@ -211,7 +211,14 @@ public abstract class SomBasics implements ISomBasics {
 		return bmu;
 	}
 
-
+	public void printLabelMap(){
+		 for (int row = 0; row <somMap.getHeight(); row++) {
+		        for (int col = 0; col < somMap.getWidth(); col++) {
+		            System.out.printf("%4d", somMap.get(col, row).getLabel());
+		        }
+		        System.out.println();
+		    }
+	}
 	
 	/**
 	 * This method is used in optimization of the code. 

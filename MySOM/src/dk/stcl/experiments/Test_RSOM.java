@@ -19,8 +19,8 @@ import dk.stcl.utils.RSomLabeler;
 public class Test_RSOM {
 	private final int NUM_ITERATIONS = 10000;
 	private final double DECAY = 0.7;
-	private final int SIZE = 3;
-	private final int STDDEV = 2;
+	private final int SIZE =3;
+	private final int STDDEV = 1;
 	private final double LEARNING_RATE = 0.1;
 	private final double NOISE_MAGNITUDE = 0.1;
 	private final double CROSS_CHANCE = 0.0;
@@ -59,6 +59,8 @@ public class Test_RSOM {
 			rsom.flush();
 			rsom.setLearning(false);
 			label();
+			rsom.printLabelMap();
+			System.out.println();
 			rsom.flush();
 			fitness += validate(NOISE_MAGNITUDE,CROSS_CHANCE);
 		}

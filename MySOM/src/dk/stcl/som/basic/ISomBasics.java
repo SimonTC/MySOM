@@ -58,5 +58,7 @@ public interface ISomBasics {
 	 * @return
 	 */
 	public abstract SomNode findBMU(SimpleMatrix inputVector);
+	
+	public void printLabelMap();
 
 }
