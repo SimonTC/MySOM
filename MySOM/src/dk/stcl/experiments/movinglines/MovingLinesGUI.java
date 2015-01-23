@@ -185,7 +185,7 @@ public class MovingLinesGUI extends JFrame {
 		SimpleMatrix weightVector = model.getVector();
 		int vectorSize = weightVector.numCols() * weightVector.numRows();
 		double mean = weightVector.elementSum() / (double)vectorSize;
-		double threshold = 2 * ( 1 / (temporalModels.getHeight() * temporalModels.getWidth()));
+		double threshold = 2 * ( 1 / (temporalModels.getHeight() * temporalModels.getWidth())); 
 		boolean[] importantModels = new boolean[vectorSize];
 		
 		for (int i = 0; i <vectorSize; i++){
