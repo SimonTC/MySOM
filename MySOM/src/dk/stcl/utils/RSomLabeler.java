@@ -27,7 +27,7 @@ public class RSomLabeler {
 	 * @param data
 	 * @param sequenceLabels
 	 */
-	public void labelSOM (IRSOM  rsomToBelabeled, SimpleMatrix[][] sequences, int[] sequenceLabels, int iterations ){
+	public void labelRSOM (IRSOM  rsomToBelabeled, SimpleMatrix[][] sequences, int[] sequenceLabels, int iterations ){
 		assert sequences.length == sequenceLabels.length : "The number of labels does not equal the number of sequences!";
 		
 		SomNode[] nodes = rsomToBelabeled.getNodes();

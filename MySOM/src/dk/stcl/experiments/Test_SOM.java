@@ -136,6 +136,7 @@ public class Test_SOM {
 		
 		return noisy;
 	}
+	
 	private double validate(double noiseMagnitude){
 		int numValidations = 1000;
 		double fitness = 0;
