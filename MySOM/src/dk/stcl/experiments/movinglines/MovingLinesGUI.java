@@ -181,14 +181,15 @@ public class MovingLinesGUI extends JFrame {
 		//Collect Model
 		SomNode model = temporalModels.getNode(modelID);
 		
-		//Create boolean vector where an item is true if weight value of that item is higher than the mean value of all the weights
+		//Create boolean vector where an item is true if weight value of that item is higher than the mean.
 		SimpleMatrix weightVector = model.getVector();
 		int vectorSize = weightVector.numCols() * weightVector.numRows();
 		double mean = weightVector.elementSum() / (double)vectorSize;
+		double threshold = 2 * ( 1 / (temporalModels.getHeight() * temporalModels.getWidth()));
 		boolean[] importantModels = new boolean[vectorSize];
 		
 		for (int i = 0; i <vectorSize; i++){
-			if (weightVector.get(i) > mean * 2){
+			if (weightVector.get(i) > mean){
 				importantModels[i] = true;
 			}
 		}
