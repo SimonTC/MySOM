@@ -1,4 +1,4 @@
-package dk.stcl.experiments;
+package dk.stcl.experiments.tests.rsom;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,13 +16,13 @@ import dk.stcl.som.rsom.RSOM;
 import dk.stcl.som.som.SOM;
 import dk.stcl.utils.RSomLabeler;
 
-public class Test_RSOM_MovingLines {
+public class Test_RSOM {
 	private final int NUM_ITERATIONS = 40000;
 	private final double DECAY = 0.7;
 	private final int SIZE =2;
 	private final int STDDEV = 1;
 	private final double LEARNING_RATE = 0.1;
-	private final double NOISE_MAGNITUDE = 0.0;
+	private final double NOISE_MAGNITUDE = 0.1;
 	private final double CROSS_CHANCE = 0.0;
 	
 	int[] labels;
@@ -45,7 +45,7 @@ public class Test_RSOM_MovingLines {
 	
 
 	public static void main(String[] args) {
-		Test_RSOM_MovingLines runner = new Test_RSOM_MovingLines();
+		Test_RSOM runner = new Test_RSOM();
 		runner.run();
 
 	}
@@ -112,12 +112,10 @@ public class Test_RSOM_MovingLines {
 	public void train(double noiseMagnitude){
 		int curSeqID = 0;
 		int curInputID = Integer.MAX_VALUE;
-		SimpleMatrix[] seq = blank;
+		SimpleMatrix[] seq = null;
 		for (int i = 1; i < NUM_ITERATIONS; i++){
-			boolean change = curInputID >= seq.length;
+			boolean change = rand.nextDouble() > 0.9 ? true : false;
 			if (change){
-				rsom.flush();
-				curInputID = 0;
 				boolean choose = rand.nextBoolean();
 				switch (curSeqID){
 				case 0 : curSeqID = choose ? 1 : 2; break;
@@ -125,6 +123,7 @@ public class Test_RSOM_MovingLines {
 				case 2 : curSeqID = choose ? 0 : 1; break;
 				}
 			} 
+			curInputID = rand.nextInt(3);
 			if (curSeqID == 0) seq = hor;
 			if (curSeqID == 1) seq = ver;
 			if (curSeqID == 2) seq = blank;
@@ -134,8 +133,6 @@ public class Test_RSOM_MovingLines {
 			SimpleMatrix noisyInput = addnoise(input, noiseMagnitude);
 			
 			step(noisyInput);			
-			
-			curInputID++;
 		}
 	}
 	
@@ -159,12 +156,10 @@ public class Test_RSOM_MovingLines {
 		
 		int curSeqID = 0;
 		int curInputID = Integer.MAX_VALUE;
-		SimpleMatrix[] seq = blank;
+		SimpleMatrix[] seq = null;
 		for (int i = 1; i < numValidations; i++){
-			boolean change = curInputID >= seq.length;
+			boolean change = rand.nextDouble() > 0.9 ? true : false;
 			if (change){
-				rsom.flush();
-				curInputID = 0;
 				boolean choose = rand.nextBoolean();
 				switch (curSeqID){
 				case 0 : curSeqID = choose ? 1 : 2; break;
@@ -175,6 +170,7 @@ public class Test_RSOM_MovingLines {
 			
 			SimpleMatrix input;
 			if (rand.nextDouble() > crossChance){
+				curInputID = rand.nextInt(3);
 				if (curSeqID == 0) seq = hor;
 				if (curSeqID == 1) seq = ver;
 				if (curSeqID == 2) seq = blank;
@@ -191,8 +187,6 @@ public class Test_RSOM_MovingLines {
 			int expectedLabel = labels[curSeqID];
 			
 			if (actualLabel == expectedLabel) somCorrect++;
-			
-			curInputID++;
 		}
 		
 		fitness = (double) somCorrect / numValidations;
@@ -297,7 +291,7 @@ public class Test_RSOM_MovingLines {
 	
 	private void setupRSOM(){
 		int inputSize = sequences[0][0].numCols();
-		rsom = new RSOM(SIZE, SIZE, inputSize, rand, LEARNING_RATE, STDDEV, 0.3, DECAY);
+		rsom = new RSOM(SIZE, SIZE, inputSize, rand, LEARNING_RATE, STDDEV, 1.0, DECAY);
 		
 	}
 	

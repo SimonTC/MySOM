@@ -1,4 +1,4 @@
-package dk.stcl.experiments;
+package dk.stcl.experiments.tests.rsom;
 
 import java.util.ArrayList;
 import java.util.HashMap;
