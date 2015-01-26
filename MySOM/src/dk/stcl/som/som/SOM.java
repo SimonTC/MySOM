@@ -88,7 +88,10 @@ public class SOM extends SomBasics implements ISOM {
 		for (SomNode n : somMap.getNodes()){
 			SimpleMatrix weightVector = n.getVector();
 			SimpleMatrix diffVector = inputVector.minus(weightVector);
-			double diff = diffVector.normF();
+			double error = Math.pow(diffVector.normF(), 2);
+			double avgError = error / inputLength;
+			SimpleMatrix avgDiffVector = diffVector.scale(1 / weightVector.numCols());
+			double diff = avgError; //diffVector.normF();
 			if (diff < minDiff){
 				minDiff = diff;
 				BMU = n;
