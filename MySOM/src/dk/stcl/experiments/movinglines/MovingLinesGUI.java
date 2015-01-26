@@ -29,6 +29,8 @@ public class MovingLinesGUI extends JFrame {
 	private MatrixPanel rsomActivation3;
 	private MatrixPanel rsomActivation4;
 	
+	private int singleSomModelWidth;
+	
 	public MovingLinesGUI(ISomBasics spatialSom, ISomBasics possibleInputsSom) {
 		//Create overall grid layout
 		int rows = 3;
@@ -37,69 +39,72 @@ public class MovingLinesGUI extends JFrame {
 		setLayout(new GridLayout(rows, cols, gap, gap));
 		
 		//Set preffered size of GUI
-		int somModelSize = 3;
-		int somModelCellSize = 10;
-		int numberOfModelsInSOMS = 5;
+		int somHeight = spatialSom.getHeight(); //This should be equal to the width also
+		singleSomModelWidth =  (int) Math.sqrt(spatialSom.getNode(0).getVector().numCols()); //How many cells (size x size) are there in a single SOM model
+		int somModelCellSize = 5;	  //How many pixels (size x size) does a single cell in a SOM model require in height and width
 		int gapBetweenSomodels = 2;
-		int somSize = somModelSize * numberOfModelsInSOMS * gapBetweenSomodels * somModelCellSize;
 		
-		setPreferredSize(new Dimension(cols * somSize, rows * somSize));
+		int somPanelSize = somHeight * singleSomModelWidth * gapBetweenSomodels * somModelCellSize;
+		
+		setPreferredSize(new Dimension(cols * somPanelSize, rows * somPanelSize));
 		
 		
 		//Add input area
-		input = new MatrixPanel(new SimpleMatrix(3, 3), true);
-		input.setSize(somModelSize, somModelSize);
+		input = new MatrixPanel(new SimpleMatrix(singleSomModelWidth, singleSomModelWidth), true);
+		input.setSize(singleSomModelWidth, singleSomModelWidth);
 		add(input);
 		
 		//Add visualization of spatial som models
-		spatialModels = new SomPanel(spatialSom, somModelSize, somModelSize);
-		spatialModels.setSize(somSize, somSize);
+		spatialModels = new SomPanel(spatialSom, singleSomModelWidth, singleSomModelWidth);
+		spatialModels.setSize(somPanelSize, somPanelSize);
 		add(spatialModels);
 		
 		//Add visualization of spatial activation
 		spatialActivation = new MatrixPanel(new SimpleMatrix(5, 5), true);
-		spatialActivation.setSize(somSize, somSize);
+		spatialActivation.setSize(somPanelSize, somPanelSize);
 		add(spatialActivation);
 		
 		//Add blank (Or the different figures that can be seen
-		possibleInputs = new SomPanel(possibleInputsSom, somModelSize, somModelSize);
-		possibleInputs.setSize(somSize, somSize);
-		add(possibleInputs);
+		if (possibleInputsSom != null){
+			possibleInputs = new SomPanel(possibleInputsSom, somHeight, somHeight);
+			possibleInputs.setSize(somPanelSize, somPanelSize);
+			add(possibleInputs);
+		}
 		
 		// 2 x RSOM models
-		rsomModel1 = new SomPanel(spatialSom, somModelSize, somModelSize);
-		rsomModel1.setSize(somSize, somSize);
+		rsomModel1 = new SomPanel(spatialSom, somHeight, somHeight);
+		rsomModel1.setSize(somPanelSize, somPanelSize);
 		add(rsomModel1);
 		
-		rsomModel2 = new SomPanel(spatialSom, somModelSize, somModelSize);
-		rsomModel2.setSize(somSize, somSize);
+		rsomModel2 = new SomPanel(spatialSom, somHeight, somHeight);
+		rsomModel2.setSize(somPanelSize, somPanelSize);
 		add(rsomModel2);
 		
 		//Add two of the RSOM activation cells
 		rsomActivation1 = new MatrixPanel(new SimpleMatrix(1, 1), true);
-		rsomActivation1.setSize(somSize, somSize);
+		rsomActivation1.setSize(somPanelSize, somPanelSize);
 		add(rsomActivation1);
 		
 		rsomActivation2 = new MatrixPanel(new SimpleMatrix(1, 1), true);
-		rsomActivation2.setSize(somSize, somSize);
+		rsomActivation2.setSize(somPanelSize, somPanelSize);
 		add(rsomActivation2);
 		
 		// 2 x RSOM models
-		rsomModel3 = new SomPanel(spatialSom, somModelSize, somModelSize);
-		rsomModel3.setSize(somSize, somSize);
+		rsomModel3 = new SomPanel(spatialSom, somHeight, somHeight);
+		rsomModel3.setSize(somPanelSize, somPanelSize);
 		add(rsomModel3);
 		
-		rsomModel4 = new SomPanel(spatialSom, somModelSize, somModelSize);
-		rsomModel4.setSize(somSize, somSize);
+		rsomModel4 = new SomPanel(spatialSom, somHeight, somHeight);
+		rsomModel4.setSize(somPanelSize, somPanelSize);
 		add(rsomModel4);
 		
 		//Add two of the RSOM activation cells
 		rsomActivation3 = new MatrixPanel(new SimpleMatrix(1, 1),true);
-		rsomActivation3.setSize(somSize, somSize);
+		rsomActivation3.setSize(somPanelSize, somPanelSize);
 		add(rsomActivation3);
 		
 		rsomActivation4 = new MatrixPanel(new SimpleMatrix(1, 1),true);
-		rsomActivation4.setSize(somSize, somSize);
+		rsomActivation4.setSize(somPanelSize, somPanelSize);
 		add(rsomActivation4);		
 	}
 	
@@ -107,7 +112,7 @@ public class MovingLinesGUI extends JFrame {
 		
 		//Update input area
 		SimpleMatrix inputMatrix = new SimpleMatrix(inputVector);
-		inputMatrix.reshape(3, 3);
+		inputMatrix.reshape(singleSomModelWidth, singleSomModelWidth);
 		input.registerMatrix(inputMatrix);
 		input.repaint();
 		input.revalidate();

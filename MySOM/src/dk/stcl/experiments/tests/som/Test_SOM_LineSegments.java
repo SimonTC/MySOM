@@ -1,4 +1,4 @@
-package dk.stcl.experiments;
+package dk.stcl.experiments.tests.som;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -18,8 +18,12 @@ import dk.stcl.som.som.SOM;
 import dk.stcl.utils.SomLabeler;
 
 	
-
-public class Test_SOM {
+/**
+ * This class tests if the SOM correctly labels different line elements.
+ * @author Simon
+ *
+ */
+public class Test_SOM_LineSegments {
 
 	private SimpleMatrix[] sequences;
 	private ISOM spatialPooler;
@@ -29,7 +33,7 @@ public class Test_SOM {
 	private final int MAX_ITERTIONS = 1000;
 	private final int FRAMES_PER_SECOND = 4;
 	
-	private final boolean VISUAL_RUN = false;
+	private final boolean VISUAL_RUN = true;
 	
 	private final boolean VISUAL_TRAINING = false;
 	
@@ -44,7 +48,7 @@ public class Test_SOM {
 
 
 	public static void main(String[] args){
-		Test_SOM runner = new Test_SOM();
+		Test_SOM_LineSegments runner = new Test_SOM_LineSegments();
 		runner.run();
 	}
 	
@@ -78,11 +82,21 @@ public class Test_SOM {
 	}
 	
 	private void visualRun( Random rand){
+		int SKIP_TICKS = 1000 / FRAMES_PER_SECOND; 
 		setupVisualization(spatialPooler, GUI_SIZE);
 		for (int i = 1; i < 500;i++){
 			SimpleMatrix seq;
 			seq = sequences[rand.nextInt(sequences.length)];	    	
 			step(seq);
+			
+			//Visualize
+			updateGraphics(seq,i);					
+			try {
+				Thread.sleep(SKIP_TICKS);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
