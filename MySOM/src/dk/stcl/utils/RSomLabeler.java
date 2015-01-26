@@ -40,8 +40,9 @@ public class RSomLabeler {
 			SimpleMatrix scores = new SimpleMatrix(rsomToBelabeled.getErrorMatrix());
 			scores.scale(0);
 			
+			int inputID = Integer.MAX_VALUE;
 			for (int i = 0; i < iterations; i++){
-				int inputID = rand.nextInt(sequence.length);
+				inputID = rand.nextInt(sequence.length);
 				SimpleMatrix input = sequence[inputID];
 				rsomToBelabeled.step(input);
 				scores = scores.plus(rsomToBelabeled.getErrorMatrix());

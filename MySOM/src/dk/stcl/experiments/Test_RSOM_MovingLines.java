@@ -16,13 +16,13 @@ import dk.stcl.som.rsom.RSOM;
 import dk.stcl.som.som.SOM;
 import dk.stcl.utils.RSomLabeler;
 
-public class Test_RSOM {
+public class Test_RSOM_MovingLines {
 	private final int NUM_ITERATIONS = 40000;
 	private final double DECAY = 0.7;
 	private final int SIZE =2;
 	private final int STDDEV = 1;
 	private final double LEARNING_RATE = 0.1;
-	private final double NOISE_MAGNITUDE = 0.1;
+	private final double NOISE_MAGNITUDE = 0.0;
 	private final double CROSS_CHANCE = 0.0;
 	
 	int[] labels;
@@ -45,7 +45,7 @@ public class Test_RSOM {
 	
 
 	public static void main(String[] args) {
-		Test_RSOM runner = new Test_RSOM();
+		Test_RSOM_MovingLines runner = new Test_RSOM_MovingLines();
 		runner.run();
 
 	}
@@ -112,10 +112,12 @@ public class Test_RSOM {
 	public void train(double noiseMagnitude){
 		int curSeqID = 0;
 		int curInputID = Integer.MAX_VALUE;
-		SimpleMatrix[] seq = null;
+		SimpleMatrix[] seq = blank;
 		for (int i = 1; i < NUM_ITERATIONS; i++){
-			boolean change = rand.nextDouble() > 0.9 ? true : false;
+			boolean change = curInputID >= seq.length;
 			if (change){
+				rsom.flush();
+				curInputID = 0;
 				boolean choose = rand.nextBoolean();
 				switch (curSeqID){
 				case 0 : curSeqID = choose ? 1 : 2; break;
@@ -123,7 +125,6 @@ public class Test_RSOM {
 				case 2 : curSeqID = choose ? 0 : 1; break;
 				}
 			} 
-			curInputID = rand.nextInt(3);
 			if (curSeqID == 0) seq = hor;
 			if (curSeqID == 1) seq = ver;
 			if (curSeqID == 2) seq = blank;
@@ -133,6 +134,8 @@ public class Test_RSOM {
 			SimpleMatrix noisyInput = addnoise(input, noiseMagnitude);
 			
 			step(noisyInput);			
+			
+			curInputID++;
 		}
 	}
 	
@@ -156,10 +159,12 @@ public class Test_RSOM {
 		
 		int curSeqID = 0;
 		int curInputID = Integer.MAX_VALUE;
-		SimpleMatrix[] seq = null;
+		SimpleMatrix[] seq = blank;
 		for (int i = 1; i < numValidations; i++){
-			boolean change = rand.nextDouble() > 0.9 ? true : false;
+			boolean change = curInputID >= seq.length;
 			if (change){
+				rsom.flush();
+				curInputID = 0;
 				boolean choose = rand.nextBoolean();
 				switch (curSeqID){
 				case 0 : curSeqID = choose ? 1 : 2; break;
@@ -170,7 +175,6 @@ public class Test_RSOM {
 			
 			SimpleMatrix input;
 			if (rand.nextDouble() > crossChance){
-				curInputID = rand.nextInt(3);
 				if (curSeqID == 0) seq = hor;
 				if (curSeqID == 1) seq = ver;
 				if (curSeqID == 2) seq = blank;
@@ -187,6 +191,8 @@ public class Test_RSOM {
 			int expectedLabel = labels[curSeqID];
 			
 			if (actualLabel == expectedLabel) somCorrect++;
+			
+			curInputID++;
 		}
 		
 		fitness = (double) somCorrect / numValidations;
@@ -291,7 +297,7 @@ public class Test_RSOM {
 	
 	private void setupRSOM(){
 		int inputSize = sequences[0][0].numCols();
-		rsom = new RSOM(SIZE, SIZE, inputSize, rand, LEARNING_RATE, STDDEV, 1.0, DECAY);
+		rsom = new RSOM(SIZE, SIZE, inputSize, rand, LEARNING_RATE, STDDEV, 0.3, DECAY);
 		
 	}
 	
