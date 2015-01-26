@@ -34,12 +34,12 @@ public class MovingLines {
 	private IRSOM temporalPooler;
 	private MovingLinesGUI frame;
 	private final int GUI_SIZE = 500;
-	private final int MAX_ITERTIONS = 1000;
+	private final int MAX_ITERTIONS = 10000;
 	private final int FRAMES_PER_SECOND = 10;
 	
 	private final double DECAY = 0.3;
 	
-	private final boolean USE_PLSOM = true;
+	private final boolean USE_PLSOM = false;
 
 
 	public static void main(String[] args){
