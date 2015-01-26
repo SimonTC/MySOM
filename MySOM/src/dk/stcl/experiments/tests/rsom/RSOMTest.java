@@ -22,7 +22,7 @@ public class RSOMTest {
 	private final double DECAY = 0.3;
 	private final int SIZE = 5;
 	
-	private final boolean USE_LINE_SEQUENCES = true;
+	private final boolean USE_LINE_SEQUENCES = false;
 	private final boolean USE_LINE_SEQUENCES_Random = false;
 	
 	
@@ -40,14 +40,14 @@ public class RSOMTest {
 	
 	private final double LEARNING_RATE = 0.1;
 	private final int INPUTLENGTH = 1;
-	private final int MAX_SEQUENCE_LENGTH = 3;
-	private final boolean DIFFERENT_LENGTH = true;
-	private final int NUM_SEQUENCES = 100;
+	private final int MAX_SEQUENCE_LENGTH = 5;
+	private final boolean DIFFERENT_LENGTH = false;
+	private final int NUM_SEQUENCES = 10;
 	
 	private MovingLinesGUI frame;
 	private final int GUI_SIZE = 500;
 	private final int FRAMES_PER_SECOND = 10;
-	private final boolean VISUALIZE = true;
+	private final boolean VISUALIZE = false;
 	
 
 	public static void main(String[] args) {
@@ -58,7 +58,7 @@ public class RSOMTest {
 
 	public void run(){
 		double fitness = 0;
-		for (int i = 0; i < 10; i++){
+		for (int i = 0; i < 10; i++){;
 			buildSequences(INPUTLENGTH, MAX_SEQUENCE_LENGTH, DIFFERENT_LENGTH, NUM_SEQUENCES);
 			setupRSOM();
 			train();
@@ -66,7 +66,9 @@ public class RSOMTest {
 			rsom.setLearning(false);
 			label();
 			rsom.flush();
-			fitness += validate();
+			double curFit = validate();
+			fitness += curFit;
+			System.out.println("Iteration " + i + " Fitness: " + curFit );
 		}
 		fitness = fitness / 10;
 		System.out.println("Fitness: " + fitness);
