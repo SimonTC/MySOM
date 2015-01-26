@@ -22,8 +22,8 @@ public class RSOMTest {
 	private final double DECAY = 0.3;
 	private final int SIZE = 5;
 	
-	private final boolean USE_LINE_SEQUENCES = false;
-	private final boolean USE_LINE_SEQUENCES_Random = true;
+	private final boolean USE_LINE_SEQUENCES = true;
+	private final boolean USE_LINE_SEQUENCES_Random = false;
 	
 	
 	private enum RSOMTYPES {RSOM,RSOMlo};
@@ -47,7 +47,7 @@ public class RSOMTest {
 	private MovingLinesGUI frame;
 	private final int GUI_SIZE = 500;
 	private final int FRAMES_PER_SECOND = 10;
-	private final boolean VISUALIZE = false;
+	private final boolean VISUALIZE = true;
 	
 
 	public static void main(String[] args) {
@@ -89,8 +89,7 @@ public class RSOMTest {
 	}
 	
 	private void setupVisualization(ISomBasics som, int GUI_SIZE){
-		//Create GUI
-		
+		//Create GUI		
 		frame = new MovingLinesGUI(som, spatialDummy);
 		frame.setTitle("Visualiztion");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -30,6 +30,8 @@ public interface ISomBasics {
 	public abstract int getWidth();
 
 	public abstract boolean getLearning();
+	
+	public int getInputVectorLength();
 
 	public abstract void setLearning(boolean learning);
 

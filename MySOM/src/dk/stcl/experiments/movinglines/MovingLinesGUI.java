@@ -38,9 +38,11 @@ public class MovingLinesGUI extends JFrame {
 		int gap = 2;
 		setLayout(new GridLayout(rows, cols, gap, gap));
 		
+		int inputLength = spatialSom.getInputVectorLength();
+		
 		//Set preffered size of GUI
 		int somHeight = spatialSom.getHeight(); //This should be equal to the width also
-		singleSomModelWidth =  (int) Math.sqrt(spatialSom.getNode(0).getVector().numCols()); //How many cells (size x size) are there in a single SOM model
+		singleSomModelWidth =  (int) Math.sqrt(spatialSom.getInputVectorLength()); //How many cells (size x size) are there in a single SOM model
 		int somModelCellSize = 5;	  //How many pixels (size x size) does a single cell in a SOM model require in height and width
 		int gapBetweenSomodels = 2;
 		

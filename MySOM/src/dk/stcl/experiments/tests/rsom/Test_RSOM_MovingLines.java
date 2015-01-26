@@ -31,7 +31,7 @@ public class Test_RSOM_MovingLines {
 	private SimpleMatrix[] hor, ver, blank;
 	private SimpleMatrix cross;
 	
-	private SOM spatialDummy = new SOM(3, 3, 3, rand, 0, 0, 0);
+	private SOM spatialDummy = new SOM(3, 3, 9, rand, 0, 0, 0);
 	
 	
 	

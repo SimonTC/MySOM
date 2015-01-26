@@ -17,7 +17,7 @@ import dk.stcl.som.som.SOM;
 import dk.stcl.utils.RSomLabeler;
 
 public class Test_RSOM {
-	private final int NUM_ITERATIONS = 40000;
+	private final int NUM_ITERATIONS = 20000;
 	private final double DECAY = 0.7;
 	private final int SIZE =2;
 	private final int STDDEV = 1;
@@ -31,7 +31,7 @@ public class Test_RSOM {
 	private SimpleMatrix[] hor, ver, blank;
 	private SimpleMatrix cross;
 	
-	private SOM spatialDummy = new SOM(3, 3, 3, rand, 0, 0, 0);
+	private SOM spatialDummy = new SOM(3, 3, 9, rand, 0, 0, 0);
 	
 	
 	

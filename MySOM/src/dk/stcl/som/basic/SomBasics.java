@@ -220,6 +220,10 @@ public abstract class SomBasics implements ISomBasics {
 		    }
 	}
 	
+	public int getInputVectorLength(){
+		return inputLength;
+	}
+	
 	/**
 	 * This method is used in optimization of the code. 
 	 * Max radius is the radius of the circle with the BMU as centrum in which weight updates are performed
