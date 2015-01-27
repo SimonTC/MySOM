@@ -13,7 +13,7 @@ public interface ISomBasics {
 	 * @param orthogonalize If true, the matrix is orthogonalized
 	 * @return
 	 */
-	public abstract SimpleMatrix computeActivationMatrix(boolean orthogonalize);
+	public abstract SimpleMatrix computeActivationMatrix();
 
 	public abstract SomNode getBMU();
 

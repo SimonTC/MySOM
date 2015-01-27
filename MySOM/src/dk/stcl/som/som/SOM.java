@@ -104,10 +104,15 @@ public class SOM extends SomBasics implements ISOM {
 		return BMU;
 	}
 	
+	/* (non-Javadoc)
+	 * @see dk.stcl.som.ISomBasics#computeActivationMatrix()
+	 */
 	@Override
-	protected SimpleMatrix orthogonalize(SimpleMatrix m) {
-		SimpleMatrix activation = m.divide(-2 * Math.pow(activationCodingFactor, 2));	 
-		activation = activation.elementExp();
+	public SimpleMatrix computeActivationMatrix(){
+		SimpleMatrix activation = errorMatrix.elementPower(2);
+		activation = activation.divide(-2 * Math.pow(activationCodingFactor, 2));	 
+		activation = activation.elementExp();		
+		activationMatrix = activation;
 		return activation;
 	}
 

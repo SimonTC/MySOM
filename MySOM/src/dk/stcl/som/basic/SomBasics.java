@@ -18,6 +18,7 @@ public abstract class SomBasics implements ISomBasics {
 	protected double somFitness;
 	protected SimpleMatrix activationMatrix;
 	
+	
 	/**
 	 * 
 	 * @param columns number of columns in the internal weightMap
@@ -33,32 +34,7 @@ public abstract class SomBasics implements ISomBasics {
 		errorMatrix = new SimpleMatrix(rows, columns);
 		learning = true;
 		
-	}	
-	
-	/* (non-Javadoc)
-	 * @see dk.stcl.som.ISomBasics#computeActivationMatrix()
-	 */
-	@Override
-	public SimpleMatrix computeActivationMatrix(boolean orthogonalize){
-		double maxError = errorMatrix.elementMaxAbs();
-		SimpleMatrix m;
-		if (maxError == 0){
-			m = errorMatrix;
-		} else {
-			m = errorMatrix.divide(maxError);
-		}		 
-		SimpleMatrix activation = new SimpleMatrix(errorMatrix.numRows(), errorMatrix.numCols());
-		activation.set(1);
-		activation = activation.minus(m);	
-		
-		if (orthogonalize){
-			activation = orthogonalize(activation);
-		}
-		
-		activationMatrix = activation;
-		return activation;
-	}
-	
+	}		
 	
 	/* (non-Javadoc)
 	 * @see dk.stcl.som.ISomBasics#getBMU()
@@ -279,13 +255,6 @@ public abstract class SomBasics implements ISomBasics {
 	 * @return
 	 */
 	protected abstract double calculateSomFitness(SomNode bmu, SimpleMatrix inputVector);	
-	
-	/**
-	 * Orthogonalizes the input matrix 
-	 * @param m
-	 * @return
-	 */
-	protected abstract SimpleMatrix orthogonalize(SimpleMatrix m);
 
 	
 }
