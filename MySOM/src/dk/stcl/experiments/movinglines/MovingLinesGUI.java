@@ -120,7 +120,7 @@ public class MovingLinesGUI extends JFrame {
 		input.revalidate();
 		
 		//Update spatial activation
-		SimpleMatrix activationMatrix = spatialPooler.computeActivationMatrix(true);
+		SimpleMatrix activationMatrix = spatialPooler.computeActivationMatrix();
 		spatialActivation.registerMatrix(activationMatrix);
 		spatialActivation.repaint();
 		spatialActivation.revalidate();
@@ -140,7 +140,7 @@ public class MovingLinesGUI extends JFrame {
 		if (temporalPooler != null){
 		
 			//Update RSOM activation
-			SimpleMatrix temporalActivationMatrix = temporalPooler.computeActivationMatrix(true);
+			SimpleMatrix temporalActivationMatrix = temporalPooler.computeActivationMatrix();
 			double tmp1[][] = {{temporalActivationMatrix.get(0, 0)}};
 			rsomActivation1.registerMatrix(new SimpleMatrix(tmp1));
 			rsomActivation1.repaint();

@@ -199,7 +199,7 @@ public class TwoDLines {
 	private void step(SimpleMatrix input){
 		//Spatial classification	    		
 		spatialPooler.step(input.getMatrix().data);
-		SimpleMatrix spatialActivation = spatialPooler.computeActivationMatrix(true);
+		SimpleMatrix spatialActivation = spatialPooler.computeActivationMatrix();
 		
 		//Transform spatial output matrix to vector
 		double[] spatialOutputVector = spatialActivation.getMatrix().data;

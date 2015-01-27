@@ -27,7 +27,7 @@ public class SomActivationDrawer extends JFrame {
 		
 		setPreferredSize(new Dimension(frameSize, frameSize));
 		
-		panel = new MatrixPanel(som.computeActivationMatrix(true), scaled);
+		panel = new MatrixPanel(som.computeActivationMatrix(), scaled);
 		
 		add(panel);
 	}
@@ -38,7 +38,7 @@ public class SomActivationDrawer extends JFrame {
 	 * on the map
 	 */
 	public void updateData() {
-		this.panel.registerMatrix(som.computeActivationMatrix(true));
+		this.panel.registerMatrix(som.computeActivationMatrix());
 		this.panel.revalidate();
 		this.panel.repaint();
 	}
