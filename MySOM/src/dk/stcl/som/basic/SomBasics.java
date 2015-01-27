@@ -52,7 +52,7 @@ public abstract class SomBasics implements ISomBasics {
 		activation = activation.minus(m);	
 		
 		if (orthogonalize){
-			orthogonalize(activation);
+			activation = orthogonalize(activation);
 		}
 		
 		activationMatrix = activation;
