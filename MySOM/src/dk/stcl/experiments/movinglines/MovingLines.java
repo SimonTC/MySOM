@@ -159,7 +159,7 @@ public class MovingLines {
 		for (SimpleMatrix m : sequence){
     		//Spatial classification	    		
     		spatialPooler.step(m.getMatrix().data);
-    		SimpleMatrix spatialActivation = spatialPooler.computeActivationMatrix();
+    		SimpleMatrix spatialActivation = spatialPooler.computeActivationMatrix(true);
     		
     		//Transform spatial output matrix to vector
     		double[] spatialOutputVector = spatialActivation.getMatrix().data;

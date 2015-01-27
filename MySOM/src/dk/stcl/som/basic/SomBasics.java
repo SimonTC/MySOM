@@ -16,6 +16,7 @@ public abstract class SomBasics implements ISomBasics {
 	protected int inputLength, rows, columns;
 	protected SimpleMatrix inputVector;
 	protected double somFitness;
+	protected SimpleMatrix activationMatrix;
 	
 	/**
 	 * 
@@ -38,7 +39,7 @@ public abstract class SomBasics implements ISomBasics {
 	 * @see dk.stcl.som.ISomBasics#computeActivationMatrix()
 	 */
 	@Override
-	public SimpleMatrix computeActivationMatrix(){
+	public SimpleMatrix computeActivationMatrix(boolean orthogonalize){
 		double maxError = errorMatrix.elementMaxAbs();
 		SimpleMatrix m;
 		if (maxError == 0){
@@ -49,8 +50,15 @@ public abstract class SomBasics implements ISomBasics {
 		SimpleMatrix activation = new SimpleMatrix(errorMatrix.numRows(), errorMatrix.numCols());
 		activation.set(1);
 		activation = activation.minus(m);	
+		
+		if (orthogonalize){
+			orthogonalize(activation);
+		}
+		
+		activationMatrix = activation;
 		return activation;
 	}
+	
 	
 	/* (non-Javadoc)
 	 * @see dk.stcl.som.ISomBasics#getBMU()
@@ -224,6 +232,10 @@ public abstract class SomBasics implements ISomBasics {
 		return inputLength;
 	}
 	
+	public SimpleMatrix getActivationMatrix(){
+		return activationMatrix;
+	}
+	
 	/**
 	 * This method is used in optimization of the code. 
 	 * Max radius is the radius of the circle with the BMU as centrum in which weight updates are performed
@@ -267,6 +279,13 @@ public abstract class SomBasics implements ISomBasics {
 	 * @return
 	 */
 	protected abstract double calculateSomFitness(SomNode bmu, SimpleMatrix inputVector);	
+	
+	/**
+	 * Orthogonalizes the input matrix
+	 * @param m
+	 * @return
+	 */
+	protected abstract SimpleMatrix orthogonalize(SimpleMatrix m);
 
 	
 }

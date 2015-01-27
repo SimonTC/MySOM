@@ -79,7 +79,7 @@ public class FourPoints {
 		som.step(input);
 		
 		//Calculate activation
-		SimpleMatrix activation = som.computeActivationMatrix();
+		SimpleMatrix activation = som.computeActivationMatrix(true);
 		
 		//Give activation to RSOM
 		rsom.step(activation.getMatrix().data);

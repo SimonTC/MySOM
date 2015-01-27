@@ -8,10 +8,12 @@ import dk.stcl.som.containers.SomNode;
 public interface ISomBasics {
 
 	/**
-	 * The activation matrix is computed as 1 - (Ei / Emax)
+	 * Computes the activation matrix of the SOM
+	 * The basic activation is computed as 1 - (Ei / Emax)
+	 * @param orthogonalize If true, the matrix is orthogonalized
 	 * @return
 	 */
-	public abstract SimpleMatrix computeActivationMatrix();
+	public abstract SimpleMatrix computeActivationMatrix(boolean orthogonalize);
 
 	public abstract SomNode getBMU();
 
@@ -26,6 +28,8 @@ public interface ISomBasics {
 	public abstract SomNode getNode(int row, int col);
 
 	public abstract SomNode[] getNodes();
+	
+	public SimpleMatrix getActivationMatrix();
 
 	public abstract int getWidth();
 
