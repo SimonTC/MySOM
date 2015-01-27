@@ -281,7 +281,7 @@ public abstract class SomBasics implements ISomBasics {
 	protected abstract double calculateSomFitness(SomNode bmu, SimpleMatrix inputVector);	
 	
 	/**
-	 * Orthogonalizes the input matrix
+	 * Orthogonalizes the input matrix 
 	 * @param m
 	 * @return
 	 */
