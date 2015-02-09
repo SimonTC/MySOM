@@ -25,10 +25,14 @@ public class TwoDPictures {
 	private SOMTYPES somType = SOMTYPES.Normal;
 	private final int FRAMES_PER_SECOND = 10;
 	private Random rand = new Random();
-    private int maxIterations = 500;
+    private int maxIterations = 10000;
     private boolean useSimpleImages = false;
+	int figureRows;
+	int figureColumns;
+	int mapSize = 3;
     
-    private boolean visualize = false;
+    private boolean visualizeTraining = false;
+    private boolean visualizeResult = true;
 	
 	public static void main(String[] args) {
 		TwoDPictures runner = new TwoDPictures();
@@ -36,18 +40,31 @@ public class TwoDPictures {
 	}
 	
 	public void run(){
-	    int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;	    
-
-		setupExperiment(maxIterations, useSimpleImages);		
+		setupExperiment(maxIterations, useSimpleImages, visualizeTraining);		
+		runExperiment(visualizeTraining);
 		
+		if (visualizeResult){
+			pooler.setLearning(false);
+			setupGraphics(pooler, figureRows, mapSize);
+			runExperiment(visualizeResult);
+		}
+		
+	}
+	
+	private void runExperiment(boolean visualization){
+		int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;	
 		for (int i = 0; i < maxIterations; i++){			
 			//Choose random figure
 			SimpleMatrix input = figureMatrices[rand.nextInt(figureMatrices.length)];
 			
+			//Sensitize pooler
+			pooler.sensitize(i, maxIterations);
+			
 			//Feed forward
 			pooler.step(input);
 			
-			if (visualize){
+			
+			if (visualization){
 				//Update graphicss
 				updateGraphics(input, pooler, i);
 				
@@ -59,16 +76,13 @@ public class TwoDPictures {
 					e.printStackTrace();
 				}
 			}
-						
-			pooler.sensitize(i, maxIterations);
-		}
-				
 			
+		}			
+		
 	}
 	
-	private void setupExperiment(int iterations, boolean simple){
-		int figureRows = 0;
-		int figureColumns = 0;
+	private void setupExperiment(int iterations, boolean simple, boolean visualization){
+
 		
 		//Create Figure matrices
 		if (simple){
@@ -84,19 +98,17 @@ public class TwoDPictures {
 		
 		//Create spatial pooler
 		int inputLength = figureColumns * figureRows;
-		int mapSize = 3;
+
 		double activationCodingFactor = 0.125;
-		double initialLearningRate;
+		double initialLearningRate = 0.1;
 		switch (somType) {
 		case Normal:
-			initialLearningRate = 1;
 			pooler = new SOM_Normal(mapSize, inputLength, rand, initialLearningRate, activationCodingFactor);
 			break;
 		case PLSOM:
 			break;
 		case Semi_Online: 
-			initialLearningRate = 0.1;
-			pooler = new SOM_SemiOnline(mapSize, mapSize, inputLength, rand, initialLearningRate, 3, 0.125);
+			pooler = new SOM_SemiOnline(mapSize, mapSize, inputLength, rand, initialLearningRate, 3, activationCodingFactor);
 			break;
 		default:
 			break;
@@ -104,7 +116,7 @@ public class TwoDPictures {
 		}
 		
 		
-		if (visualize) {
+		if (visualization) {
 			//Setup graphics
 			setupGraphics(pooler, figureRows, mapSize);
 		}

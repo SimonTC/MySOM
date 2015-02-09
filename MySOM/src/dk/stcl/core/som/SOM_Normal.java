@@ -16,7 +16,7 @@ public class SOM_Normal extends SomBasics implements ISOM {
 		super(size, inputLength, rand);
 		this.initialLearningRate = initialLearningRate;
 		this.learningRate = initialLearningRate;
-		this.initialNeighborhoodRadius = Math.max(columns, rows) / 2;
+		this.initialNeighborhoodRadius = Math.max(columns, rows) / 2.0;
 		this.neighborhoodRadius = initialLearningRate;
 		this.activationCodingFactor = activationCodingFactor;
 	}
@@ -146,6 +146,8 @@ public class SOM_Normal extends SomBasics implements ISOM {
 	public void sensitize(int iteration, int maxIterations) {
 		adjustLearningRate(iteration, maxIterations);
 		adjustNeighborhoodRadius(iteration, maxIterations);
+		
+		//System.out.println("Iteration " + iteration + " LR: " + learningRate + " NR: " + neighborhoodRadius);
 		
 	}
 

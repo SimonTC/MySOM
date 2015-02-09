@@ -156,5 +156,7 @@ public abstract class SomBasics implements ISomBasics {
 	public SimpleMatrix getActivationMatrix(){
 		return activationMatrix;
 	}
+
+	
 	
 }
