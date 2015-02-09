@@ -10,10 +10,10 @@ import org.ejml.simple.SimpleMatrix;
 import dk.stcl.core.basic.ISomBasics;
 import dk.stcl.core.basic.containers.SomNode;
 import dk.stcl.core.rsom.IRSOM;
-import dk.stcl.core.rsom.RSOM;
+import dk.stcl.core.rsom.RSOM_SemiOnline;
 import dk.stcl.core.som.ISOM;
 import dk.stcl.core.som.PLSOM;
-import dk.stcl.core.som.SOM;
+import dk.stcl.core.som.SOM_SemiOnline;
 import dk.stcl.experiments.movinglines.MovingLinesGUI;
 import dk.stcl.utils.SomLabeler;
 
@@ -215,7 +215,7 @@ public class Test_SOM_LineSegments {
 		if (USE_PLSOM){
 			spatialPooler = new PLSOM(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, STDDEV, 0.125);
 		} else {
-			spatialPooler = new SOM(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, STDDEV, 0.125);
+			spatialPooler = new SOM_SemiOnline(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, STDDEV, 0.125);
 		}	
 
 		
@@ -224,7 +224,7 @@ public class Test_SOM_LineSegments {
 	
 	private void buildSequences(){
 		sequences = new SimpleMatrix[7];
-		possibleInputs = new SOM(3, 3, 9, new Random(),0,0,0);
+		possibleInputs = new SOM_SemiOnline(3, 3, 9, new Random(),0,0,0);
 		SomNode[] nodes = possibleInputs.getNodes();
 		labels = new int[sequences.length];
 		

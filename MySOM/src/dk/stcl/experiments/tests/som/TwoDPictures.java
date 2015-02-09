@@ -11,7 +11,7 @@ import javax.swing.JFrame;
 import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.core.som.ISOM;
-import dk.stcl.core.som.SOM;
+import dk.stcl.core.som.SOM_SemiOnline;
 import dk.stcl.experiments.movinglines.MovingLinesGUI;
 
 public class TwoDPictures {
@@ -86,7 +86,7 @@ public class TwoDPictures {
 		int inputLength = figureColumns * figureRows;
 		int mapSize = 3;
 		double initialLearningRate = 0.1;
-		pooler = new SOM(mapSize, mapSize, inputLength, rand, initialLearningRate, 3, 0.125);
+		pooler = new SOM_SemiOnline(mapSize, mapSize, inputLength, rand, initialLearningRate, 3, 0.125);
 		
 		//Setup graphics
 		setupGraphics(pooler, figureRows, mapSize);

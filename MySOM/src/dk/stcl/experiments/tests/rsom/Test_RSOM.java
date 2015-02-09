@@ -11,8 +11,8 @@ import org.ejml.simple.SimpleMatrix;
 import dk.stcl.core.basic.ISomBasics;
 import dk.stcl.core.basic.containers.SomNode;
 import dk.stcl.core.rsom.IRSOM;
-import dk.stcl.core.rsom.RSOM;
-import dk.stcl.core.som.SOM;
+import dk.stcl.core.rsom.RSOM_SemiOnline;
+import dk.stcl.core.som.SOM_SemiOnline;
 import dk.stcl.experiments.movinglines.MovingLinesGUI;
 import dk.stcl.utils.RSomLabeler;
 
@@ -31,7 +31,7 @@ public class Test_RSOM {
 	private SimpleMatrix[] hor, ver, blank;
 	private SimpleMatrix cross;
 	
-	private SOM spatialDummy = new SOM(3, 3, 9, rand, 0, 0, 0);
+	private SOM_SemiOnline spatialDummy = new SOM_SemiOnline(3, 3, 9, rand, 0, 0, 0);
 	
 	
 	
@@ -291,7 +291,7 @@ public class Test_RSOM {
 	
 	private void setupRSOM(){
 		int inputSize = sequences[0][0].numCols();
-		rsom = new RSOM(SIZE, SIZE, inputSize, rand, LEARNING_RATE, STDDEV, 1.0, DECAY);
+		rsom = new RSOM_SemiOnline(SIZE, SIZE, inputSize, rand, LEARNING_RATE, STDDEV, 1.0, DECAY);
 		
 	}
 	

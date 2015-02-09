@@ -13,13 +13,13 @@ import dk.stcl.core.basic.containers.SomNode;
  *
  */
 //TODO: Better citation
-public class SOM extends SomBasics implements ISOM {
+public class SOM_SemiOnline extends SomBasics implements ISOM {
 	
 	private double learningRate;
 	private double stddev; //TODO: Give a good real name
 	private double activationCodingFactor;
 	
-	public SOM(int columns, int rows, int inputLength, Random rand, double learningRate, double stddev, double activationCodingFactor) {
+	public SOM_SemiOnline(int columns, int rows, int inputLength, Random rand, double learningRate, double stddev, double activationCodingFactor) {
 		super(columns, rows, inputLength, rand);
 		this.learningRate = learningRate;
 		this.stddev = stddev;

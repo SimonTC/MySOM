@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import dk.stcl.core.basic.containers.SomNode;
 import dk.stcl.core.som.ISOM;
-import dk.stcl.core.som.SOM;
+import dk.stcl.core.som.SOM_SemiOnline;
 import dk.stcl.utils.SomLabeler;
 
 public class SomLabelerTest {
@@ -57,7 +57,7 @@ public class SomLabelerTest {
 	public void When_SamplesEqualsSomMap_Expect_EachNodeGivenUniqueCorrectLabel(){
 		//Setup SOM
 		int size = 3;
-		som = new SOM(size, size, inputLength, rand, 0, 0, 0);
+		som = new SOM_SemiOnline(size, size, inputLength, rand, 0, 0, 0);
 		SomNode[] nodes = som.getNodes();
 		
 		for (int i = 0; i < nodes.length; i++){
@@ -83,7 +83,7 @@ public class SomLabelerTest {
 	public void When_LabelingIsFinished_Expect_AllNodesHasALabel() {
 		//Setup SOM
 		int size = 3;
-		som = new SOM(size, size, inputLength, rand, 0, 0, 0);
+		som = new SOM_SemiOnline(size, size, inputLength, rand, 0, 0, 0);
 		SomNode[] nodes = som.getNodes();
 		
 		//Label SOM
@@ -103,7 +103,7 @@ public class SomLabelerTest {
 	public void When_AllNodesEqualToOneSample_Expect_OnlyOneLabelGiven(){
 		//Setup SOM
 		int size = 3;
-		som = new SOM(size, size, inputLength, rand, 0, 0, 0);
+		som = new SOM_SemiOnline(size, size, inputLength, rand, 0, 0, 0);
 		SomNode[] nodes = som.getNodes();
 		int chosenSample = 3;
 		for (int i = 0; i < nodes.length; i++){
@@ -129,7 +129,7 @@ public class SomLabelerTest {
 	public void When_NodeNearlyEqualToSample_Expect_NodeGetsLabelOfSample(){
 		//Setup SOM
 		int size = 3;
-		som = new SOM(size, size, inputLength, rand, 0, 0, 0);
+		som = new SOM_SemiOnline(size, size, inputLength, rand, 0, 0, 0);
 		SomNode[] nodes = som.getNodes();
 		
 		for (int i = 0; i < nodes.length; i++){

@@ -9,7 +9,7 @@ import org.ejml.simple.SimpleMatrix;
 import dk.stcl.core.basic.SomBasics;
 import dk.stcl.core.basic.containers.SomNode;
 
-public class PLSOM extends SOM implements ISOM {
+public class PLSOM extends SOM_SemiOnline implements ISOM {
 	
 	public PLSOM(int columns, int rows, int inputLength, Random rand,
 			double learningRate, double stddev, double activationCodingFactor) {

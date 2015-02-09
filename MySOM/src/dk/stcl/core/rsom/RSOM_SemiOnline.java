@@ -6,7 +6,7 @@ import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.core.basic.containers.SomMap;
 import dk.stcl.core.basic.containers.SomNode;
-import dk.stcl.core.som.SOM;
+import dk.stcl.core.som.SOM_SemiOnline;
 
 /**
  * This clas is an implementation of the RSOM from the LoopSOM paper
@@ -14,12 +14,12 @@ import dk.stcl.core.som.SOM;
  *
  */
 //TODO: Better citation
-public class RSOM extends SOM implements IRSOM {
+public class RSOM_SemiOnline extends SOM_SemiOnline implements IRSOM {
 	
 	private SomMap leakyDifferencesMap;
 	private double decayFactor;
 
-	public RSOM(int columns, int rows, int inputLength, Random rand,
+	public RSOM_SemiOnline(int columns, int rows, int inputLength, Random rand,
 			double learningRate, double stddev, double activationCodingFactor, double decayFactor) {
 		super(columns, rows, inputLength, rand, learningRate, stddev,
 				activationCodingFactor);

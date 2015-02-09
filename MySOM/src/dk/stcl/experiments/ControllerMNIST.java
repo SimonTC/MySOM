@@ -11,7 +11,7 @@ import org.ejml.simple.SimpleMatrix;
 import dk.stcl.core.basic.ISomBasics;
 import dk.stcl.core.basic.containers.SomNode;
 import dk.stcl.core.som.PLSOM;
-import dk.stcl.core.som.SOM;
+import dk.stcl.core.som.SOM_SemiOnline;
 import dk.stcl.gui.SomModelDrawer;
 import dk.stcl.utils.DataLoader;
 
@@ -89,7 +89,7 @@ public class ControllerMNIST {
 		if (USE_PLSOM){
 			som = new PLSOM(size, size, inputLength, rand, INITIAL_LEARNING, STDDEV, 0.125);
 		} else {
-			som = new SOM(size, size, inputLength, rand, INITIAL_LEARNING, STDDEV, 0.125);
+			som = new SOM_SemiOnline(size, size, inputLength, rand, INITIAL_LEARNING, STDDEV, 0.125);
 		}
 		//som = new SOM(size, size, inputLength, rand, INITIAL_LEARNING, 1, 0.125);
 		//som = new PLSOM(size, size, inputLength, rand);

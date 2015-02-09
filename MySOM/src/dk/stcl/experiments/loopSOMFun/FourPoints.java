@@ -5,14 +5,14 @@ import java.util.Random;
 import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.core.basic.containers.SomNode;
-import dk.stcl.core.rsom.RSOM;
-import dk.stcl.core.som.SOM;
+import dk.stcl.core.rsom.RSOM_SemiOnline;
+import dk.stcl.core.som.SOM_SemiOnline;
 
 public class FourPoints {
 
 	double[][] trainingSet;
-	SOM som;
-	RSOM rsom;
+	SOM_SemiOnline som;
+	RSOM_SemiOnline rsom;
 	Random rand = new Random(1234);
 	
 	public static void main(String[] args) {
@@ -26,8 +26,8 @@ public class FourPoints {
 	}
 	
 	private void createPoolers(){
-		som = new SOM(2, 2, 2, rand, 0.1, 1, 0.125);
-		rsom = new RSOM(2, 1, 4, rand, 0.01, 0.7, 0.125, 0.3);
+		som = new SOM_SemiOnline(2, 2, 2, rand, 0.1, 1, 0.125);
+		rsom = new RSOM_SemiOnline(2, 1, 4, rand, 0.01, 0.7, 0.125, 0.3);
 	}
 	
 	public void run(){

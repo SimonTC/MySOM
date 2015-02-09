@@ -6,12 +6,12 @@ import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.core.basic.containers.SomMap;
 import dk.stcl.core.basic.containers.SomNode;
-import dk.stcl.core.rsom.RSOM;
+import dk.stcl.core.rsom.RSOM_SemiOnline;
 import dk.stcl.utils.RSomLabeler;
 
 public class UnderstandingRSOM {
 	
-	private RSOM rsom;
+	private RSOM_SemiOnline rsom;
 	private Random rand = new Random(1234);
 	
 	private double learningRate = 0.1;
@@ -30,7 +30,7 @@ public class UnderstandingRSOM {
 	}
 	
 	public void run(){
-		rsom = new RSOM(2, 2, 2, rand, learningRate, stddev, 0.1, decayFactor);
+		rsom = new RSOM_SemiOnline(2, 2, 2, rand, learningRate, stddev, 0.1, decayFactor);
 		//buildSimpleSequences();
 		buildMoreComplexSequences();
 		//Print initial maps
