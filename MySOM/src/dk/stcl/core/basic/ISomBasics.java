@@ -15,34 +15,6 @@ public interface ISomBasics {
 	public abstract SimpleMatrix computeActivationMatrix();
 
 	/**
-	 * Collects the best matching unit. Can be called after the step() function has been called.
-	 * @return 
-	 */
-	public abstract SomNode getBMU();
-
-	public abstract SimpleMatrix getErrorMatrix();
-
-	public abstract int getHeight();
-
-	public abstract SomMap getSomMap();
-
-	public abstract SomNode getNode(int id);
-
-	public abstract SomNode getNode(int row, int col);
-
-	public abstract SomNode[] getNodes();
-	
-	public SimpleMatrix getActivationMatrix();
-
-	public abstract int getWidth();
-
-	public abstract boolean getLearning();
-	
-	public int getInputVectorLength();
-
-	public abstract void setLearning(boolean learning);
-
-	/**
 	 * Place the node n at coordinate (row,column) in the som map
 	 * @param n
 	 * @param row
@@ -68,6 +40,39 @@ public interface ISomBasics {
 	 */
 	public abstract SomNode findBMU(SimpleMatrix inputVector);
 	
+	public abstract void adjustLearningRate(int iteration, int maxIterations);
+	
+	public abstract void adjustNeighborhoodRadius(int iteration, int maxIterations);
+	
 	public void printLabelMap();
+	
+	/**
+	 * Collects the best matching unit. Can be called after the step() function has been called.
+	 * @return 
+	 */
+	public abstract SomNode getBMU();
+
+	public abstract SimpleMatrix getErrorMatrix();
+
+	public abstract int getHeight();
+
+	public abstract SomMap getSomMap();
+
+	public abstract SomNode getNode(int id);
+
+	public abstract SomNode getNode(int row, int col);
+
+	public abstract SomNode[] getNodes();
+	
+	public SimpleMatrix getActivationMatrix();
+
+	public abstract int getWidth();
+	
+	public int getInputVectorLength();
+
+	public abstract void setLearning(boolean learning);
+
+	public abstract boolean getLearning();
+
 
 }
