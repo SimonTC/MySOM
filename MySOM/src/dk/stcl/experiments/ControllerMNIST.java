@@ -8,11 +8,11 @@ import javax.swing.JFrame;
 
 import org.ejml.simple.SimpleMatrix;
 
+import dk.stcl.core.basic.ISomBasics;
+import dk.stcl.core.basic.containers.SomNode;
+import dk.stcl.core.som.PLSOM;
+import dk.stcl.core.som.SOM;
 import dk.stcl.gui.SomModelDrawer;
-import dk.stcl.som.basic.ISomBasics;
-import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.som.PLSOM;
-import dk.stcl.som.som.SOM;
 import dk.stcl.utils.DataLoader;
 
 public class ControllerMNIST {

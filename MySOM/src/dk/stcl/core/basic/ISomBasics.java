@@ -1,9 +1,9 @@
-package dk.stcl.som.basic;
+package dk.stcl.core.basic;
 
 import org.ejml.simple.SimpleMatrix;
 
-import dk.stcl.som.containers.SomMap;
-import dk.stcl.som.containers.SomNode;
+import dk.stcl.core.basic.containers.SomMap;
+import dk.stcl.core.basic.containers.SomNode;
 
 public interface ISomBasics {
 

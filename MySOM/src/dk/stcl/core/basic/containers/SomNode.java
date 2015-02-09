@@ -1,4 +1,4 @@
-package dk.stcl.som.containers;
+package dk.stcl.core.basic.containers;
 
 import java.util.Random;
 

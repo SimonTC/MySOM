@@ -4,9 +4,9 @@ import java.util.Random;
 
 import org.ejml.simple.SimpleMatrix;
 
-import dk.stcl.som.containers.SomMap;
-import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.rsom.RSOM;
+import dk.stcl.core.basic.containers.SomMap;
+import dk.stcl.core.basic.containers.SomNode;
+import dk.stcl.core.rsom.RSOM;
 import dk.stcl.utils.RSomLabeler;
 
 public class UnderstandingRSOM {

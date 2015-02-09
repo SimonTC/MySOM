@@ -8,9 +8,9 @@ import org.ejml.simple.SimpleMatrix;
 import org.junit.Before;
 import org.junit.Test;
 
-import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.som.ISOM;
-import dk.stcl.som.som.SOM;
+import dk.stcl.core.basic.containers.SomNode;
+import dk.stcl.core.som.ISOM;
+import dk.stcl.core.som.SOM;
 import dk.stcl.utils.SomLabeler;
 
 public class SomLabelerTest {

@@ -7,13 +7,13 @@ import javax.swing.JFrame;
 
 import org.ejml.simple.SimpleMatrix;
 
-import dk.stcl.som.basic.ISomBasics;
-import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.rsom.IRSOM;
-import dk.stcl.som.rsom.RSOM;
-import dk.stcl.som.som.ISOM;
-import dk.stcl.som.som.PLSOM;
-import dk.stcl.som.som.SOM;
+import dk.stcl.core.basic.ISomBasics;
+import dk.stcl.core.basic.containers.SomNode;
+import dk.stcl.core.rsom.IRSOM;
+import dk.stcl.core.rsom.RSOM;
+import dk.stcl.core.som.ISOM;
+import dk.stcl.core.som.PLSOM;
+import dk.stcl.core.som.SOM;
 
 	
 

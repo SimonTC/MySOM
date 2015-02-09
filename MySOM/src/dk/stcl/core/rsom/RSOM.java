@@ -1,12 +1,12 @@
-package dk.stcl.som.rsom;
+package dk.stcl.core.rsom;
 
 import java.util.Random;
 
 import org.ejml.simple.SimpleMatrix;
 
-import dk.stcl.som.containers.SomMap;
-import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.som.SOM;
+import dk.stcl.core.basic.containers.SomMap;
+import dk.stcl.core.basic.containers.SomNode;
+import dk.stcl.core.som.SOM;
 
 /**
  * This clas is an implementation of the RSOM from the LoopSOM paper

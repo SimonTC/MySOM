@@ -10,9 +10,9 @@ import javax.swing.JFrame;
 
 import org.ejml.simple.SimpleMatrix;
 
+import dk.stcl.core.som.ISOM;
+import dk.stcl.core.som.SOM;
 import dk.stcl.experiments.movinglines.MovingLinesGUI;
-import dk.stcl.som.som.ISOM;
-import dk.stcl.som.som.SOM;
 
 public class TwoDPictures {
 	

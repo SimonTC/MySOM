@@ -1,4 +1,4 @@
-package dk.stcl.som.som;
+package dk.stcl.core.som;
 
 
 import java.util.ArrayList;
@@ -6,8 +6,8 @@ import java.util.Random;
 
 import org.ejml.simple.SimpleMatrix;
 
-import dk.stcl.som.basic.SomBasics;
-import dk.stcl.som.containers.SomNode;
+import dk.stcl.core.basic.SomBasics;
+import dk.stcl.core.basic.containers.SomNode;
 
 public class PLSOM extends SOM implements ISOM {
 	

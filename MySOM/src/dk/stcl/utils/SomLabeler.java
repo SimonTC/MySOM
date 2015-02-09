@@ -2,8 +2,8 @@ package dk.stcl.utils;
 
 import org.ejml.simple.SimpleMatrix;
 
-import dk.stcl.som.containers.SomNode;
-import dk.stcl.som.som.ISOM;
+import dk.stcl.core.basic.containers.SomNode;
+import dk.stcl.core.som.ISOM;
 
 /**
  * This class is used for labeling the nodes of a SOM

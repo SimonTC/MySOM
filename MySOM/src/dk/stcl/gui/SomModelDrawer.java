@@ -12,8 +12,8 @@ import javax.swing.JPanel;
 
 import org.ejml.simple.SimpleMatrix;
 
-import dk.stcl.som.basic.ISomBasics;
-import dk.stcl.som.containers.SomNode;
+import dk.stcl.core.basic.ISomBasics;
+import dk.stcl.core.basic.containers.SomNode;
 
 public class SomModelDrawer extends JFrame {
 
