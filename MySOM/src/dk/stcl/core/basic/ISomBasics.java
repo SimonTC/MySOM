@@ -9,12 +9,15 @@ public interface ISomBasics {
 
 	/**
 	 * Computes the activation matrix of the SOM
-	 * The basic activation is computed as 1 - (Ei / Emax)
-	 * @param orthogonalize If true, the matrix is orthogonalized
+	 * The actual activation computation is dependent on the SOM implementation
 	 * @return
 	 */
 	public abstract SimpleMatrix computeActivationMatrix();
 
+	/**
+	 * Collects the best matching unit. Can be called after the step() function has been called.
+	 * @return 
+	 */
 	public abstract SomNode getBMU();
 
 	public abstract SimpleMatrix getErrorMatrix();
