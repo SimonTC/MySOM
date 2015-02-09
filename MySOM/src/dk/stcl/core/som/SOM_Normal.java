@@ -55,6 +55,8 @@ public class SOM_Normal extends SomBasics implements ISOM {
 		}
 		
 		assert (BMU != null): "No BMU was found";
+		
+		//errorMatrix.print();
 
 		return BMU;
 	}
@@ -69,10 +71,10 @@ public class SOM_Normal extends SomBasics implements ISOM {
 		//Calculate start and end coordinates for the weight updates
 		int bmuCol = bmu.getCol();
 		int bmuRow = bmu.getRow();
-		int colStart = (int) (bmuCol - neighborhoodRadius);
-		int rowStart = (int) (bmuRow - neighborhoodRadius);
-		int colEnd = (int) (bmuCol + neighborhoodRadius);
-		int rowEnd = (int) (bmuRow + neighborhoodRadius);
+		int colStart = (int) (bmuCol - neighborhoodRadius) - 1;
+		int rowStart = (int) (bmuRow - neighborhoodRadius) - 1;
+		int colEnd = (int) (bmuCol + neighborhoodRadius) + 1;
+		int rowEnd = (int) (bmuRow + neighborhoodRadius) + 1;
 		
 		//Make sure we don't get out of bounds errors
 		if (colStart < 0) colStart = 0;
@@ -80,15 +82,35 @@ public class SOM_Normal extends SomBasics implements ISOM {
 		if (colEnd > somMap.getWidth()) colEnd = somMap.getWidth();
 		if (rowEnd > somMap.getHeight()) rowEnd = somMap.getHeight();
 		
+		SimpleMatrix effect = new SimpleMatrix(somMap.getHeight(), somMap.getWidth());
+		effect.set(-1);
+		
+		System.out.println("BMU row " + bmuRow + " BMU col " + bmuCol);
+		System.out.println("Col start " + colStart + " Col end " + colEnd);
+		System.out.println("Row start " + rowStart + " Row end " + rowEnd);
+		
 		//Adjust weights
-		for (int col = colStart; col < colEnd; col++){
-			for (int row = rowStart; row < rowEnd; row++){
+		for (int col = 0; col < somMap.getWidth(); col++){
+			for (int row = 0; row < somMap.getHeight(); row++){
+				//System.out.println("Col: " + col + " Row: " + row);
 				SomNode n = somMap.get(col, row);
 				double neighborhoodEffect = calculateNeighborhoodEffect(bmu, n);
+				effect.set(row, col, neighborhoodEffect);
 				adjustNodeWeights(n, neighborhoodEffect, learningRate);
 			}
 		}
-
+		/*
+		for (int col = colStart; col < colEnd; col++){
+			for (int row = rowStart; row < rowEnd; row++){
+				System.out.println("Col: " + col + " Row: " + row);
+				SomNode n = somMap.get(col, row);
+				double neighborhoodEffect = calculateNeighborhoodEffect(bmu, n);
+				effect.set(row, col, neighborhoodEffect);
+				adjustNodeWeights(n, neighborhoodEffect, learningRate);
+			}
+		}*/
+		effect.print();
+		System.out.println();
 	}
 	
 	/**
@@ -98,8 +120,8 @@ public class SOM_Normal extends SomBasics implements ISOM {
 	 * @return
 	 */
 	private double calculateNeighborhoodEffect(SomNode bmu, SomNode n){
-		double dist = bmu.distanceTo(n);
-		double effect = Math.exp(- Math.pow(dist, 2) / (2 * Math.pow(neighborhoodRadius, 2)));
+		double squaredDist = bmu.normDistanceTo(n);
+		double effect = Math.exp(- squaredDist / (2 * Math.pow(neighborhoodRadius, 2)));
 		return effect;
 	}
 

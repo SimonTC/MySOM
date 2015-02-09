@@ -24,9 +24,9 @@ public class TwoDPictures {
 	private enum SOMTYPES {Normal, Semi_Online, PLSOM};
 	private SOMTYPES somType = SOMTYPES.Normal;
 	private final int FRAMES_PER_SECOND = 10;
-	private Random rand = new Random();
-    private int maxIterations = 10000;
-    private boolean useSimpleImages = false;
+	private Random rand = new Random(1234);
+    private int maxIterations = 100;
+    private boolean useSimpleImages = true;
 	int figureRows;
 	int figureColumns;
 	int mapSize = 3;

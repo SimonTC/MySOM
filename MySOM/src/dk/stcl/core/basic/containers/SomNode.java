@@ -118,7 +118,7 @@ public class SomNode {
 	 * @param n
 	 * @return returns the squared distance
 	 */
-	public double distanceTo(SomNode n){
+	public double squaredDistanceTo(SomNode n){
 		int thatX = n.getCol();
 		int thatY = n.getRow();
 		int myX = col;

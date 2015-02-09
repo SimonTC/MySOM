@@ -103,7 +103,7 @@ public class PLSOM extends SOM_SemiOnline implements ISOM {
 	@Override
 	protected double calculateNeighborhoodEffect(SomNode bmu, SomNode n) {
 		double neighborhoodSize = calculateNeighborhoodSize(somFitness);
-		double distance = bmu.distanceTo(n);
+		double distance = bmu.squaredDistanceTo(n);
 		double neighborhoodEffect = Math.exp(-Math.pow(distance, 2) / Math.pow(neighborhoodSize, 2));
 		return neighborhoodEffect;
 
