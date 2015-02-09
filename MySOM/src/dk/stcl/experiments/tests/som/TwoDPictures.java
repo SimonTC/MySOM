@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.core.som.ISOM;
+import dk.stcl.core.som.SOM_Normal;
 import dk.stcl.core.som.SOM_SemiOnline;
 import dk.stcl.experiments.movinglines.MovingLinesGUI;
 
@@ -20,6 +21,14 @@ public class TwoDPictures {
 	private ISOM possibleInputs;
 	private MovingLinesGUI frame;
 	private SimpleMatrix[] figureMatrices;
+	private enum SOMTYPES {Normal, Semi_Online, PLSOM};
+	private SOMTYPES somType = SOMTYPES.Normal;
+	private final int FRAMES_PER_SECOND = 10;
+	private Random rand = new Random();
+    private int maxIterations = 500;
+    private boolean useSimpleImages = false;
+    
+    private boolean visualize = false;
 	
 	public static void main(String[] args) {
 		TwoDPictures runner = new TwoDPictures();
@@ -27,38 +36,31 @@ public class TwoDPictures {
 	}
 	
 	public void run(){
-		int FRAMES_PER_SECOND = 10;
-	    int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
-	   
-	    float next_game_tick = System.currentTimeMillis();
-	    float sleepTime = 0;
+	    int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;	    
+
+		setupExperiment(maxIterations, useSimpleImages);		
 		
-	    int maxIterations = 500;
-	    boolean useSimpleImages = true;
-		setupExperiment(maxIterations, useSimpleImages);
-		
-		
-		
-		for (int i = 0; i < maxIterations; i++){
-						
-			for (int j = 0; j < figureMatrices.length; j++){
-				//Feed forward
-				 pooler.step(figureMatrices[j]);;			
-				
+		for (int i = 0; i < maxIterations; i++){			
+			//Choose random figure
+			SimpleMatrix input = figureMatrices[rand.nextInt(figureMatrices.length)];
+			
+			//Feed forward
+			pooler.step(input);
+			
+			if (visualize){
 				//Update graphicss
-				updateGraphics(figureMatrices[j], pooler, i);	
+				updateGraphics(input, pooler, i);
 				
 				//Sleep
-				next_game_tick+= SKIP_TICKS;
-				sleepTime = next_game_tick - System.currentTimeMillis();
 				try {
 					Thread.sleep(SKIP_TICKS);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
-			}					
+			}
+						
+			pooler.sensitize(i, maxIterations);
 		}
 				
 			
@@ -81,15 +83,31 @@ public class TwoDPictures {
 
 		
 		//Create spatial pooler
-		Random rand = new Random();
-		int maxIterations = iterations;
 		int inputLength = figureColumns * figureRows;
 		int mapSize = 3;
-		double initialLearningRate = 0.1;
-		pooler = new SOM_SemiOnline(mapSize, mapSize, inputLength, rand, initialLearningRate, 3, 0.125);
+		double activationCodingFactor = 0.125;
+		double initialLearningRate;
+		switch (somType) {
+		case Normal:
+			initialLearningRate = 1;
+			pooler = new SOM_Normal(mapSize, inputLength, rand, initialLearningRate, activationCodingFactor);
+			break;
+		case PLSOM:
+			break;
+		case Semi_Online: 
+			initialLearningRate = 0.1;
+			pooler = new SOM_SemiOnline(mapSize, mapSize, inputLength, rand, initialLearningRate, 3, 0.125);
+			break;
+		default:
+			break;
 		
-		//Setup graphics
-		setupGraphics(pooler, figureRows, mapSize);
+		}
+		
+		
+		if (visualize) {
+			//Setup graphics
+			setupGraphics(pooler, figureRows, mapSize);
+		}
 		
 	}
 	

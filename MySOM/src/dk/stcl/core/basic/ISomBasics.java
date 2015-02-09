@@ -46,6 +46,8 @@ public interface ISomBasics {
 	
 	public void printLabelMap();
 	
+	public double calculateSOMFitness();
+	
 	/**
 	 * Collects the best matching unit. Can be called after the step() function has been called.
 	 * @return 
@@ -73,6 +75,13 @@ public interface ISomBasics {
 	public abstract void setLearning(boolean learning);
 
 	public abstract boolean getLearning();
+	
+	/**
+	 * Adjusts the learning rate and neighborhood radius of the SOM
+	 * @param iteration
+	 * @param maxIterations
+	 */
+	public void sensitize(int iteration, int maxIterations);
 
 
 }
