@@ -116,5 +116,17 @@ public class SOM_SemiOnline extends SomBasics implements ISOM {
 		return activation;
 	}
 
+	@Override
+	public void adjustLearningRate(int iteration, int maxIterations) {
+		// LEarning rate is not adjusted in the semi-onlineSOM
+		
+	}
+
+	@Override
+	public void adjustNeighborhoodRadius(int iteration, int maxIterations) {
+		//Neighborhood radius is not adjusted by way of time in the semi-online SOM
+		
+	}
+
 
 }
