@@ -25,7 +25,7 @@ public class TwoDPictures {
 	private SOMTYPES somType = SOMTYPES.Normal;
 	private final int FRAMES_PER_SECOND = 10;
 	private Random rand = new Random(1234);
-    private int maxIterations = 100;
+    private int maxIterations = 1000;
     private boolean useSimpleImages = true;
 	int figureRows;
 	int figureColumns;

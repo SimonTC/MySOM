@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.ejml.simple.SimpleMatrix;
 
+import dk.stcl.core.basic.CopyOfSomBasics;
 import dk.stcl.core.basic.SomBasics;
 import dk.stcl.core.basic.containers.SomNode;
 
@@ -13,7 +14,7 @@ import dk.stcl.core.basic.containers.SomNode;
  *
  */
 //TODO: Better citation
-public class SOM_SemiOnline extends SomBasics implements ISOM {
+public class SOM_SemiOnline extends CopyOfSomBasics implements ISOM {
 	
 	private double learningRate;
 	private double stddev; //TODO: Give a good real name
@@ -118,13 +119,25 @@ public class SOM_SemiOnline extends SomBasics implements ISOM {
 
 	@Override
 	public void adjustLearningRate(int iteration, int maxIterations) {
-		// LEarning rate is not adjusted in the semi-onlineSOM
+		// Learning rate is not adjusted in the semi-onlineSOM
 		
 	}
 
 	@Override
 	public void adjustNeighborhoodRadius(int iteration, int maxIterations) {
 		//Neighborhood radius is not adjusted by way of time in the semi-online SOM
+		
+	}
+
+	@Override
+	public double calculateSOMFitness() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void sensitize(int iteration, int maxIterations) {
+		// TODO Auto-generated method stub
 		
 	}
 
