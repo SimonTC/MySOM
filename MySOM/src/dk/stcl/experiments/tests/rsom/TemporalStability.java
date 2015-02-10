@@ -9,6 +9,7 @@ import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.core.basic.ISomBasics;
 import dk.stcl.core.rsom.IRSOM;
+import dk.stcl.core.rsom.RSOM_Online;
 import dk.stcl.core.rsom.RSOM_SemiOnline;
 import dk.stcl.core.som.SOM_SemiOnline;
 import dk.stcl.experiments.movinglines.MovingLinesGUI;
@@ -64,6 +65,8 @@ public class TemporalStability {
 		double stddev = 1;
 		double activationCodingFactor = 0.5;
 		double decay = 0.3;
+		
+		//rsom = new RSOM_Online(mapSize, mapSize, inputLength, rand, learningRate, stddev, activationCodingFactor, decay);
 		
 		rsom = new RSOM_SemiOnline(mapSize, mapSize, inputLength, rand, learningRate, stddev, activationCodingFactor, decay);
 	}

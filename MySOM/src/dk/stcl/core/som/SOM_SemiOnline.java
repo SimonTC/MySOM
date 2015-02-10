@@ -17,7 +17,7 @@ import dk.stcl.core.basic.containers.SomNode;
 public class SOM_SemiOnline extends CopyOfSomBasics implements ISOM {
 	
 	private double learningRate;
-	private double stddev; //TODO: Give a good real name
+	protected double stddev; //TODO: Give a good real name
 	private double activationCodingFactor;
 	
 	public SOM_SemiOnline(int columns, int rows, int inputLength, Random rand, double learningRate, double stddev, double activationCodingFactor) {
