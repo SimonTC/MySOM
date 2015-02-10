@@ -10,24 +10,21 @@ import javax.swing.JFrame;
 
 import org.ejml.simple.SimpleMatrix;
 
+import dk.stcl.core.basic.containers.SomNode;
 import dk.stcl.core.som.ISOM;
-import dk.stcl.core.som.SOM_Normal;
-import dk.stcl.core.som.SOM_SemiOnline;
 import dk.stcl.core.som.SimpleSOM;
 import dk.stcl.experiments.movinglines.MovingLinesGUI;
 
-public class TwoDPictures {
-	
-	private ISOM pooler;
-	private ISOM possibleInputs;
+public class SimpleSOM_Test {
+
+	private SimpleSOM pooler;
+	private SimpleSOM possibleInputs;
 	private MovingLinesGUI frame;
 	private SimpleMatrix[] figureMatrices;
-	private enum SOMTYPES {Normal, Semi_Online, PLSOM};
-	private SOMTYPES somType = SOMTYPES.Normal;
 	private final int FRAMES_PER_SECOND = 10;
 	private Random rand = new Random(1234);
-    private int maxIterations = 5000;
-    private boolean useSimpleImages = false;
+    private int maxIterations = 1000;
+    private boolean useSimpleImages = true;
 	int figureRows;
 	int figureColumns;
 	int mapSize = 3;
@@ -36,7 +33,7 @@ public class TwoDPictures {
     private boolean visualizeResult = true;
 	
 	public static void main(String[] args) {
-		TwoDPictures runner = new TwoDPictures();
+		SimpleSOM_Test runner = new SimpleSOM_Test();
 		runner.run();
 	}
 	
@@ -58,11 +55,13 @@ public class TwoDPictures {
 			//Choose random figure
 			SimpleMatrix input = figureMatrices[rand.nextInt(figureMatrices.length)];
 			
-			//Sensitize pooler
-			pooler.sensitize(i, maxIterations);
-			
 			//Feed forward
-			pooler.step(input);
+			SomNode bmu = pooler.step(input);
+			
+			SimpleMatrix out = new SimpleMatrix(bmu.getVector());
+			out.reshape(mapSize, mapSize);
+			//out.print();
+			
 			
 			
 			if (visualization){
@@ -77,6 +76,8 @@ public class TwoDPictures {
 					e.printStackTrace();
 				}
 			}
+			//Sensitize pooler
+			pooler.sensitize(i, maxIterations);
 			
 		}			
 		
@@ -100,22 +101,9 @@ public class TwoDPictures {
 		//Create spatial pooler
 		int inputLength = figureColumns * figureRows;
 
-		double activationCodingFactor = 0.125;
 		double initialLearningRate = 0.1;
-		switch (somType) {
-		case Normal:
-			//pooler = new SOM_Normal(mapSize, inputLength, rand, initialLearningRate, activationCodingFactor);
-			pooler = new SimpleSOM(mapSize, inputLength, rand, iterations, initialLearningRate);
-			break;
-		case PLSOM:
-			break;
-		case Semi_Online: 
-			pooler = new SOM_SemiOnline(mapSize, mapSize, inputLength, rand, initialLearningRate, 3, activationCodingFactor);
-			break;
-		default:
-			break;
+		pooler = new SimpleSOM(mapSize, inputLength, rand, iterations, initialLearningRate);
 		
-		}
 		
 		
 		if (visualization) {
@@ -280,5 +268,6 @@ public class TwoDPictures {
 			}
 		}
 		return counter;
-	}
+	}	
+	
 }

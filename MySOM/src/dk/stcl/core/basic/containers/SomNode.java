@@ -134,7 +134,7 @@ public class SomNode {
 	}
 	
 	/**
-	 * Uses the frobenius norm to calculate distance
+	 * Uses the frobenius norm to calculate distance in the map
 	 * @param n
 	 * @return
 	 */
