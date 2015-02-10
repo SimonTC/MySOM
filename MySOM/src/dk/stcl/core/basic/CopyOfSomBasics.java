@@ -165,7 +165,7 @@ public abstract class CopyOfSomBasics implements ISomBasics {
 		if (rowStart < 0) rowStart = 0;
 		if (colEnd > somMap.getWidth()) colEnd = somMap.getWidth();
 		if (rowEnd > somMap.getHeight()) rowEnd = somMap.getHeight();
-		
+
 		//Adjust weights
 		for (int col = colStart; col < colEnd; col++){
 			for (int row = rowStart; row < rowEnd; row++){

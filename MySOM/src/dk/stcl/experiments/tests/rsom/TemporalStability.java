@@ -24,7 +24,7 @@ public class TemporalStability {
 	
 	private final int ITERATIONS = 10000;
 	private final boolean VISUALIZE_TRAINING = false;
-	private final boolean VISUALIZE_RESULT = true;
+	private final boolean VISUALIZE_RESULT = false;
 	private final int GUI_SIZE = 500;
 	private final int FRAMES_PER_SECOND = 5;
 
