@@ -36,8 +36,8 @@ public abstract class SomBasics implements ISomBasics {
 		
 	}		
 	
-	public SomBasics(int size, int inputLength, Random rand) {
-		this(size,size,inputLength, rand);
+	public SomBasics(int mapSize, int inputLength, Random rand) {
+		this(mapSize,mapSize,inputLength, rand);
 	}
 	
 	/* (non-Javadoc)
