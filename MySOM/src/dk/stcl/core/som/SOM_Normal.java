@@ -71,10 +71,10 @@ public class SOM_Normal extends SomBasics implements ISOM {
 		//Calculate start and end coordinates for the weight updates
 		int bmuCol = bmu.getCol();
 		int bmuRow = bmu.getRow();
-		int colStart = (int) (bmuCol - neighborhoodRadius) - 1;
-		int rowStart = (int) (bmuRow - neighborhoodRadius) - 1;
-		int colEnd = (int) (bmuCol + neighborhoodRadius) + 1;
-		int rowEnd = (int) (bmuRow + neighborhoodRadius) + 1;
+		int colStart = (int) (bmuCol - neighborhoodRadius) ;
+		int rowStart = (int) (bmuRow - neighborhoodRadius) ;
+		int colEnd = (int) (bmuCol + neighborhoodRadius) ;
+		int rowEnd = (int) (bmuRow + neighborhoodRadius) ;
 		
 		//Make sure we don't get out of bounds errors
 		if (colStart < 0) colStart = 0;
@@ -84,11 +84,11 @@ public class SOM_Normal extends SomBasics implements ISOM {
 		
 		SimpleMatrix effect = new SimpleMatrix(somMap.getHeight(), somMap.getWidth());
 		effect.set(-1);
-		
+		/*
 		System.out.println("BMU row " + bmuRow + " BMU col " + bmuCol);
 		System.out.println("Col start " + colStart + " Col end " + colEnd);
 		System.out.println("Row start " + rowStart + " Row end " + rowEnd);
-		
+		*/
 		//Adjust weights
 		for (int col = 0; col < somMap.getWidth(); col++){
 			for (int row = 0; row < somMap.getHeight(); row++){
@@ -109,8 +109,8 @@ public class SOM_Normal extends SomBasics implements ISOM {
 				adjustNodeWeights(n, neighborhoodEffect, learningRate);
 			}
 		}*/
-		effect.print();
-		System.out.println();
+		//effect.print();
+		//System.out.println();
 	}
 	
 	/**
@@ -120,7 +120,7 @@ public class SOM_Normal extends SomBasics implements ISOM {
 	 * @return
 	 */
 	private double calculateNeighborhoodEffect(SomNode bmu, SomNode n){
-		double squaredDist = bmu.normDistanceTo(n);
+		double squaredDist =  Math.pow(n.normDistanceTo(bmu),2);
 		double effect = Math.exp(- squaredDist / (2 * Math.pow(neighborhoodRadius, 2)));
 		return effect;
 	}
@@ -134,12 +134,11 @@ public class SOM_Normal extends SomBasics implements ISOM {
 		SimpleMatrix diff = inputVector.minus(valueVector);
 		
 		//Multiply by learning rate and neighborhood effect
-		SimpleMatrix learningEffect = new SimpleMatrix(diff.numRows(), diff.numCols());
-		learningEffect.set(learningRate * neighborhoodEffect);
-		diff = diff.elementMult(learningEffect);
+		double effect = learningRate * neighborhoodEffect;
+		SimpleMatrix delta = diff.scale(effect);
 		
 		//Add the diff-values to the value vector
-		valueVector = valueVector.plus(diff);
+		valueVector = valueVector.plus(delta);
 		
 		n.setVector(valueVector);
 	}

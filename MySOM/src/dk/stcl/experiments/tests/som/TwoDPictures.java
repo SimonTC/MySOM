@@ -22,12 +22,12 @@ public class TwoDPictures {
 	private ISOM possibleInputs;
 	private MovingLinesGUI frame;
 	private SimpleMatrix[] figureMatrices;
-	private enum SOMTYPES {Normal, Semi_Online, PLSOM};
+	private enum SOMTYPES {Simple, Normal, Semi_Online, PLSOM};
 	private SOMTYPES somType = SOMTYPES.Normal;
 	private final int FRAMES_PER_SECOND = 10;
 	private Random rand = new Random(1234);
-    private int maxIterations = 5000;
-    private boolean useSimpleImages = false;
+    private int maxIterations = 1000;
+    private boolean useSimpleImages = true;
 	int figureRows;
 	int figureColumns;
 	int mapSize = 3;
@@ -103,10 +103,8 @@ public class TwoDPictures {
 		double activationCodingFactor = 0.125;
 		double initialLearningRate = 0.1;
 		switch (somType) {
-		case Normal:
-			//pooler = new SOM_Normal(mapSize, inputLength, rand, initialLearningRate, activationCodingFactor);
-			pooler = new SimpleSOM(mapSize, inputLength, rand, iterations, initialLearningRate);
-			break;
+		case Simple: pooler = new SimpleSOM(mapSize, inputLength, rand, iterations, initialLearningRate); break;
+		case Normal: pooler = new SOM_Normal(mapSize, inputLength, rand, initialLearningRate, activationCodingFactor); break;
 		case PLSOM:
 			break;
 		case Semi_Online: 
