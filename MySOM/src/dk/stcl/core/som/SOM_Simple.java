@@ -32,17 +32,7 @@ public class SOM_Simple extends SomBasics implements ISOM {
 		this.activationCodingFactor = activationCodingFactor;
 	}
 
-	
-	public SomNode step(SimpleMatrix inputVector){
-		//Find BMU
-		bmu = findBMU(inputVector);
-		
-		//Update weights
-		if (learning) updateWeights(inputVector);
-		
-		return bmu;
-	}
-	
+	@Override
 	protected void updateWeights(SimpleMatrix inputVector){
 		for (SomNode n : somMap.getNodes()){
 			double dist = n.squaredDistanceTo(bmu);
@@ -82,12 +72,14 @@ public class SOM_Simple extends SomBasics implements ISOM {
 		return bmu;
 	}
 	
-	public void adjustNeighborhoodRadius(int step){
-		curNeighborhoodRadius = mapRadius * Math.exp(-(double) step / timeConstant);	
+	@Override
+	public void adjustNeighborhoodRadius(int iteration){
+		curNeighborhoodRadius = mapRadius * Math.exp(-(double) iteration / timeConstant);	
 	}
 	
-	public void adjustLearningRate(int step){
-		curLearningRate = initialLearningRate * Math.exp(-(double) step / maxIterations);
+	@Override
+	public void adjustLearningRate(int iteration){
+		curLearningRate = initialLearningRate * Math.exp(-(double) iteration / maxIterations);
 	}
 	
 	protected double calculateNeighborhoodEffect(SomNode n, SomNode bmu){
@@ -116,25 +108,6 @@ public class SOM_Simple extends SomBasics implements ISOM {
 		double fitness = 1 - errorMatrix.get(bmu.getRow(), bmu.getCol());
 		return fitness;
 	}
-
-
-	@Override
-	public void adjustLearningRate(int iteration, int maxIterations) {
-		adjustLearningRate(iteration);
-		
-	}
-
-	@Override
-	public void adjustNeighborhoodRadius(int iteration, int maxIterations) {
-		adjustNeighborhoodRadius(iteration);
-		
-	}
-
-	@Override
-	public void sensitize(int iteration, int maxIterations) {
-		adjustLearningRate(iteration);
-		adjustNeighborhoodRadius(iteration);		
-	}	
 
 
 }

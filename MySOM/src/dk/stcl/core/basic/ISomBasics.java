@@ -40,9 +40,9 @@ public interface ISomBasics {
 	 */
 	public abstract SomNode findBMU(SimpleMatrix inputVector);
 	
-	public abstract void adjustLearningRate(int iteration, int maxIterations);
+	public abstract void adjustLearningRate(int iteration);
 	
-	public abstract void adjustNeighborhoodRadius(int iteration, int maxIterations);
+	public abstract void adjustNeighborhoodRadius(int iteration);
 	
 	public void printLabelMap();
 	
@@ -81,7 +81,7 @@ public interface ISomBasics {
 	 * @param iteration
 	 * @param maxIterations
 	 */
-	public void sensitize(int iteration, int maxIterations);
+	public void sensitize(int iteration);
 
 
 }

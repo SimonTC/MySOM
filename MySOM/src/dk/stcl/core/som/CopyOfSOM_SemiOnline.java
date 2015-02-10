@@ -14,30 +14,26 @@ import dk.stcl.core.basic.containers.SomNode;
  *
  */
 //TODO: Better citation
-public class SOM_SemiOnline extends SomBasics implements ISOM {
+public class CopyOfSOM_SemiOnline extends CopyOfSomBasics implements ISOM {
 	
 	private double learningRate;
 	protected double stddev; //TODO: Give a good real name
 	private double activationCodingFactor;
 	
-	public SOM_SemiOnline(int columns, int rows, int inputLength, Random rand, double learningRate, double stddev, double activationCodingFactor) {
+	public CopyOfSOM_SemiOnline(int columns, int rows, int inputLength, Random rand, double learningRate, double stddev, double activationCodingFactor) {
 		super(columns, rows, inputLength, rand);
 		this.learningRate = learningRate;
 		this.stddev = stddev;
 		this.activationCodingFactor = activationCodingFactor;
 	}
-	
 
 	@Override
-	protected void updateWeights(SimpleMatrix inputVector) {
-		for (SomNode n : somMap.getNodes()){
-			double neighborhoodEffect = calculateNeighborhoodEffect(n, bmu);
-			adjustNodeWeights(n, neighborhoodEffect, learningRate, somFitness);
-		}		
+	protected double calculateMaxRadius(SomNode bmu, SimpleMatrix inputVector,
+			double minimumLearningEffect) {
+		return rows; //Currently we do not perform any optimization
 	}
-	
-	
 
+	@Override
 	protected double calculateNeighborhoodEffect(SomNode bmu, SomNode n) {		
 		//double dist = bmu.distanceTo(n);
 		double dist = Math.pow(bmu.normDistanceTo(n),2);
@@ -52,7 +48,12 @@ public class SOM_SemiOnline extends SomBasics implements ISOM {
 		return effect;
 	}
 
+	@Override
+	protected double calculateLearningRate(SomNode bmu, SimpleMatrix inputVector) {
+		return learningRate;
+	}
 
+	@Override
 	protected void adjustNodeWeights(SomNode n, double neighborhoodEffect,
 			double learningRate, double somFitness) {
 		SimpleMatrix valueVector = n.getVector();
@@ -61,15 +62,25 @@ public class SOM_SemiOnline extends SomBasics implements ISOM {
 		SimpleMatrix diff = inputVector.minus(valueVector);
 		
 		//Multiply by som fitness and neighborhood effect
-		double learningEffect = neighborhoodEffect * learningRate;
+		SimpleMatrix learningEffect = new SimpleMatrix(diff.numRows(), diff.numCols());
+		learningEffect.set(learningRate * neighborhoodEffect);
+		diff = diff.elementMult(learningEffect);
 		
-		SimpleMatrix delta = diff.scale(learningEffect);
+		//Add the diff-values to the value vector
+		valueVector = valueVector.plus(diff);
 		
-		SimpleMatrix newVector = valueVector.plus(delta);
-		n.setVector(newVector);
+		n.setVector(valueVector);
 
 	}
 
+	@Override
+	protected double calculateSomFitness(SomNode bmu, SimpleMatrix inputVector) {
+		SimpleMatrix bmuVector = bmu.getVector();
+		SimpleMatrix diff = bmuVector.minus(inputVector);
+		double error = Math.pow(diff.normF(), 2);
+		double avgError = error / inputLength;
+		return 1 - avgError;
+	}
 
 	@Override
 	public SomNode findBMU(SimpleMatrix inputVector){
@@ -107,27 +118,28 @@ public class SOM_SemiOnline extends SomBasics implements ISOM {
 	}
 
 	@Override
-	public double calculateSOMFitness() {
-		SimpleMatrix bmuVector = bmu.getVector();
-		SimpleMatrix diff = bmuVector.minus(inputVector);
-		double error = Math.pow(diff.normF(), 2);
-		double avgError = error / inputLength;
-		return 1 - avgError;
-		
-	}
-	
-	@Override
-	public void adjustLearningRate(int iteration) {
+	public void adjustLearningRate(int iteration, int maxIterations) {
 		// Learning rate is not adjusted in the semi-onlineSOM
 		
 	}
 
 	@Override
-	public void adjustNeighborhoodRadius(int iteration) {
+	public void adjustNeighborhoodRadius(int iteration, int maxIterations) {
 		//Neighborhood radius is not adjusted by way of time in the semi-online SOM
 		
 	}
 
+	@Override
+	public double calculateSOMFitness() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void sensitize(int iteration, int maxIterations) {
+		// TODO Auto-generated method stub
+		
+	}
 
 
 }

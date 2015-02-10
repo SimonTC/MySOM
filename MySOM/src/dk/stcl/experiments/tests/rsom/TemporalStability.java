@@ -120,7 +120,7 @@ public class TemporalStability {
 					e.printStackTrace();
 				}	
     		}
-    		rsom.sensitize(i, maxIterations);
+    		rsom.sensitize(i);
 	    }
 	    
 	    System.out.println("Rsom models:");

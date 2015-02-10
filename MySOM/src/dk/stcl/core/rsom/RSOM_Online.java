@@ -32,7 +32,7 @@ public class RSOM_Online extends RSOM_SemiOnline implements IRSOM {
 	}
 	
 	@Override
-	protected double calculateSomFitness(SomNode bmu, SimpleMatrix inputVector) {
+	public double calculateSOMFitness() {
 		//Make sure the memory list is not too long
 		if (stateChangeList.size() >= memoryLength){
 			double removedValue = stateChangeList.removeFirst();

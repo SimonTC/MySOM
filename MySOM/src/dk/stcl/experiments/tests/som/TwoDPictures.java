@@ -75,7 +75,7 @@ public class TwoDPictures {
 			}
 			
 			//Sensitize pooler
-			pooler.sensitize(i, maxIterations);
+			pooler.sensitize(i);
 			
 		}			
 		

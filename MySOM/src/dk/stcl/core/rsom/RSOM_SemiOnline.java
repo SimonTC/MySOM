@@ -89,22 +89,6 @@ public class RSOM_SemiOnline extends SOM_SemiOnline implements IRSOM {
 		}
 	}
 
-	/*
-	@Override
-	public void weightAdjustment(SomNode n, SomNode bmu,
-			SimpleMatrix inputVector, double neighborhoodRadius,
-			double learningRate) {
-		
-		double learningEffect = learningEffect(n,bmu);		
-		SimpleMatrix weightVector = n.getVector();
-		SomNode leakyDifferenceNode = leakyDifferencesMap.get(n.getCol(), n.getRow());
-		SimpleMatrix delta = leakyDifferenceNode.getVector().scale(learningRate * learningEffect);
-		weightVector = weightVector.plus(delta);
-		n.setVector(weightVector);
-
-	}
-	*/
-	
 	@Override
 	/**
 	 * Adjust the weights of the nodes based on the difference between the valueVectors of this node and input vector

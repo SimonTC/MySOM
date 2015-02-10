@@ -40,6 +40,20 @@ public abstract class SomBasics implements ISomBasics {
 		this(mapSize,mapSize,inputLength, rand);
 	}
 	
+
+	public SomNode step(SimpleMatrix inputVector){
+		//Find BMU
+		bmu = findBMU(inputVector);
+		
+		//Calculate SOM fitness
+		somFitness = calculateSOMFitness();
+		
+		//Update weights
+		if (learning) updateWeights(inputVector);
+		
+		return bmu;
+	}
+
 	/* (non-Javadoc)
 	 * @see dk.stcl.som.ISomBasics#getBMU()
 	 */
@@ -156,6 +170,14 @@ public abstract class SomBasics implements ISomBasics {
 	public SimpleMatrix getActivationMatrix(){
 		return activationMatrix;
 	}
+	
+	@Override
+	public void sensitize(int iteration) {
+		adjustLearningRate(iteration);
+		adjustNeighborhoodRadius(iteration);		
+	}	
+	
+	protected abstract void updateWeights(SimpleMatrix inputVector);
 
 	
 	

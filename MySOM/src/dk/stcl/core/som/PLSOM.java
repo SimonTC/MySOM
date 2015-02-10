@@ -15,6 +15,7 @@ public class PLSOM extends SOM_SemiOnline implements ISOM {
 			double learningRate, double stddev, double activationCodingFactor) {
 		super(columns, rows, inputLength, rand, learningRate, stddev,
 				activationCodingFactor);
+		
 		setupDiameterCalculation(inputLength);
 		neighborHoodRange = (double) rows * rangeFactor; //TODO: change to input parameter
 	}
@@ -25,13 +26,6 @@ public class PLSOM extends SOM_SemiOnline implements ISOM {
 	private double neighborHoodRange;
 	private final double rangeFactor = 1;
 
-	/*
-	public PLSOM(int columns, int rows, int inputLength, Random rand) {
-		super(columns, rows, inputLength, rand);
-		setupDiameterCalculation(inputLength);
-		neighborHoodRange = (double) rows * rangeFactor; //TODO: change to input parameter
-	}
-	*/
 	private void setupDiameterCalculation(int inputLength){
 		inputSpaceSize = -1;
 		inputSpaceMembers = new ArrayList<SimpleMatrix>();
@@ -89,8 +83,7 @@ public class PLSOM extends SOM_SemiOnline implements ISOM {
 		return neighborhoodSize;
 	}
 
-	@Override
-	protected double calculateMaxRadius(SomNode bmu, SimpleMatrix inputVector, double minimumLearningEffect) {
+	private double calculateMaxRadius(SomNode bmu, SimpleMatrix inputVector, double minimumLearningEffect) {
 		double neighborhoodSize = calculateNeighborhoodSize(somFitness);
 		double maxRadius = Math.sqrt(-Math.log(minimumLearningEffect) * Math.pow(neighborhoodSize, 2));
 		
@@ -99,7 +92,7 @@ public class PLSOM extends SOM_SemiOnline implements ISOM {
 		return (int) maxRadius;
 
 	}
-
+	
 	@Override
 	protected double calculateNeighborhoodEffect(SomNode bmu, SomNode n) {
 		double neighborhoodSize = calculateNeighborhoodSize(somFitness);
@@ -109,13 +102,6 @@ public class PLSOM extends SOM_SemiOnline implements ISOM {
 
 	}
 
-	@Override
-	/**
-	 * Learning rate is not used in PLSOM
-	 */
-	protected double calculateLearningRate(SomNode bmu, SimpleMatrix inputVector) {
-		return 0;
-	}
 
 	@Override
 	protected void adjustNodeWeights(SomNode n, double neighborhoodEffect,
@@ -156,7 +142,7 @@ public class PLSOM extends SOM_SemiOnline implements ISOM {
 	}
 
 	@Override
-	protected double calculateSomFitness(SomNode bmu, SimpleMatrix inputVector) {
+	public double calculateSOMFitness() {
 		//Calculate error between BMU and input
 		double error = bmu.squaredDifference(inputVector);
 		double avgError = error / inputVector.getMatrix().data.length; //TODO: Remove avgError if it doesnt help
