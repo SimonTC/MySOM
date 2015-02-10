@@ -22,11 +22,11 @@ public class TemporalStability {
 	private Random rand = new Random(1234);
 	private SOM_SemiOnline spatialDummy = new SOM_SemiOnline(2,2,5,rand,0,0,0);
 	
-	private final int ITERATIONS = 10000;
+	private final int ITERATIONS = 100000;
 	private final boolean VISUALIZE_TRAINING = false;
-	private final boolean VISUALIZE_RESULT = false;
+	private final boolean VISUALIZE_RESULT = true;
 	private final int GUI_SIZE = 500;
-	private final int FRAMES_PER_SECOND = 5;
+	private final int FRAMES_PER_SECOND = 20;
 
 	public static void main(String[] args){
 		TemporalStability runner = new TemporalStability();
@@ -61,8 +61,8 @@ public class TemporalStability {
 		int mapSize = 2;
 		int inputLength = blank.getNumElements();
 		double learningRate = 0.01;
-		double stddev = 2;
-		double activationCodingFactor = 0.125;
+		double stddev = 1;
+		double activationCodingFactor = 0.5;
 		double decay = 0.3;
 		
 		rsom = new RSOM_SemiOnline(mapSize, mapSize, inputLength, rand, learningRate, stddev, activationCodingFactor, decay);
@@ -82,7 +82,7 @@ public class TemporalStability {
 	    	boolean change = rand.nextDouble() > 0.95 ? true : false;
 	    	SimpleMatrix[] curSequence = null;
 			if (change){
-				rsom.flush();
+				//rsom.flush();
 				int nextSeqID;
 				do {
 					nextSeqID = rand.nextInt(sequences.size());
@@ -170,6 +170,7 @@ public class TemporalStability {
 		sequences.add(seq10);
 		sequences.add(seq11);
 		sequences.add(seq12);
+		//sequences.add(seq12);
 		
 	}
 	
