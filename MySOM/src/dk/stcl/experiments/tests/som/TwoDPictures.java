@@ -12,7 +12,7 @@ import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.core.som.ISOM;
 import dk.stcl.core.som.SOM_SemiOnline;
-import dk.stcl.core.som.SimpleSOM;
+import dk.stcl.core.som.SOM_Simple;
 import dk.stcl.experiments.movinglines.MovingLinesGUI;
 
 public class TwoDPictures {
@@ -102,7 +102,7 @@ public class TwoDPictures {
 		double activationCodingFactor = 0.125;
 		double initialLearningRate = 0.1;
 		switch (somType) {
-		case Simple: pooler = new SimpleSOM(mapSize, inputLength, rand, iterations, initialLearningRate, activationCodingFactor); break;
+		case Simple: pooler = new SOM_Simple(mapSize, inputLength, rand, iterations, initialLearningRate, activationCodingFactor); break;
 		case PLSOM:
 			break;
 		case Semi_Online: 

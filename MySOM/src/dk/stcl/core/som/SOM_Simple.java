@@ -8,7 +8,7 @@ import dk.stcl.core.basic.SomBasics;
 import dk.stcl.core.basic.containers.SomMap;
 import dk.stcl.core.basic.containers.SomNode;
 
-public class SimpleSOM extends SomBasics implements ISOM {
+public class SOM_Simple extends SomBasics implements ISOM {
 
 	private int maxIterations;
 	private double mapRadius;
@@ -17,7 +17,7 @@ public class SimpleSOM extends SomBasics implements ISOM {
 	private double initialLearningRate, curLearningRate;
 	private double activationCodingFactor;
 	
-	public SimpleSOM(int mapSize, int inputLength, Random rand, int maxIterations, double initialLearningRate, double activationCodingFactor) {
+	public SOM_Simple(int mapSize, int inputLength, Random rand, int maxIterations, double initialLearningRate, double activationCodingFactor) {
 		super(mapSize, inputLength, rand);
 		this.mapRadius = (double) mapSize / 2;
 		this.maxIterations = maxIterations;
