@@ -6,7 +6,11 @@ import java.util.Random;
 import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.core.basic.containers.SomNode;
-
+/**
+ * SOM_Online calculates its error based on how stable it is
+ * @author Simon
+ *
+ */
 public class RSOM_Online extends RSOM_SemiOnline implements IRSOM {
 	private int memoryLength;
 	private LinkedList<Integer> stateChangeList; 

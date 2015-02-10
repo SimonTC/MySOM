@@ -10,12 +10,12 @@ import dk.stcl.core.basic.containers.SomNode;
 
 public class SOM_Simple extends SomBasics implements ISOM {
 
-	private int maxIterations;
-	private double mapRadius;
-	private double timeConstant;
-	private double initialNeighborHoodRadius, curNeighborhoodRadius;
-	private double initialLearningRate, curLearningRate;
-	private double activationCodingFactor;
+	protected int maxIterations;
+	protected double mapRadius;
+	protected double timeConstant;
+	protected double initialNeighborHoodRadius, curNeighborhoodRadius;
+	protected double initialLearningRate, curLearningRate;
+	protected double activationCodingFactor;
 	
 	public SOM_Simple(int mapSize, int inputLength, Random rand, int maxIterations, double initialLearningRate, double activationCodingFactor) {
 		super(mapSize, inputLength, rand);
@@ -43,7 +43,7 @@ public class SOM_Simple extends SomBasics implements ISOM {
 		return bmu;
 	}
 	
-	private void updateWeights(SimpleMatrix inputVector){
+	protected void updateWeights(SimpleMatrix inputVector){
 		for (SomNode n : somMap.getNodes()){
 			double dist = n.squaredDistanceTo(bmu);
 			//double dist = n.normDistanceTo(bmu);
@@ -90,7 +90,7 @@ public class SOM_Simple extends SomBasics implements ISOM {
 		curLearningRate = initialLearningRate * Math.exp(-(double) step / maxIterations);
 	}
 	
-	private double calculateNeighborhoodEffect(SomNode n, SomNode bmu){
+	protected double calculateNeighborhoodEffect(SomNode n, SomNode bmu){
 		double dist = Math.pow(n.normDistanceTo(bmu),2);
 		double bottom = 2 * Math.pow(curNeighborhoodRadius, 2);
 		double effect =  Math.exp(- dist / bottom);
