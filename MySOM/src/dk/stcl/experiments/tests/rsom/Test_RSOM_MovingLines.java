@@ -12,20 +12,25 @@ import dk.stcl.core.basic.ISomBasics;
 import dk.stcl.core.basic.containers.SomNode;
 import dk.stcl.core.rsom.IRSOM;
 import dk.stcl.core.rsom.RSOM_SemiOnline;
+import dk.stcl.core.rsom.RSOM_Simple;
 import dk.stcl.core.som.SOM_SemiOnline;
 import dk.stcl.experiments.movinglines.MovingLinesGUI;
 import dk.stcl.utils.RSomLabeler;
 
 public class Test_RSOM_MovingLines {
-	private final int NUM_ITERATIONS = 40000;
-	private final double DECAY = 0.7;
+	private final int NUM_ITERATIONS = 80000;
+	private final double DECAY = 0.3;
 	private final int SIZE =2;
 	private final int STDDEV = 1;
 	private final double LEARNING_RATE = 0.1;
 	private final double NOISE_MAGNITUDE = 0.0;
 	private final double CROSS_CHANCE = 0.0;
+	private final double ACTIVATION_CODING_FACTOR = 0.125;
 	
-	int[] labels;
+	private enum RSOM_TYPES {Simple, Semi_Online};
+	private RSOM_TYPES type = RSOM_TYPES.Simple;
+	
+	private int[] labels;
 	private Random rand = new Random();
 	private IRSOM rsom;
 	private SimpleMatrix[] hor, ver, blank;
@@ -116,7 +121,7 @@ public class Test_RSOM_MovingLines {
 		for (int i = 1; i < NUM_ITERATIONS; i++){
 			boolean change = curInputID >= seq.length;
 			if (change){
-				rsom.flush();
+				//rsom.flush();
 				curInputID = 0;
 				boolean choose = rand.nextBoolean();
 				switch (curSeqID){
@@ -133,7 +138,9 @@ public class Test_RSOM_MovingLines {
 			
 			SimpleMatrix noisyInput = addnoise(input, noiseMagnitude);
 			
-			step(noisyInput);			
+			step(noisyInput);		
+			
+			rsom.sensitize(i);
 			
 			curInputID++;
 		}
@@ -297,7 +304,16 @@ public class Test_RSOM_MovingLines {
 	
 	private void setupRSOM(){
 		int inputSize = sequences[0][0].numCols();
-		rsom = new RSOM_SemiOnline(SIZE, SIZE, inputSize, rand, LEARNING_RATE, STDDEV, 0.3, DECAY);
+		switch(type){
+		case Semi_Online: rsom = new RSOM_SemiOnline(SIZE, SIZE, inputSize, rand, LEARNING_RATE, STDDEV, ACTIVATION_CODING_FACTOR, DECAY);
+			break;
+		case Simple: rsom = new RSOM_Simple(SIZE, inputSize, rand, NUM_ITERATIONS, LEARNING_RATE, ACTIVATION_CODING_FACTOR, DECAY);
+			break;
+		default:
+			break;
+		
+		}
+		
 		
 	}
 	

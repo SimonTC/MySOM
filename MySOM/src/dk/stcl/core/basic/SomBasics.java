@@ -42,6 +42,9 @@ public abstract class SomBasics implements ISomBasics {
 	
 
 	public SomNode step(SimpleMatrix inputVector){
+		//Save input vector
+		this.inputVector = inputVector;
+		
 		//Find BMU
 		bmu = findBMU(inputVector);
 		
