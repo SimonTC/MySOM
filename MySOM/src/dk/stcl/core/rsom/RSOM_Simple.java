@@ -23,6 +23,7 @@ public class RSOM_Simple extends SOM_Simple implements IRSOM {
 	public RSOM_Simple(int mapSize, int inputLength, Random rand,
 			int maxIterations, double initialLearningRate,
 			double activationCodingFactor, double decay) {
+		
 		super(mapSize, inputLength, rand, maxIterations, initialLearningRate,
 				activationCodingFactor);
 		this.decayFactor = decay;
@@ -92,8 +93,8 @@ public class RSOM_Simple extends SOM_Simple implements IRSOM {
 	@Override
 	protected void updateWeights(SimpleMatrix inputVector){
 		for (SomNode n : somMap.getNodes()){
-			double dist = n.squaredDistanceTo(bmu);
-			//double dist = n.normDistanceTo(bmu);
+			//double dist = n.squaredDistanceTo(bmu);
+			double dist = n.normDistanceTo(bmu);
 			if (dist <= curNeighborhoodRadius){
 				
 				SimpleMatrix weightVector = n.getVector();

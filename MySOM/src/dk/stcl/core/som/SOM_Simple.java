@@ -21,7 +21,7 @@ public class SOM_Simple extends SomBasics implements ISOM {
 		super(mapSize, inputLength, rand);
 		this.mapRadius = (double) mapSize / 2;
 		this.maxIterations = maxIterations;
-		this.timeConstant = maxIterations / Math.log(mapRadius);
+		this.timeConstant = maxIterations / Math.log(mapRadius + 0.01); //Have to add a small constant in case the map radius is 1 as this would lead the time constant to be == Infinity
 		initialNeighborHoodRadius = mapRadius;
 		curNeighborhoodRadius = initialNeighborHoodRadius;
 		this.initialLearningRate = initialLearningRate;
@@ -83,7 +83,7 @@ public class SOM_Simple extends SomBasics implements ISOM {
 	}
 	
 	public void adjustNeighborhoodRadius(int step){
-		curNeighborhoodRadius = mapRadius * Math.exp(-(double) step / timeConstant);		
+		curNeighborhoodRadius = mapRadius * Math.exp(-(double) step / timeConstant);	
 	}
 	
 	public void adjustLearningRate(int step){

@@ -16,7 +16,7 @@ import dk.stcl.core.rsom.RSOM_Simple;
 import dk.stcl.core.som.SOM_SemiOnline;
 import dk.stcl.experiments.movinglines.MovingLinesGUI;
 
-public class TemporalStability {
+public class CopyOfTemporalStability {
 	
 	//private IRSOM rsom;
 	private RSOM_Simple rsom;
@@ -26,15 +26,14 @@ public class TemporalStability {
 	private Random rand = new Random(1234);
 	private SOM_SemiOnline spatialDummy = new SOM_SemiOnline(2,2,5,rand,0,0,0);
 	
-	private final int ITERATIONS = 80000;
+	private final int ITERATIONS = 100000;
 	private final boolean VISUALIZE_TRAINING = false;
 	private final boolean VISUALIZE_RESULT = true;
 	private final int GUI_SIZE = 500;
 	private final int FRAMES_PER_SECOND = 10;
-	private final int MAP_SIZE = 2;
 
 	public static void main(String[] args){
-		TemporalStability runner = new TemporalStability();
+		CopyOfTemporalStability runner = new CopyOfTemporalStability();
 		runner.run();
 	}
 
@@ -63,12 +62,12 @@ public class TemporalStability {
 	}
 	
 	private void buildRSOM(){
-		int mapSize = MAP_SIZE;
+		int mapSize = 2;
 		int inputLength = blank.getNumElements();
-		double learningRate = 0.1;
+		double learningRate = 0.01;
 		double stddev = 1;
 		double activationCodingFactor = 0.125;
-		double decay = 0.3;
+		double decay = 0.1;
 		
 		//rsom = new RSOM_Online(mapSize, mapSize, inputLength, rand, learningRate, stddev, activationCodingFactor, decay);
 		
@@ -179,11 +178,10 @@ public class TemporalStability {
 		SimpleMatrix[] seq5_3 = {smallV, smallV, bigO, smallV, smallV};
 		SimpleMatrix[] seq5_4 = {bigT, bigO, bigO, bigO, smallV};
 
-		/*
+		
 		sequences.add(seq1);
 		sequences.add(seq2);
 		sequences.add(seq3);
-		*/
 		
 		//sequences.add(seq4);
 		//sequences.add(seq5);
@@ -191,7 +189,6 @@ public class TemporalStability {
 		
 		//sequences.add(seq7);
 		//sequences.add(seq8);
-		
 		/*
 		sequences.add(seq9);
 		sequences.add(seq10);
@@ -200,12 +197,12 @@ public class TemporalStability {
 		*/
 		//sequences.add(seq12);
 		
-		
+		/*
 		sequences.add(seq5_1);
 		sequences.add(seq5_2);
 		sequences.add(seq5_3);
 		sequences.add(seq5_4);
-		
+		*/
 	}
 	
 	private void createFigures(){		
