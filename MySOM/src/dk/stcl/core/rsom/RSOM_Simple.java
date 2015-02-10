@@ -51,11 +51,9 @@ public class RSOM_Simple extends SOM_Simple implements IRSOM {
 			errorMatrix.set(n.getRow(), n.getCol(), value);
 			if (value < min) {
 				min = value;
-				//TODO: is BMU the node from the som map or from leaky differences?
 				int col = n.getCol();
 				int row = n.getRow();
 				BMU = somMap.get(col, row);
-				//BMU = n;
 			}
 		}		
 		

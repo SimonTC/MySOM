@@ -8,15 +8,18 @@ import javax.swing.JFrame;
 import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.core.basic.ISomBasics;
+import dk.stcl.core.basic.containers.SomNode;
 import dk.stcl.core.rsom.IRSOM;
 import dk.stcl.core.rsom.RSOM_Online;
 import dk.stcl.core.rsom.RSOM_SemiOnline;
+import dk.stcl.core.rsom.RSOM_Simple;
 import dk.stcl.core.som.SOM_SemiOnline;
 import dk.stcl.experiments.movinglines.MovingLinesGUI;
 
 public class TemporalStability {
 	
-	private IRSOM rsom;
+	//private IRSOM rsom;
+	private RSOM_Simple rsom;
 	private ArrayList<SimpleMatrix[]> sequences;
 	private SimpleMatrix bigT, bigO, smallO, smallV, blank;
 	private MovingLinesGUI frame;
@@ -27,7 +30,7 @@ public class TemporalStability {
 	private final boolean VISUALIZE_TRAINING = false;
 	private final boolean VISUALIZE_RESULT = true;
 	private final int GUI_SIZE = 500;
-	private final int FRAMES_PER_SECOND = 20;
+	private final int FRAMES_PER_SECOND = 10;
 
 	public static void main(String[] args){
 		TemporalStability runner = new TemporalStability();
@@ -61,14 +64,17 @@ public class TemporalStability {
 	private void buildRSOM(){
 		int mapSize = 2;
 		int inputLength = blank.getNumElements();
-		double learningRate = 0.01;
+		double learningRate = 0.1;
 		double stddev = 1;
-		double activationCodingFactor = 0.5;
+		double activationCodingFactor = 0.125;
 		double decay = 0.3;
 		
 		//rsom = new RSOM_Online(mapSize, mapSize, inputLength, rand, learningRate, stddev, activationCodingFactor, decay);
 		
-		rsom = new RSOM_SemiOnline(mapSize, mapSize, inputLength, rand, learningRate, stddev, activationCodingFactor, decay);
+		//rsom = new RSOM_SemiOnline(mapSize, mapSize, inputLength, rand, learningRate, stddev, activationCodingFactor, decay);
+		
+		rsom = new RSOM_Simple(mapSize, inputLength, rand, ITERATIONS, learningRate, activationCodingFactor, decay);
+		
 	}
 
 	
@@ -81,11 +87,9 @@ public class TemporalStability {
 	    
 	    for (int i = 0; i < maxIterations; i++){
 	    	//Choose sequence
-	    	
-	    	boolean change = rand.nextDouble() > 0.95 ? true : false;
+	    	boolean change = rand.nextDouble() > 0.90 ? true : false;
 	    	SimpleMatrix[] curSequence = null;
 			if (change){
-				//rsom.flush();
 				int nextSeqID;
 				do {
 					nextSeqID = rand.nextInt(sequences.size());
@@ -114,6 +118,17 @@ public class TemporalStability {
 					e.printStackTrace();
 				}	
     		}
+    		rsom.sensitize(i, maxIterations);
+	    }
+	    
+	    System.out.println("Rsom models:");
+	    System.out.println();
+	    for (SomNode n : rsom.getNodes()){
+	    	SimpleMatrix vector = new SimpleMatrix(n.getVector());
+	    	vector.reshape(2, 2);
+	    	vector.print();
+	    	System.out.println(vector.elementSum());
+	    	System.out.println();
 	    }
 	}
 
@@ -156,11 +171,16 @@ public class TemporalStability {
 		SimpleMatrix[] seq10 = {bigT, smallO, bigO, smallO};
 		SimpleMatrix[] seq11 = {bigT, bigT, bigT, bigT};
 		SimpleMatrix[] seq12 = {smallO, smallO, bigO, bigO};
+		
+		SimpleMatrix[] seq5_1 = {bigT, smallO, bigT, bigT, bigT};
+		SimpleMatrix[] seq5_2 = {bigT, smallO, smallO, smallO, smallO};
+		SimpleMatrix[] seq5_3 = {smallV, smallV, bigO, smallV, smallV};
+		SimpleMatrix[] seq5_4 = {bigT, bigO, bigO, bigO, smallV};
 
 		
-		//sequences.add(seq1);
-		//sequences.add(seq2);
-		//sequences.add(seq3);
+		sequences.add(seq1);
+		sequences.add(seq2);
+		sequences.add(seq3);
 		
 		//sequences.add(seq4);
 		//sequences.add(seq5);
@@ -168,13 +188,20 @@ public class TemporalStability {
 		
 		//sequences.add(seq7);
 		//sequences.add(seq8);
-		
+		/*
 		sequences.add(seq9);
 		sequences.add(seq10);
 		sequences.add(seq11);
 		sequences.add(seq12);
+		*/
 		//sequences.add(seq12);
 		
+		/*
+		sequences.add(seq5_1);
+		sequences.add(seq5_2);
+		sequences.add(seq5_3);
+		sequences.add(seq5_4);
+		*/
 	}
 	
 	private void createFigures(){		
