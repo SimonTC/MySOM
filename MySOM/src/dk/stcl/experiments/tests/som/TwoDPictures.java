@@ -11,7 +11,6 @@ import javax.swing.JFrame;
 import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.core.som.ISOM;
-import dk.stcl.core.som.SOM_Normal;
 import dk.stcl.core.som.SOM_SemiOnline;
 import dk.stcl.core.som.SimpleSOM;
 import dk.stcl.experiments.movinglines.MovingLinesGUI;
@@ -22,7 +21,7 @@ public class TwoDPictures {
 	private ISOM possibleInputs;
 	private MovingLinesGUI frame;
 	private SimpleMatrix[] figureMatrices;
-	private enum SOMTYPES {Simple, Normal, Semi_Online, PLSOM};
+	private enum SOMTYPES {Simple, Semi_Online, PLSOM};
 	private SOMTYPES somType = SOMTYPES.Simple;
 	private final int FRAMES_PER_SECOND = 10;
 	private Random rand = new Random(1234);
@@ -104,7 +103,6 @@ public class TwoDPictures {
 		double initialLearningRate = 0.1;
 		switch (somType) {
 		case Simple: pooler = new SimpleSOM(mapSize, inputLength, rand, iterations, initialLearningRate, activationCodingFactor); break;
-		case Normal: pooler = new SOM_Normal(mapSize, inputLength, rand, initialLearningRate, activationCodingFactor); break;
 		case PLSOM:
 			break;
 		case Semi_Online: 
