@@ -20,6 +20,15 @@ public class SOM_SemiOnline extends SomBasics implements ISOM {
 	protected double stddev; //TODO: Give a good real name
 	private double activationCodingFactor;
 	
+	/**
+	 * 
+	 * @param mapSize
+	 * @param inputLength
+	 * @param rand
+	 * @param learningRate
+	 * @param activationCodingFactor
+	 * @param stddev
+	 */
 	public SOM_SemiOnline(int mapSize, int inputLength, Random rand, double learningRate, double activationCodingFactor, double stddev ) {
 		super(mapSize, inputLength, rand);
 		this.learningRate = learningRate;
