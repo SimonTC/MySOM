@@ -18,13 +18,14 @@ import dk.stcl.experiments.movinglines.MovingLinesGUI;
 
 public class TemporalStability {
 	
-	//private IRSOM rsom;
-	private RSOM_Simple rsom;
+	private IRSOM rsom;
 	private ArrayList<SimpleMatrix[]> sequences;
 	private SimpleMatrix bigT, bigO, smallO, smallV, blank;
 	private MovingLinesGUI frame;
 	private Random rand = new Random(1234);
 	private SOM_SemiOnline spatialDummy = new SOM_SemiOnline(2,2,5,rand,0,0,0);
+	
+	
 	
 	private final int ITERATIONS = 80000;
 	private final boolean VISUALIZE_TRAINING = false;
@@ -32,6 +33,7 @@ public class TemporalStability {
 	private final int GUI_SIZE = 500;
 	private final int FRAMES_PER_SECOND = 10;
 	private final int MAP_SIZE = 2;
+	private final boolean USE_SIMPLE_RSOM = false;
 
 	public static void main(String[] args){
 		TemporalStability runner = new TemporalStability();
@@ -68,13 +70,19 @@ public class TemporalStability {
 		double learningRate = 0.1;
 		double stddev = 1;
 		double activationCodingFactor = 0.125;
-		double decay = 1;
+		double decay = 0.3;
+		
+		if (USE_SIMPLE_RSOM){
+			rsom = new RSOM_Simple(mapSize, inputLength, rand, ITERATIONS, learningRate, activationCodingFactor, decay);
+		} else {
+			rsom = new RSOM_SemiOnline(mapSize, inputLength, rand, learningRate, stddev, activationCodingFactor, decay);
+		}
 		
 		//rsom = new RSOM_Online(mapSize, mapSize, inputLength, rand, learningRate, stddev, activationCodingFactor, decay);
 		
 		//rsom = new RSOM_SemiOnline(mapSize, mapSize, inputLength, rand, learningRate, stddev, activationCodingFactor, decay);
 		
-		rsom = new RSOM_Simple(mapSize, inputLength, rand, ITERATIONS, learningRate, activationCodingFactor, decay);
+		
 		
 	}
 
