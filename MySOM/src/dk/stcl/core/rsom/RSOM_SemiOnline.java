@@ -18,30 +18,12 @@ public class RSOM_SemiOnline extends SOM_SemiOnline implements IRSOM {
 	
 	private SomMap leakyDifferencesMap;
 	private double decayFactor;
-
-	/**
-	 * 
-	 * @param columns
-	 * @param rows
-	 * @param inputLength
-	 * @param rand
-	 * @param learningRate
-	 * @param stddev
-	 * @param activationCodingFactor
-	 * @param decayFactor
-	 */
-	public RSOM_SemiOnline(int columns, int rows, int inputLength, Random rand,
-			double learningRate, double stddev, double activationCodingFactor, double decayFactor) {
-		super(columns, rows, inputLength, rand, learningRate, stddev,
-				activationCodingFactor);
-		this.decayFactor = decayFactor;
-		setupLeakyDifferences();
-	}
 	
 	public RSOM_SemiOnline(int mapSize, int inputLength, Random rand,
-			double learningRate, double stddev, double activationCodingFactor, double decayFactor) {		
-		this(mapSize, mapSize, inputLength, rand, learningRate, stddev, activationCodingFactor, decayFactor);
-		
+			double learningRate, double activationCodingFactor, double stddev, double decayFactor) {			
+		super(mapSize, inputLength, rand, learningRate, activationCodingFactor, stddev);
+		this.decayFactor = decayFactor;
+		setupLeakyDifferences();
 	}
 	
 	private void setupLeakyDifferences(){

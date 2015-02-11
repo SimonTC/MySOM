@@ -70,7 +70,7 @@ public class TemporalStability {
 		double learningRate = 0.1;
 		double stddev = 1;
 		double activationCodingFactor = 0.125;
-		double decay = 0.3;
+		double decay = 1;
 		
 		if (USE_SIMPLE_RSOM){
 			rsom = new RSOM_Simple(mapSize, inputLength, rand, ITERATIONS, learningRate, activationCodingFactor, decay);

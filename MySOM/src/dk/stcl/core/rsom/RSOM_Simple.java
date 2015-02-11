@@ -21,11 +21,11 @@ public class RSOM_Simple extends SOM_Simple implements IRSOM {
 	private double decayFactor;
 
 	public RSOM_Simple(int mapSize, int inputLength, Random rand,
-			int maxIterations, double initialLearningRate,
-			double activationCodingFactor, double decay) {
+			double initialLearningRate,
+			double activationCodingFactor, int maxIterations, double decay) {
 		
-		super(mapSize, inputLength, rand, maxIterations, initialLearningRate,
-				activationCodingFactor);
+		super(mapSize, inputLength, rand, initialLearningRate, activationCodingFactor, maxIterations);
+		
 		this.decayFactor = decay;
 		setupLeakyDifferences();
 	}

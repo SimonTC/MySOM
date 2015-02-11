@@ -17,11 +17,11 @@ public class RSOM_Online extends RSOM_SemiOnline implements IRSOM {
 	private double instabilitySum;
 	private SomNode oldBMU;
 	
-	public RSOM_Online(int columns, int rows, int inputLength, Random rand,
-			double learningRate, double stddev, double activationCodingFactor,
+	public RSOM_Online(int mapSize, int inputLength, Random rand,
+			double learningRate, double activationCodingFactor, double stddev,
 			double decayFactor) {
-		super(columns, rows, inputLength, rand, learningRate, stddev,
-				activationCodingFactor, decayFactor);
+		
+		super(mapSize, inputLength, rand, learningRate, activationCodingFactor, stddev, decayFactor);
 		
 		memoryLength = calculateMemoryLength(0.05, decayFactor);
 		stateChangeList = new LinkedList<Integer>();

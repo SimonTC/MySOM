@@ -17,7 +17,7 @@ public class SOM_Simple extends SomBasics implements ISOM {
 	protected double initialLearningRate, curLearningRate;
 	protected double activationCodingFactor;
 	
-	public SOM_Simple(int mapSize, int inputLength, Random rand, int maxIterations, double initialLearningRate, double activationCodingFactor) {
+	public SOM_Simple(int mapSize, int inputLength, Random rand, double initialLearningRate, double activationCodingFactor, int maxIterations) {
 		super(mapSize, inputLength, rand);
 		this.mapRadius = (double) mapSize / 2;
 		this.maxIterations = maxIterations;
