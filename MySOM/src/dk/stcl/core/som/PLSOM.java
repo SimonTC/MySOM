@@ -11,19 +11,13 @@ import dk.stcl.core.basic.containers.SomNode;
 
 public class PLSOM extends SOM_SemiOnline implements ISOM {
 	
-	public PLSOM(int columns, int rows, int inputLength, Random rand,
-			double learningRate, double stddev, double activationCodingFactor) {
-		super(columns, rows, inputLength, rand, learningRate, stddev,
-				activationCodingFactor);
+	public PLSOM(int mapSize, int inputLength, Random rand,
+			double learningRate, double activationCodingFactor,  double stddev) {
+		
+		super(mapSize, inputLength, rand, learningRate, activationCodingFactor, stddev);
 		
 		setupDiameterCalculation(inputLength);
-		neighborHoodRange = (double) rows * rangeFactor; //TODO: change to input parameter
-	}
-	
-	public PLSOM(int mapSize, int inputLength, Random rand,
-			double learningRate, double stddev, double activationCodingFactor) {
-	
-		this(mapSize, mapSize, inputLength, rand, learningRate, stddev, activationCodingFactor);
+		neighborHoodRange = (double) rows * rangeFactor; //TODO: change rangefactor to input parameter
 	}
 
 	private double inputSpaceSize;

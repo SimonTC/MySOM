@@ -31,7 +31,7 @@ public class Test_RSOM {
 	private SimpleMatrix[] hor, ver, blank;
 	private SimpleMatrix cross;
 	
-	private SOM_SemiOnline spatialDummy = new SOM_SemiOnline(3, 3, 9, rand, 0, 0, 0);
+	private SOM_SemiOnline spatialDummy = new SOM_SemiOnline(3, 9, rand, 0, 0, 0);
 	
 	
 	
@@ -291,7 +291,7 @@ public class Test_RSOM {
 	
 	private void setupRSOM(){
 		int inputSize = sequences[0][0].numCols();
-		rsom = new RSOM_SemiOnline(SIZE, SIZE, inputSize, rand, LEARNING_RATE, STDDEV, 1.0, DECAY);
+		rsom = new RSOM_SemiOnline(SIZE, inputSize, rand, LEARNING_RATE, 1, STDDEV, DECAY);
 		
 	}
 	

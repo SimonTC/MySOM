@@ -85,11 +85,12 @@ public class ControllerMNIST {
 		System.out.println("Creating som");
 		//int inputLength = data.numCols();
 		int inputLength = trainLoader.getNumColumns() - 1;
+		double activationCodingFactor = 0.125;
 		int size = SOM_SIZE;
 		if (USE_PLSOM){
-			som = new PLSOM(size, size, inputLength, rand, INITIAL_LEARNING, STDDEV, 0.125);
+			som = new PLSOM(size, inputLength, rand, INITIAL_LEARNING, activationCodingFactor, STDDEV);
 		} else {
-			som = new SOM_SemiOnline(size, size, inputLength, rand, INITIAL_LEARNING, STDDEV, 0.125);
+			som = new SOM_SemiOnline(size, inputLength, rand, INITIAL_LEARNING, activationCodingFactor, STDDEV);
 		}
 		//som = new SOM(size, size, inputLength, rand, INITIAL_LEARNING, 1, 0.125);
 		//som = new PLSOM(size, size, inputLength, rand);

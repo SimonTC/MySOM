@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.core.som.ISOM;
+import dk.stcl.core.som.PLSOM;
 import dk.stcl.core.som.SOM_SemiOnline;
 import dk.stcl.core.som.SOM_Simple;
 import dk.stcl.experiments.movinglines.MovingLinesGUI;
@@ -101,13 +102,11 @@ public class TwoDPictures {
 
 		double activationCodingFactor = 0.125;
 		double initialLearningRate = 0.1;
+		double stdDev =  3;
 		switch (somType) {
-		case Simple: pooler = new SOM_Simple(mapSize, inputLength, rand, iterations, initialLearningRate, activationCodingFactor); break;
-		case PLSOM:
-			break;
-		case Semi_Online: 
-			pooler = new SOM_SemiOnline(mapSize, mapSize, inputLength, rand, initialLearningRate, 3, activationCodingFactor);
-			break;
+		case Simple: pooler = new SOM_Simple(mapSize, inputLength, rand, initialLearningRate, activationCodingFactor, iterations); break;
+		case PLSOM: pooler = new PLSOM(mapSize, inputLength, rand, initialLearningRate, activationCodingFactor, stdDev); break;
+		case Semi_Online: pooler = new SOM_SemiOnline(mapSize, inputLength, rand, initialLearningRate, activationCodingFactor, stdDev); break;
 		default:
 			break;
 		

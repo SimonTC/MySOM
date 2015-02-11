@@ -30,7 +30,7 @@ public class UnderstandingRSOM {
 	}
 	
 	public void run(){
-		rsom = new RSOM_SemiOnline(2, 2, 2, rand, learningRate, stddev, 0.1, decayFactor);
+		rsom = new RSOM_SemiOnline(2, 2, rand, learningRate, 0.1, stddev, decayFactor);
 		//buildSimpleSequences();
 		buildMoreComplexSequences();
 		//Print initial maps

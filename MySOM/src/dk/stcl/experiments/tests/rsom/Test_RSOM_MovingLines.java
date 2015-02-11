@@ -36,7 +36,7 @@ public class Test_RSOM_MovingLines {
 	private SimpleMatrix[] hor, ver, blank;
 	private SimpleMatrix cross;
 	
-	private SOM_SemiOnline spatialDummy = new SOM_SemiOnline(3, 3, 9, rand, 0, 0, 0);
+	private SOM_SemiOnline spatialDummy = new SOM_SemiOnline(3, 9, rand, 0, 0, 0);
 	
 	
 	
@@ -305,9 +305,9 @@ public class Test_RSOM_MovingLines {
 	private void setupRSOM(){
 		int inputSize = sequences[0][0].numCols();
 		switch(type){
-		case Semi_Online: rsom = new RSOM_SemiOnline(SIZE, SIZE, inputSize, rand, LEARNING_RATE, STDDEV, ACTIVATION_CODING_FACTOR, DECAY);
+		case Semi_Online: rsom = new RSOM_SemiOnline(SIZE, inputSize, rand, LEARNING_RATE, ACTIVATION_CODING_FACTOR, STDDEV, DECAY);
 			break;
-		case Simple: rsom = new RSOM_Simple(SIZE, inputSize, rand, NUM_ITERATIONS, LEARNING_RATE, ACTIVATION_CODING_FACTOR, DECAY);
+		case Simple: rsom = new RSOM_Simple(SIZE, inputSize, rand, LEARNING_RATE, ACTIVATION_CODING_FACTOR, NUM_ITERATIONS, DECAY);
 			break;
 		default:
 			break;

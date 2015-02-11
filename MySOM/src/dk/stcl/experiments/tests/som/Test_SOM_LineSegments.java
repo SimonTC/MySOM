@@ -210,12 +210,14 @@ public class Test_SOM_LineSegments {
 		//Spatial pooler
 		int spatialInputLength = 9;
 		int spatialMapSize = SOM_SIZE;
+		double activationCodingFactor = 0.125;
+		double learningRate = 0.1;
 		
 		
 		if (USE_PLSOM){
-			spatialPooler = new PLSOM(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, STDDEV, 0.125);
+			spatialPooler = new PLSOM(spatialMapSize, spatialInputLength, rand, learningRate, activationCodingFactor, STDDEV);
 		} else {
-			spatialPooler = new SOM_SemiOnline(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, STDDEV, 0.125);
+			spatialPooler = new SOM_SemiOnline(spatialMapSize, spatialInputLength, rand, learningRate, activationCodingFactor, STDDEV);
 		}	
 
 		
@@ -224,7 +226,7 @@ public class Test_SOM_LineSegments {
 	
 	private void buildSequences(){
 		sequences = new SimpleMatrix[7];
-		possibleInputs = new SOM_SemiOnline(3, 3, 9, new Random(),0,0,0);
+		possibleInputs = new SOM_SemiOnline(3, 9, new Random(),0,0,0);
 		SomNode[] nodes = possibleInputs.getNodes();
 		labels = new int[sequences.length];
 		

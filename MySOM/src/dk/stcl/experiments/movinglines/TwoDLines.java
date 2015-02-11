@@ -274,13 +274,15 @@ public class TwoDLines {
 		//Spatial pooler
 		int spatialInputLength = 9;
 		int spatialMapSize = SOM_SIZE;
+		double learningRate = 0.1;
+		double activationCodingFactor = 0.125;
 		
 		
 		if (USE_PLSOM){
-			spatialPooler = new PLSOM(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, STDDEV, 0.125);
+			spatialPooler = new PLSOM(spatialMapSize, spatialInputLength, rand, learningRate, activationCodingFactor, STDDEV);
 		} else {
-			spatialPooler = new SOM_SemiOnline(spatialMapSize, spatialMapSize, spatialInputLength, rand, 0.1, STDDEV, 0.125);
-		}	
+			spatialPooler = new SOM_SemiOnline(spatialMapSize, spatialInputLength, rand, learningRate, activationCodingFactor, STDDEV);
+		}
 		
 		
 		//Temporal pooler
@@ -288,14 +290,14 @@ public class TwoDLines {
 		int temporalMapSize = 2;
 		
 		
-		temporalPooler = new RSOM_SemiOnline(temporalMapSize, temporalMapSize, temporalInputLength, rand, 0.1, STDDEV, 0.125, DECAY);
+		temporalPooler = new RSOM_SemiOnline(temporalMapSize, temporalInputLength, rand, learningRate, activationCodingFactor, STDDEV, DECAY);
 		
 		
 	}
 	
 	private void buildSequences(){
 		sequences = new SimpleMatrix[3][3];
-		possibleInputs = new SOM_SemiOnline(3, 3, 9, new Random(),0,0,0);
+		possibleInputs = new SOM_SemiOnline(3, 9, new Random(), 0, 0, 0);
 		SomNode[] nodes = possibleInputs.getNodes();
 		
 		SimpleMatrix m;

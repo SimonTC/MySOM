@@ -32,7 +32,7 @@ public class RSOMTest {
 	
 	private double[][] hor, ver, blank;
 	
-	private SOM_SemiOnline spatialDummy = new SOM_SemiOnline(3, 3, 3, rand, 0, 0, 0);
+	private SOM_SemiOnline spatialDummy = new SOM_SemiOnline(3, 3, rand, 0, 0, 0);
 	
 	private final int STDDEV = 1;
 	
@@ -227,7 +227,7 @@ public class RSOMTest {
 	
 	private void setupRSOM(){
 		int inputSize = sequences.get(0)[0].length;
-		rsom = new RSOM_SemiOnline(SIZE, SIZE, inputSize, rand, LEARNING_RATE, STDDEV, 0.3, DECAY);
+		rsom = new RSOM_SemiOnline(SIZE, INPUTLENGTH, rand, LEARNING_RATE, 0.125, STDDEV, DECAY);
 		
 	}
 	
