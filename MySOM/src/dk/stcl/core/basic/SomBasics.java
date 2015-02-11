@@ -33,6 +33,7 @@ public abstract class SomBasics implements ISomBasics {
 		somMap = new SomMap(columns, rows, inputLength, rand);
 		errorMatrix = new SimpleMatrix(rows, columns);
 		learning = true;
+		activationMatrix = new SimpleMatrix(rows, columns);
 		
 	}		
 	

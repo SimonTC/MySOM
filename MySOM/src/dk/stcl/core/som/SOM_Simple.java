@@ -26,9 +26,6 @@ public class SOM_Simple extends SomBasics implements ISOM {
 		curNeighborhoodRadius = initialNeighborHoodRadius;
 		this.initialLearningRate = initialLearningRate;
 		this.curLearningRate = initialLearningRate;
-		learning = true;
-		this.errorMatrix = new SimpleMatrix(mapSize, mapSize);
-		this.activationMatrix = new SimpleMatrix(mapSize, mapSize);
 		this.activationCodingFactor = activationCodingFactor;
 	}
 
