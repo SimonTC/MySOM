@@ -40,7 +40,7 @@ public class RSOM_SemiOnline extends SOM_SemiOnline implements IRSOM {
 	
 	public RSOM_SemiOnline(int mapSize, int inputLength, Random rand,
 			double learningRate, double stddev, double activationCodingFactor, double decayFactor) {		
-		super(mapSize, mapSize, inputLength, rand, learningRate, stddev, activationCodingFactor);
+		this(mapSize, mapSize, inputLength, rand, learningRate, stddev, activationCodingFactor, decayFactor);
 		
 	}
 	

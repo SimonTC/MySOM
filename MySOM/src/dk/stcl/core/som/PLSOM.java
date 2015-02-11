@@ -23,7 +23,7 @@ public class PLSOM extends SOM_SemiOnline implements ISOM {
 	public PLSOM(int mapSize, int inputLength, Random rand,
 			double learningRate, double stddev, double activationCodingFactor) {
 	
-		super(mapSize, mapSize, inputLength, rand, learningRate, stddev, activationCodingFactor);
+		this(mapSize, mapSize, inputLength, rand, learningRate, stddev, activationCodingFactor);
 	}
 
 	private double inputSpaceSize;
