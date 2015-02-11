@@ -27,6 +27,11 @@ public class SOM_SemiOnline extends SomBasics implements ISOM {
 		this.activationCodingFactor = activationCodingFactor;
 	}
 	
+	public SOM_SemiOnline(int mapSize, int inputLength, Random rand, double learningRate, double stddev, double activationCodingFactor) {
+		this(mapSize, mapSize, inputLength, rand, learningRate, stddev, activationCodingFactor);
+	}
+	
+	
 
 	@Override
 	protected void updateWeights(SimpleMatrix inputVector) {

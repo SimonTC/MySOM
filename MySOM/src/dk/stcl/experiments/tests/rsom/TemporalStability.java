@@ -68,7 +68,7 @@ public class TemporalStability {
 		double learningRate = 0.1;
 		double stddev = 1;
 		double activationCodingFactor = 0.125;
-		double decay = 0.3;
+		double decay = 1;
 		
 		//rsom = new RSOM_Online(mapSize, mapSize, inputLength, rand, learningRate, stddev, activationCodingFactor, decay);
 		

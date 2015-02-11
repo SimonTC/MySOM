@@ -19,6 +19,12 @@ public class PLSOM extends SOM_SemiOnline implements ISOM {
 		setupDiameterCalculation(inputLength);
 		neighborHoodRange = (double) rows * rangeFactor; //TODO: change to input parameter
 	}
+	
+	public PLSOM(int mapSize, int inputLength, Random rand,
+			double learningRate, double stddev, double activationCodingFactor) {
+	
+		super(mapSize, mapSize, inputLength, rand, learningRate, stddev, activationCodingFactor);
+	}
 
 	private double inputSpaceSize;
 	private ArrayList<SimpleMatrix> inputSpaceMembers;
