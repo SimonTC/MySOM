@@ -18,10 +18,10 @@ import dk.stcl.experiments.movinglines.MovingLinesGUI;
 import dk.stcl.utils.RSomLabeler;
 
 public class Test_RSOM_MovingLines {
-	private final int NUM_ITERATIONS = 80000;
+	private final int NUM_ITERATIONS = 100000;
 	private final double DECAY = 0.3;
-	private final int SIZE =2;
-	private final int STDDEV = 1;
+	private final int SIZE = 2;
+	private final int STDDEV = 2;
 	private final double LEARNING_RATE = 0.1;
 	private final double NOISE_MAGNITUDE = 0.0;
 	private final double CROSS_CHANCE = 0.0;
@@ -121,7 +121,7 @@ public class Test_RSOM_MovingLines {
 		for (int i = 1; i < NUM_ITERATIONS; i++){
 			boolean change = curInputID >= seq.length;
 			if (change){
-				//rsom.flush();
+				rsom.flush();
 				curInputID = 0;
 				boolean choose = rand.nextBoolean();
 				switch (curSeqID){

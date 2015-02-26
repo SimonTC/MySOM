@@ -54,7 +54,7 @@ public class RSOMasSOM {
 	}
 	
 	private void setupSOMs(){
-		int mapSize = 4;
+		int mapSize = 3;
 		int inputLength = sequences.get(0)[0].getNumElements();
 		double initialLearningRate = 0.1;
 		double activationCodingFactor = 0.125;

@@ -10,7 +10,6 @@ import org.ejml.simple.SimpleMatrix;
 import dk.stcl.core.basic.ISomBasics;
 import dk.stcl.core.basic.containers.SomNode;
 import dk.stcl.core.rsom.IRSOM;
-import dk.stcl.core.rsom.RSOM_Online;
 import dk.stcl.core.rsom.RSOM_SemiOnline;
 import dk.stcl.core.rsom.RSOM_Simple;
 import dk.stcl.core.som.SOM_SemiOnline;
@@ -33,7 +32,7 @@ public class TemporalStability {
 	private final int GUI_SIZE = 500;
 	private final int FRAMES_PER_SECOND = 10;
 	private final int MAP_SIZE = 2;
-	private final boolean USE_SIMPLE_RSOM = false;
+	private final boolean USE_SIMPLE_RSOM = true;
 
 	public static void main(String[] args){
 		TemporalStability runner = new TemporalStability();
