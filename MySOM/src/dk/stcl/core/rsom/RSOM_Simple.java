@@ -20,12 +20,12 @@ public class RSOM_Simple extends SomBasics implements IRSOM {
 	
 	private SomMap leakyDifferencesMap;
 	private double decayFactor;
-	protected int maxIterations;
-	protected double mapRadius;
-	protected double timeConstant;
-	protected double initialNeighborHoodRadius, curNeighborhoodRadius;
-	protected double initialLearningRate, curLearningRate;
-	protected double activationCodingFactor;
+	private int maxIterations;
+	private double mapRadius;
+	private double timeConstant;
+	private double initialNeighborHoodRadius, curNeighborhoodRadius;
+	private double initialLearningRate, curLearningRate;
+	private double activationCodingFactor;
 
 	public RSOM_Simple(int mapSize, int inputLength, Random rand, double initialLearningRate,
 			double activationCodingFactor, int maxIterations, double decay) {
