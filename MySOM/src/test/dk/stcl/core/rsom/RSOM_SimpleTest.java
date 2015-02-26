@@ -28,7 +28,10 @@ public class RSOM_SimpleTest {
 
 	@Before
 	public void setUp() throws Exception {
-		int mapSize = 5;
+		
+	}
+	
+	private void setupRun(int mapSize){
 		int inputLength = 1;
 		initialLearningRate = 1;
 		activationCodingFactor = 0.125;
@@ -53,52 +56,58 @@ public class RSOM_SimpleTest {
 	}
 
 	@Test
-	public void test() {
-		ArrayList<SimpleMatrix[]> sequences = createSequences();
+	public void test_orderedPairs() {
+		setupRun(5);
+		ArrayList<SimpleMatrix[]> sequences = createSequences_OrderedPairs();
+		System.out.println("Testing ordered pairs");
+		run(sequences);
+		printLeakyMaps();
+		printWeightMaps();
+		
+	}
+	
+	@Test
+	public void test_singlePair() {
+		setupRun(2);
+		ArrayList<SimpleMatrix[]> sequences = createSequences_SinglePair();
+		System.out.println("Testing single pair");
+		run(sequences);
+		printLeakyMaps();
+		printWeightMaps();
+		
+	}
+	
+	@Test
+	public void test_orderedTriples() {
+		setupRun(12);
+		ArrayList<SimpleMatrix[]> sequences = createSequences_OrderedTriples();
+		System.out.println("Testing ordered triples");
+		run(sequences);
+		printLeakyMaps();
+		printWeightMaps();
+		
+	}
+	
+	private void run(ArrayList<SimpleMatrix[]> sequences){
 		for (int i = 0; i <= maxIterations; i++){
 			rsom.sensitize(i);
 			sensitize(i);
-			/*
-			System.out.println();
-			System.out.println("Iteration " + i);
-			System.out.println("Current radius: " + curNeighborhoodRadius);
-			System.out.println("Current learning rate: " + curLearningRate);
-			System.out.println();
-			*/
 			
 			//Choose random sequence
 			SimpleMatrix[] seq = sequences.get(rand.nextInt(sequences.size()));
 			int counter = 0;
 			for (SimpleMatrix m : seq){
 				if (counter >= seq.length) counter = 0;
-				//System.out.println("Input " + counter);
-				//Add noise
-				m = addNoise(m, 0.2);
-				
-				/*
-				System.out.println();
-				System.out.println("Input");
-				m.print();
-				*/
+				m = addNoise(m, 0);
 				
 				//Present to network
 				rsom.step(m);
 				testStep(m);
 				
-				//printLeakyMaps();
-				//printWeightMaps();
-				
 				counter++;	
 				assertTrue("Test failed in iteration " + i + "-" + counter , isRsomCorrect());
 			}
-							
-			//rsom.flush();
-			
 		}
-		
-		printLeakyMaps();
-		printWeightMaps();
-		
 	}
 	
 	private void sensitize(int i){
@@ -241,20 +250,9 @@ public class RSOM_SimpleTest {
 		weightNode.setVector(newWeights);
 	}
 	
-	private ArrayList<SimpleMatrix[]> createSequences(){
+	private ArrayList<SimpleMatrix[]> createSequences_OrderedPairs(){
 		ArrayList<SimpleMatrix[]> sequences = new ArrayList<>();
-		double scale = 1;
-		/*
-		double[][] in1 = {{21}};
-		SimpleMatrix ma1 = new SimpleMatrix(in1);
-		
-		double[][] in2 = {{1}};
-		SimpleMatrix ma2 = new SimpleMatrix(in2);
-		
-		SimpleMatrix[] pair = {ma1,ma2};
-		sequences.add(pair);
-		*/
-		
+		double scale = 1;		
 		
 		double[] possibleInputs = {1,6,11,16,21};
 		
@@ -271,6 +269,51 @@ public class RSOM_SimpleTest {
 				sequences.add(pair);
 			}
 		}
+		
+		return sequences;
+	}
+	
+	private ArrayList<SimpleMatrix[]> createSequences_OrderedTriples(){
+		ArrayList<SimpleMatrix[]> sequences = new ArrayList<>();
+		double scale = 1;		
+		
+		double[] possibleInputs = {1,6,11,16,21};
+		
+		for (double d : possibleInputs){
+			double[][] in1 = {{d}};
+			SimpleMatrix ma1 = new SimpleMatrix(in1);
+			ma1 = ma1.divide(scale);
+			for (double e : possibleInputs){
+				double[][] in2 = {{e}};
+				SimpleMatrix ma2 = new SimpleMatrix(in2);
+				ma2 = ma2.divide(scale);
+				
+				for (double f : possibleInputs){
+					double[][] in3 = {{f}};
+					SimpleMatrix ma3 = new SimpleMatrix(in3);
+					ma3 = ma3.divide(scale);
+					
+					SimpleMatrix[] triple = {ma1,ma2, ma3};
+					sequences.add(triple);
+				}				
+			}
+		}
+		
+		return sequences;
+	}
+	
+	private ArrayList<SimpleMatrix[]> createSequences_SinglePair(){
+		ArrayList<SimpleMatrix[]> sequences = new ArrayList<>();
+		
+		double[][] in1 = {{21}};
+		SimpleMatrix ma1 = new SimpleMatrix(in1);
+		
+		double[][] in2 = {{1}};
+		SimpleMatrix ma2 = new SimpleMatrix(in2);
+		
+		SimpleMatrix[] pair = {ma1,ma2};
+		sequences.add(pair);
+		
 		
 		return sequences;
 	}
