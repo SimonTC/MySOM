@@ -39,7 +39,7 @@ public class SOM_Simple extends SomBasics implements ISOM {
 		for (SomNode n : somMap.getNodes()){
 			double dist = n.squaredDistanceTo(bmu);
 			//double dist = n.normDistanceTo(bmu);
-			if (dist <= curNeighborhoodRadius){
+			//if (dist <= curNeighborhoodRadius){
 				SimpleMatrix weightVector = n.getVector();
 				SimpleMatrix diff = inputVector.minus(weightVector);
 				double neighborhoodEffect = calculateNeighborhoodEffect(n, bmu);
@@ -49,7 +49,7 @@ public class SOM_Simple extends SomBasics implements ISOM {
 				
 				SimpleMatrix newVector = weightVector.plus(delta);
 				n.setVector(newVector);
-			}
+			//}
 		}
 	}
 	
