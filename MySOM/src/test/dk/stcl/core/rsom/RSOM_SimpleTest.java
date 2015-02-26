@@ -36,7 +36,7 @@ public class RSOM_SimpleTest {
 		initialLearningRate = 1;
 		activationCodingFactor = 0.125;
 		this.decay = decay;
-		maxIterations = 2000 * mapSize * mapSize;
+		maxIterations = 1000 * mapSize * mapSize;
 		initialRadius = (double)mapSize / 2.0;
 		
 		rsom = new RSOM_Simple(mapSize, inputLength, rand, initialLearningRate, activationCodingFactor, maxIterations, decay);
@@ -77,6 +77,7 @@ public class RSOM_SimpleTest {
 		
 	}
 	
+	/*
 	@Test 
 	public void test_isLikeSOMWhenDecayIsOne(){
 		System.out.println("Test how it works when acting as SOM");
@@ -87,26 +88,41 @@ public class RSOM_SimpleTest {
 		printWeightMaps();
 		
 	}
+	*/
+	@Test
+	public void test_SingleLongSequence(){
+		System.out.println("testing single long sequence");
+		setupRun(2, 0.68);
+		System.out.println("Start weights");
+		printWeightMaps();
+		ArrayList<SimpleMatrix[]> sequences = createSequences_Longer();
+		run(sequences);
+		printLeakyMaps();
+		printWeightMaps();
+	}
 	
 	private void run(ArrayList<SimpleMatrix[]> sequences){
+		int count = Integer.MAX_VALUE;
+		SimpleMatrix[] seq = null;
 		for (int i = 0; i <= maxIterations; i++){
+			if (count >= sequences.get(0).length){
+				count = 0;
+				seq = sequences.get(rand.nextInt(sequences.size()));
+			}
 			rsom.sensitize(i);
 			sensitize(i);
 			
-			//Choose random sequence
-			SimpleMatrix[] seq = sequences.get(rand.nextInt(sequences.size()));
-			int counter = 0;
-			for (SimpleMatrix m : seq){
-				if (counter >= seq.length) counter = 0;
-				m = addNoise(m, 0);
-				
-				//Present to network
-				rsom.step(m);
-				testStep(m);
-				
-				counter++;	
-				assertTrue("Test failed in iteration " + i + "-" + counter , isRsomCorrect());
-			}
+			SimpleMatrix m = seq[count];
+			m = addNoise(m, 0);
+			
+			//Present to network
+			rsom.step(m);
+			testStep(m);
+			
+			assertTrue("Test failed in iteration " + i , isRsomCorrect());
+			
+			count++;
+			
 		}
 	}
 	
@@ -315,6 +331,24 @@ public class RSOM_SimpleTest {
 		sequences.add(pair);
 		
 		
+		return sequences;
+	}
+	
+	private ArrayList<SimpleMatrix[]> createSequences_Longer(){
+		ArrayList<SimpleMatrix[]> sequences = new ArrayList<>();
+		double scale = 1;		
+		
+		double[] possibleInputs = {1,2,3,4,5,6,7,8};
+		SimpleMatrix[] seq = new SimpleMatrix[possibleInputs.length];
+		for (int i = 0; i < possibleInputs.length; i++){
+			double d = possibleInputs[i];
+			double[][] in1 = {{d}};
+			SimpleMatrix ma1 = new SimpleMatrix(in1);
+			ma1 = ma1.divide(scale);
+			seq[i] = ma1;
+		}
+		
+		sequences.add(seq);
 		return sequences;
 	}
 	
