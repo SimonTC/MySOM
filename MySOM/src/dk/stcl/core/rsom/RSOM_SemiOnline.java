@@ -4,24 +4,31 @@ import java.util.Random;
 
 import org.ejml.simple.SimpleMatrix;
 
+import dk.stcl.core.basic.SomBasics;
 import dk.stcl.core.basic.containers.SomMap;
 import dk.stcl.core.basic.containers.SomNode;
 import dk.stcl.core.som.SOM_SemiOnline;
 
 /**
- * This clas is an implementation of the RSOM from the LoopSOM paper
+ * This class is an implementation of the RSOM from the LoopSOM paper
  * @author Simon
  *
  */
 //TODO: Better citation
-public class RSOM_SemiOnline extends SOM_SemiOnline implements IRSOM {
+public class RSOM_SemiOnline extends SomBasics implements IRSOM {
 	
 	private SomMap leakyDifferencesMap;
 	private double decayFactor;
+	private double learningRate;
+	protected double stddev; //TODO: Give a good real name
+	private double activationCodingFactor;
 	
 	public RSOM_SemiOnline(int mapSize, int inputLength, Random rand,
 			double learningRate, double activationCodingFactor, double stddev, double decayFactor) {			
-		super(mapSize, inputLength, rand, learningRate, activationCodingFactor, stddev);
+		super(mapSize, inputLength, rand);
+		this.learningRate = learningRate;
+		this.stddev = stddev;
+		this.activationCodingFactor = activationCodingFactor;
 		this.decayFactor = decayFactor;
 		setupLeakyDifferences();
 	}
@@ -45,14 +52,14 @@ public class RSOM_SemiOnline extends SOM_SemiOnline implements IRSOM {
 		SomNode BMU = null;
 		for (SomNode n : leakyNodes){
 			double value = n.getVector().normF();
-			errorMatrix.set(n.getRow(), n.getCol(), value);
+			double error = Math.pow(value, 2);
+			double avgError = error / inputLength;
+			errorMatrix.set(n.getRow(), n.getCol(), avgError);
 			if (value < min) {
 				min = value;
-				//TODO: is BMU the node from the som map or from leaky differences?
 				int col = n.getCol();
 				int row = n.getRow();
 				BMU = somMap.get(col, row);
-				//BMU = n;
 			}
 		}		
 		
@@ -87,8 +94,30 @@ public class RSOM_SemiOnline extends SOM_SemiOnline implements IRSOM {
 			}
 		}
 	}
-
+	
 	@Override
+	protected void updateWeights(SimpleMatrix inputVector) {
+		for (SomNode n : somMap.getNodes()){
+			double neighborhoodEffect = calculateNeighborhoodEffect(n, bmu);
+			adjustNodeWeights(n, neighborhoodEffect, learningRate, somFitness);
+		}		
+	}
+	
+	private double calculateNeighborhoodEffect(SomNode bmu, SomNode n) {		
+		//double dist = bmu.distanceTo(n);
+		double dist = Math.pow(bmu.normDistanceTo(n),2);
+		double error = 1 - somFitness;
+		double effect;
+		if (error == 0){
+			effect = 0;
+		} else {
+			effect = Math.exp(-dist / (error * Math.pow(stddev, 2)));
+		}
+		
+		return effect;
+	}
+
+	
 	/**
 	 * Adjust the weights of the nodes based on the difference between the valueVectors of this node and input vector
 	 * @param n node which weight vector should be adjusted
@@ -102,7 +131,9 @@ public class RSOM_SemiOnline extends SOM_SemiOnline implements IRSOM {
 		
 		SomNode leakyDifferenceNode = leakyDifferencesMap.get(n.getCol(), n.getRow());
 		
-		SimpleMatrix delta = leakyDifferenceNode.getVector().scale(learningRate * neighborhoodEffect);
+		double learningEffect = neighborhoodEffect * learningRate;
+		
+		SimpleMatrix delta = leakyDifferenceNode.getVector().scale(learningEffect);
 		
 		weightVector = weightVector.plus(delta);
 		n.setVector(weightVector);
@@ -118,6 +149,40 @@ public class RSOM_SemiOnline extends SOM_SemiOnline implements IRSOM {
 	
 	public SomMap getLeakyDifferencesMap(){
 		return leakyDifferencesMap;
+	}
+
+	/* (non-Javadoc)
+	 * @see dk.stcl.som.ISomBasics#computeActivationMatrix()
+	 */
+	@Override
+	public SimpleMatrix computeActivationMatrix(){
+		SimpleMatrix activation = errorMatrix.elementPower(2);
+		activation = activation.divide(-2 * Math.pow(activationCodingFactor, 2));	 
+		activation = activation.elementExp();		
+		activationMatrix = activation;
+		return activation;
+	}
+
+	@Override
+	public double calculateSOMFitness() {
+		SimpleMatrix bmuVector = bmu.getVector();
+		SimpleMatrix diff = bmuVector.minus(inputVector);
+		double error = Math.pow(diff.normF(), 2);
+		double avgError = error / inputLength;
+		return 1 - avgError;
+		
+	}
+	
+	@Override
+	public void adjustLearningRate(int iteration) {
+		// Learning rate is not adjusted in the semi-onlineSOM
+		
+	}
+
+	@Override
+	public void adjustNeighborhoodRadius(int iteration) {
+		//Neighborhood radius is not adjusted by way of time in the semi-online SOM
+		
 	}
 	
 
