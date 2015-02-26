@@ -31,11 +31,11 @@ public class RSOM_SimpleTest {
 		
 	}
 	
-	private void setupRun(int mapSize){
+	private void setupRun(int mapSize, double decay){
 		int inputLength = 1;
 		initialLearningRate = 1;
 		activationCodingFactor = 0.125;
-		decay = 0.8;
+		this.decay = decay;
 		maxIterations = 2000 * mapSize * mapSize;
 		initialRadius = (double)mapSize / 2.0;
 		
@@ -57,7 +57,7 @@ public class RSOM_SimpleTest {
 
 	@Test
 	public void test_orderedPairs() {
-		setupRun(5);
+		setupRun(5, 0.8);
 		ArrayList<SimpleMatrix[]> sequences = createSequences_OrderedPairs();
 		System.out.println("Testing ordered pairs");
 		run(sequences);
@@ -68,7 +68,7 @@ public class RSOM_SimpleTest {
 	
 	@Test
 	public void test_singlePair() {
-		setupRun(2);
+		setupRun(2, 0.8);
 		ArrayList<SimpleMatrix[]> sequences = createSequences_SinglePair();
 		System.out.println("Testing single pair");
 		run(sequences);
@@ -77,11 +77,11 @@ public class RSOM_SimpleTest {
 		
 	}
 	
-	@Test
-	public void test_orderedTriples() {
-		setupRun(12);
-		ArrayList<SimpleMatrix[]> sequences = createSequences_OrderedTriples();
-		System.out.println("Testing ordered triples");
+	@Test 
+	public void test_isLikeSOMWhenDecayIsOne(){
+		System.out.println("Test how it works when acting as SOM");
+		setupRun(4, 1);
+		ArrayList<SimpleMatrix[]> sequences = createSequences_OrderedPairs();
 		run(sequences);
 		printLeakyMaps();
 		printWeightMaps();
