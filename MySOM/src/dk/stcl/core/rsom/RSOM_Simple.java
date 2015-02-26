@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.ejml.simple.SimpleMatrix;
 
+import dk.stcl.core.basic.SomBasics;
 import dk.stcl.core.basic.containers.SomMap;
 import dk.stcl.core.basic.containers.SomNode;
 import dk.stcl.core.som.SOM_SemiOnline;
@@ -15,20 +16,39 @@ import dk.stcl.core.som.SOM_Simple;
  *
  */
 //TODO: Better citation
-public class RSOM_Simple extends SOM_Simple implements IRSOM {
+public class RSOM_Simple extends SomBasics implements IRSOM {
 	
 	private SomMap leakyDifferencesMap;
 	private double decayFactor;
+	protected int maxIterations;
+	protected double mapRadius;
+	protected double timeConstant;
+	protected double initialNeighborHoodRadius, curNeighborhoodRadius;
+	protected double initialLearningRate, curLearningRate;
+	protected double activationCodingFactor;
 
-	public RSOM_Simple(int mapSize, int inputLength, Random rand,
-			double initialLearningRate,
+	public RSOM_Simple(int mapSize, int inputLength, Random rand, double initialLearningRate,
 			double activationCodingFactor, int maxIterations, double decay) {
 		
-		super(mapSize, inputLength, rand, initialLearningRate, activationCodingFactor, maxIterations);
+		super(mapSize, inputLength, rand);
 		
 		this.decayFactor = decay;
+		this.mapRadius = (double) mapSize / 2;
+		updateMaxIterations(maxIterations);
+		initialNeighborHoodRadius = mapRadius;
+		curNeighborhoodRadius = initialNeighborHoodRadius;
+		this.initialLearningRate = initialLearningRate;
+		this.curLearningRate = initialLearningRate;
+		this.activationCodingFactor = activationCodingFactor;
+		
 		setupLeakyDifferences();
 	}
+	
+	public void updateMaxIterations(int maxIterations){
+		this.maxIterations = maxIterations;
+		this.timeConstant = maxIterations / mapRadius;
+	}
+	
 	
 	private void setupLeakyDifferences(){
 		leakyDifferencesMap = new SomMap(columns, rows, inputLength);
@@ -49,7 +69,9 @@ public class RSOM_Simple extends SOM_Simple implements IRSOM {
 		SomNode BMU = null;
 		for (SomNode n : leakyNodes){
 			double value = n.getVector().normF();
-			errorMatrix.set(n.getRow(), n.getCol(), value);
+			double error = Math.pow(value, 2);
+			error = error / inputLength;
+			errorMatrix.set(n.getRow(), n.getCol(), error);
 			if (value < min) {
 				min = value;
 				int col = n.getCol();
@@ -121,6 +143,45 @@ public class RSOM_Simple extends SOM_Simple implements IRSOM {
 	public SomMap getLeakyDifferencesMap(){
 		return leakyDifferencesMap;
 	}
+	
+	@Override
+	public void adjustNeighborhoodRadius(int iteration){
+		curNeighborhoodRadius = mapRadius * Math.exp(-(double) iteration / timeConstant);	
+	}
+	
+	@Override
+	public void adjustLearningRate(int iteration){
+		curLearningRate = initialLearningRate * Math.exp(-(double) iteration / maxIterations);
+	}
+	
+	protected double calculateNeighborhoodEffect(SomNode n, SomNode bmu){
+		double dist = Math.pow(n.normDistanceTo(bmu),2);
+		double bottom = 2 * Math.pow(curNeighborhoodRadius, 2);
+		double effect =  Math.exp(- dist / bottom);
+		return effect;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see dk.stcl.som.ISomBasics#computeActivationMatrix()
+	 */
+	@Override
+	public SimpleMatrix computeActivationMatrix(){
+		SimpleMatrix activation = errorMatrix.elementPower(2);
+		activation = activation.divide(-2 * Math.pow(activationCodingFactor, 2));	 
+		activation = activation.elementExp();		
+		activationMatrix = activation;
+		return activation;
+	}
+
+
+	@Override
+	public double calculateSOMFitness() {
+		double fitness = 1 - errorMatrix.get(bmu.getRow(), bmu.getCol());
+		return fitness;
+	}
+
+	
 	
 
 }

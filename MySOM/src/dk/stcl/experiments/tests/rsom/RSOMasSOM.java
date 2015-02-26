@@ -17,6 +17,8 @@ public class RSOMasSOM {
 	ArrayList<SimpleMatrix[]> sequences;
 	int iterations = 10000;
 	Random rand = new Random(1234);
+	int maxNumber;
+	double scale;
 
 	public static void main(String[] args) {
 		RSOMasSOM r =  new RSOMasSOM();
@@ -52,7 +54,7 @@ public class RSOMasSOM {
 	}
 	
 	private void setupSOMs(){
-		int mapSize = 3;
+		int mapSize = 4;
 		int inputLength = sequences.get(0)[0].getNumElements();
 		double initialLearningRate = 0.1;
 		double activationCodingFactor = 0.125;
@@ -73,7 +75,8 @@ public class RSOMasSOM {
 	
 	private void buildUniqueSequences(int numSequences, int sequenceLength){
 		int number = 1;
-		int maxNumber = numSequences * sequenceLength;
+		maxNumber = numSequences * sequenceLength;
+		scale = 1;//maxNumber;
 		sequences = new ArrayList<SimpleMatrix[]>();
 		
 		for (int seq = 0; seq < numSequences; seq++){
@@ -81,7 +84,7 @@ public class RSOMasSOM {
 			for (int i = 0; i < sequenceLength; i++){
 				double[][] data = {{number}};
 				SimpleMatrix m = new SimpleMatrix(data);
-				//m = m.divide(maxNumber);
+				m = m.divide(scale);
 				sequence[i] = m;
 				number++;
 			}
@@ -106,6 +109,19 @@ public class RSOMasSOM {
 			int id = n.getId();
 			double normF = n.getVector().normF();
 			m.set(id, normF);
+		}
+		
+		return m;
+	}
+	
+	private SimpleMatrix buildSingleValueMap(SomMap map){
+		SimpleMatrix m = new SimpleMatrix(map.getHeight(), map.getWidth());
+		
+		for (SomNode n : map.getNodes()){
+			int id = n.getId();
+			SimpleMatrix vector = n.getVector().scale(scale);
+			double value = vector.get(0);
+			m.set(id, value);
 		}
 		
 		return m;
