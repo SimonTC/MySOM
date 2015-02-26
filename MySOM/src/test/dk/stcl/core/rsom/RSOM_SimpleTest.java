@@ -19,6 +19,7 @@ public class RSOM_SimpleTest {
 	private Random rand = new Random(1234);
 	double initialLearningRate, activationCodingFactor, decay;
 	int maxIterations;
+	double initialRadius;
 	double curNeighborhoodRadius;
 	double curLearningRate;
 	double timeConstant;
@@ -27,19 +28,20 @@ public class RSOM_SimpleTest {
 
 	@Before
 	public void setUp() throws Exception {
-		int mapSize = 2;
+		int mapSize = 5;
 		int inputLength = 1;
 		initialLearningRate = 1;
 		activationCodingFactor = 0.125;
 		decay = 0.8;
-		maxIterations = 20;
+		maxIterations = 2000 * mapSize * mapSize;
+		initialRadius = (double)mapSize / 2.0;
 		
 		rsom = new RSOM_Simple(mapSize, inputLength, rand, initialLearningRate, activationCodingFactor, maxIterations, decay);
 		weightMap = new SomMap(mapSize, mapSize, inputLength);
 		copyWeightMap();
 		leakyDifferencesMap = new SomMap(mapSize, mapSize, inputLength);
 		
-		timeConstant = maxIterations / mapSize;
+		timeConstant = maxIterations / initialRadius;
 	}
 	
 	private void copyWeightMap(){
@@ -53,18 +55,25 @@ public class RSOM_SimpleTest {
 	@Test
 	public void test() {
 		ArrayList<SimpleMatrix[]> sequences = createSequences();
-		for (int i = 0; i < maxIterations; i++){
+		for (int i = 0; i <= maxIterations; i++){
+			rsom.sensitize(i);
+			sensitize(i);
+			/*
+			System.out.println();
+			System.out.println("Iteration " + i);
+			System.out.println("Current radius: " + curNeighborhoodRadius);
+			System.out.println("Current learning rate: " + curLearningRate);
+			System.out.println();
+			*/
 			
-			if (i % 1000 == 0){
-				System.out.println("Iteration: " + i + " / " + maxIterations);
-			}
 			//Choose random sequence
 			SimpleMatrix[] seq = sequences.get(rand.nextInt(sequences.size()));
 			int counter = 0;
 			for (SimpleMatrix m : seq){
 				if (counter >= seq.length) counter = 0;
+				//System.out.println("Input " + counter);
 				//Add noise
-				//m = addNoise(m, 0.2);
+				m = addNoise(m, 0.2);
 				
 				/*
 				System.out.println();
@@ -76,8 +85,10 @@ public class RSOM_SimpleTest {
 				rsom.step(m);
 				testStep(m);
 				
-				counter++;
-				rsom.sensitize(i);	
+				//printLeakyMaps();
+				//printWeightMaps();
+				
+				counter++;	
 				assertTrue("Test failed in iteration " + i + "-" + counter , isRsomCorrect());
 			}
 							
@@ -90,31 +101,15 @@ public class RSOM_SimpleTest {
 		
 	}
 	
-	private void printBMU(){
-		System.out.println("Rsom bmu: " + rsom.getBMU().getId());
-		System.out.println("Our bmu:  " + bmu.getId());
-		System.out.println();
+	private void sensitize(int i){
+		adjustLearningRate(i);
+		adjustNeighborhoodRadius(i);
 	}
 	
-	private void printLeakyMaps(){
-		System.out.println("Rsom leaky map:");
-		buildNormFMap(rsom.getLeakyDifferencesMap()).print();
-		System.out.println();
-		System.out.println("Our leaky map:");
-		buildNormFMap(leakyDifferencesMap).print();
-		System.out.println();
-	}
 	
-	private void printWeightMaps(){
-		System.out.println("Rsom weigth map:");
-		buildNormFMap(rsom.getSomMap()).print();
-		System.out.println();
-		System.out.println("Our weigth map:");
-		buildNormFMap(weightMap).print();
-		System.out.println();
-	}
 	
 	boolean isRsomCorrect(){
+	
 		//Test that BMU is the same
 		if (!bmu.equals(rsom.getBMU())){
 			System.out.println("BMU not the same");
@@ -160,6 +155,12 @@ public class RSOM_SimpleTest {
 		
 		
 		
+	}
+	
+	private SimpleMatrix addNoise(SimpleMatrix m, double noiseMagnitude){
+		double noise = (rand.nextDouble() - 0.5) * 2 * noiseMagnitude;
+		m = m.plus(noise);
+		return m;
 	}
 	
 	private SimpleMatrix buildNormFMap(SomMap map){
@@ -224,8 +225,11 @@ public class RSOM_SimpleTest {
 		for (int i = 0; i < weightMap.getNodes().length; i++){
 			SomNode leakyNode = leakyDifferencesMap.get(i);
 			SomNode weightNode = weightMap.get(i);
-			double neighborEffect = calculateNeighborhoodEffect(weightNode, bmu);
-			updateWeightNode(weightNode, curLearningRate, neighborEffect, leakyNode);		
+			double dist = weightNode.normDistanceTo(bmu);
+			if (dist <= curNeighborhoodRadius){
+				double neighborEffect = calculateNeighborhoodEffect(weightNode, bmu);
+				updateWeightNode(weightNode, curLearningRate, neighborEffect, leakyNode);	
+			}
 		}
 	}
 	
@@ -239,6 +243,8 @@ public class RSOM_SimpleTest {
 	
 	private ArrayList<SimpleMatrix[]> createSequences(){
 		ArrayList<SimpleMatrix[]> sequences = new ArrayList<>();
+		double scale = 1;
+		/*
 		double[][] in1 = {{21}};
 		SimpleMatrix ma1 = new SimpleMatrix(in1);
 		
@@ -247,8 +253,9 @@ public class RSOM_SimpleTest {
 		
 		SimpleMatrix[] pair = {ma1,ma2};
 		sequences.add(pair);
+		*/
 		
-		/*
+		
 		double[] possibleInputs = {1,6,11,16,21};
 		
 		for (double d : possibleInputs){
@@ -264,12 +271,11 @@ public class RSOM_SimpleTest {
 				sequences.add(pair);
 			}
 		}
-		*/
+		
 		return sequences;
 	}
 	
 	public void adjustNeighborhoodRadius(int iteration){
-		double initialRadius =  (double) weightMap.getHeight() / 2.0;
 		curNeighborhoodRadius = initialRadius * Math.exp(-(double) iteration / timeConstant);	
 	}
 	
@@ -282,6 +288,33 @@ public class RSOM_SimpleTest {
 		double bottom = 2 * Math.pow(curNeighborhoodRadius, 2);
 		double effect =  Math.exp(- dist / bottom);
 		return effect;
+	}
+	
+	private void printBMU(){
+		System.out.println();
+		System.out.println("Rsom bmu: " + rsom.getBMU().getId());
+		System.out.println("Our bmu:  " + bmu.getId());
+		System.out.println();
+	}
+	
+	private void printLeakyMaps(){
+		System.out.println();
+		System.out.println("Rsom leaky map:");
+		buildNormFMap(rsom.getLeakyDifferencesMap()).print();
+		System.out.println();
+		System.out.println("Our leaky map:");
+		buildNormFMap(leakyDifferencesMap).print();
+		System.out.println();
+	}
+	
+	private void printWeightMaps(){
+		System.out.println();
+		System.out.println("Rsom weigth map:");
+		buildNormFMap(rsom.getSomMap()).print();
+		System.out.println();
+		System.out.println("Our weigth map:");
+		buildNormFMap(weightMap).print();
+		System.out.println();
 	}
 
 }
