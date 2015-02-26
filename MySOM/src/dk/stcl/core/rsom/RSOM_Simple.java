@@ -95,7 +95,7 @@ public class RSOM_Simple extends SOM_Simple implements IRSOM {
 		for (SomNode n : somMap.getNodes()){
 			//double dist = n.squaredDistanceTo(bmu);
 			double dist = n.normDistanceTo(bmu);
-			//if (dist <= curNeighborhoodRadius){
+			if (dist <= curNeighborhoodRadius){
 				
 				SimpleMatrix weightVector = n.getVector();
 				
@@ -106,7 +106,7 @@ public class RSOM_Simple extends SOM_Simple implements IRSOM {
 				
 				weightVector = weightVector.plus(delta);
 				n.setVector(weightVector);
-			//}
+			}
 		}
 	}
 	
