@@ -103,7 +103,7 @@ public class RSOM_SemiOnline extends SomBasics implements IRSOM {
 		}		
 	}
 	
-	private double calculateNeighborhoodEffect(SomNode bmu, SomNode n) {		
+	protected double calculateNeighborhoodEffect(SomNode bmu, SomNode n) {		
 		//double dist = bmu.distanceTo(n);
 		double dist = Math.pow(bmu.normDistanceTo(n),2);
 		double error = 1 - somFitness;
