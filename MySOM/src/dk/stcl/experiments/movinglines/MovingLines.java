@@ -19,12 +19,6 @@ import dk.stcl.core.som.SOM_SemiOnline;
 
 public class MovingLines {
 	
-	private enum RSOMTYPES {RSOM, RSOMlo};
-	private enum SOMTYPES {PLSOM, SOMlo, NORMALSOM};
-	
-	private final RSOMTYPES rsomType = RSOMTYPES.RSOMlo;
-	private final SOMTYPES somType = SOMTYPES.SOMlo;
-	
 	private HashMap<Integer, Integer> somLabelMap;
 	private HashMap<Integer, Integer> rsomLabelMap;
 	
@@ -37,7 +31,7 @@ public class MovingLines {
 	private final int MAX_ITERTIONS = 10000;
 	private final int FRAMES_PER_SECOND = 10;
 	
-	private final double DECAY = 0.3;
+	private final double DECAY = 0.7;
 	
 	private final boolean USE_PLSOM = false;
 
@@ -164,19 +158,7 @@ public class MovingLines {
     		//Transform spatial output matrix to vector
     		double[] spatialOutputVector = spatialActivation.getMatrix().data;
     		
-    		double[] orthogonalized;
-    		if (somType != SOMTYPES.SOMlo){
-    			//Orthogonalize output
-    			orthogonalized = orthogonalize(spatialOutputVector);
-    		}else {
-    			orthogonalized = spatialOutputVector;
-    		}
-    		
-    		/*
-    		System.out.println();
-    		System.out.println("Iteration " + iteration);
-    		spatialActivation.print();
-    		 */
+    		double[] orthogonalized = orthogonalize(spatialOutputVector);
     		
     		//Temporal classification
     		temporalPooler.step(orthogonalized);	    		
@@ -240,7 +222,7 @@ public class MovingLines {
 	private void setupPoolers(Random rand){		
 		//Spatial pooler
 		int spatialInputLength = 9;
-		int spatialMapSize = 5;
+		int spatialMapSize = 3;
 		double learningRate = 0.1;
 		double stddev = 1;
 		double activationCodingFactor = 0.125;

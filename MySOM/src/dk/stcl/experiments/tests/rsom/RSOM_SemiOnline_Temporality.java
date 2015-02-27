@@ -29,7 +29,7 @@ public class RSOM_SemiOnline_Temporality {
 	}
 	
 	public void run(){
-		setupRun(2, 0.68);
+		setupRun(3, 0.68);
 		//ArrayList<SimpleMatrix[]> sequences = createSequences_Longer();
 		ArrayList<SimpleMatrix[]> sequences = createSequences_NoValueIsTheSame(4,10);
 		//train
@@ -49,7 +49,7 @@ public class RSOM_SemiOnline_Temporality {
 		SimpleMatrix[] seq = null;
 		for (int i = 0; i <= iterations; i++){
 			if (count >= sequences.get(0).length){
-				rsom.flush();
+				//rsom.flush();
 				count = 0;
 				seq = sequences.get(rand.nextInt(sequences.size()));
 			}

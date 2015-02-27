@@ -17,14 +17,20 @@ import dk.stcl.core.som.SOM_SemiOnline;
 
 	
 
-public class TwoDLines {
+public class CopyOfMovingLines {
+	
+	private enum RSOMTYPES {RSOM, RSOMlo};
+	private enum SOMTYPES {PLSOM, SOMlo, NORMALSOM};
+	
+	private final RSOMTYPES rsomType = RSOMTYPES.RSOMlo;
+	private final SOMTYPES somType = SOMTYPES.SOMlo;
 	
 	private HashMap<Integer, Integer> somLabelMap;
 	private HashMap<Integer, Integer> rsomLabelMap;
 	
 	private SimpleMatrix[][] sequences;
 	private ISOM spatialPooler;
-	private ISOM possibleInputs;
+	private ISomBasics possibleInputs;
 	private IRSOM temporalPooler;
 	private MovingLinesGUI frame;
 	private final int GUI_SIZE = 500;
@@ -33,42 +39,28 @@ public class TwoDLines {
 	
 	private final double DECAY = 0.7;
 	
-	private final boolean VISUAL_RUN = true;
-	
-	private final boolean VISUAL_TRAINING = false;
-	
-	private Random rand = new Random();
-	
 	private final boolean USE_PLSOM = false;
-	private final int STDDEV = 2;
-	private final int SOM_SIZE = 5;
 
 
 	public static void main(String[] args){
-		TwoDLines runner = new TwoDLines();
+		CopyOfMovingLines runner = new CopyOfMovingLines();
 		runner.run();
 	}
 	
 	private void run(){
-		boolean visualize = VISUAL_TRAINING;
-		double[] fitness = new double[2];
+		boolean visualize = false;
+		Random rand = new Random(1234);
+		setupExperiment(rand, visualize);
+		runExperiment(MAX_ITERTIONS, visualize, rand);
+		temporalPooler.flush();
+		temporalPooler.setLearning(false);
+		spatialPooler.setLearning(false);
+		label();
+		double[] fitness = validate();
+		System.out.println("SOM fitness: " + fitness[0]);
+		System.out.println("RSOM fitness: " + fitness[1]);
 		
-		for (int i = 0; i < 10; i++){
-			setupExperiment(rand, visualize);
-			runExperiment(MAX_ITERTIONS, visualize, rand);
-			temporalPooler.flush();
-			temporalPooler.setLearning(false);
-			spatialPooler.setLearning(false);
-			label();
-			double[] curFitness = validate();
-			fitness[0] += curFitness[0];
-			fitness[1] += curFitness[1];
-		}
-		
-		System.out.println("SOM fitness: " + ((double) fitness[0] / 10));
-		System.out.println("RSOM fitness: " + ((double) fitness[1] / 10));
-		
-		if  (VISUAL_RUN) visualRun(rand);
+		visualRun(rand);
 	}
 	
 	private void visualRun( Random rand){
@@ -81,50 +73,16 @@ public class TwoDLines {
 	}
 	
 	private void runExperiment(int maxIterations, boolean visualize, Random rand){
-		int SKIP_TICKS = 1000 / FRAMES_PER_SECOND; 
+		
 	    SimpleMatrix[] seq;
-	    int curSeqID = 0;
-	    
-	    if (visualize){
-	    	setupVisualization(spatialPooler, GUI_SIZE);
-	    }
 	    
 	    for (int i = 1; i <= maxIterations; i++){
 	    	//Choose sequence
-	    	boolean change = rand.nextDouble() > 0.9 ? true : false;
-	    	
-	    	if (change){
-				boolean choose = rand.nextBoolean();
-				switch (curSeqID){
-				case 0 : curSeqID = choose ? 1 : 2; break;
-				case 1 : curSeqID = choose ? 2 : 0; break;
-				case 2 : curSeqID = choose ? 0 : 1; break;
-				}
-			} 
-			int curInputID = rand.nextInt(3);
-			seq = sequences[curSeqID];
-			
-			SimpleMatrix input = seq[curInputID];
-			step(input);
-			
-			if (visualize){
-				//Visualize
-    			updateGraphics(input,i);					
-				try {
-					Thread.sleep(SKIP_TICKS);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-	    }
-	    
-	    if (visualize){
-		    frame.setVisible(false);
-		    frame.dispose();
+	    	seq = sequences[rand.nextInt(sequences.length)];	    	
+	    	doSequence(seq, visualize, i);
 	    }
 	}
-
+	
 	private void label(){
 		int nextFreeSOMLabel = 0;
 		int curSOMLabel = -1;
@@ -137,6 +95,7 @@ public class TwoDLines {
 		for (SimpleMatrix[] sequence : sequences){
 			int hash = toHash(sequence);
 			doSequence(sequence, false, 0);
+			temporalPooler.flush();
 			
 			if (somLabelMap.containsKey(hash)){
 				curSOMLabel = somLabelMap.get(hash);
@@ -156,8 +115,7 @@ public class TwoDLines {
 			SomNode rsomBMU = temporalPooler.getBMU();
 			
 			somBMU.setLabel(curSOMLabel);
-			rsomBMU.setLabel(curRSOMLabel);	
-			temporalPooler.flush();
+			rsomBMU.setLabel(curRSOMLabel);			
 		}
 	}
 	
@@ -172,12 +130,12 @@ public class TwoDLines {
 			total++;
 			int hash = toHash(sequence);
 			doSequence(sequence, false, 0);
+			temporalPooler.flush();
 			SomNode somBMU = spatialPooler.getBMU();
 			SomNode rsomBMU = temporalPooler.getBMU();
 			
 			if (somBMU.getLabel() == somLabelMap.get(hash)) somCorrect++;
 			if (rsomBMU.getLabel() == rsomLabelMap.get(hash)) rsomCorrect++;
-			temporalPooler.flush();
 		}
 		
 		fitness[0] = (double) somCorrect / total;
@@ -196,23 +154,32 @@ public class TwoDLines {
 		return s.hashCode();
 	}
 	
-	private void step(SimpleMatrix input){
-		//Spatial classification	    		
-		spatialPooler.step(input.getMatrix().data);
-		SimpleMatrix spatialActivation = spatialPooler.computeActivationMatrix();
-		
-		//Transform spatial output matrix to vector
-		double[] spatialOutputVector = spatialActivation.getMatrix().data;
-		
-		//Temporal classification
-		temporalPooler.step(spatialOutputVector);	    	
-	}
-	
 	private void doSequence(SimpleMatrix[] sequence, boolean visualize, int iteration){
 		int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 		for (SimpleMatrix m : sequence){
-    			
-    		step(m);
+    		//Spatial classification	    		
+    		spatialPooler.step(m.getMatrix().data);
+    		SimpleMatrix spatialActivation = spatialPooler.computeActivationMatrix();
+    		
+    		//Transform spatial output matrix to vector
+    		double[] spatialOutputVector = spatialActivation.getMatrix().data;
+    		
+    		double[] orthogonalized;
+    		if (somType != SOMTYPES.SOMlo){
+    			//Orthogonalize output
+    			orthogonalized = orthogonalize(spatialOutputVector);
+    		}else {
+    			orthogonalized = spatialOutputVector;
+    		}
+    		
+    		/*
+    		System.out.println();
+    		System.out.println("Iteration " + iteration);
+    		spatialActivation.print();
+    		 */
+    		
+    		//Temporal classification
+    		temporalPooler.step(orthogonalized);	    		
     		
     		if (visualize){
 				//Visualize
@@ -273,24 +240,23 @@ public class TwoDLines {
 	private void setupPoolers(Random rand){		
 		//Spatial pooler
 		int spatialInputLength = 9;
-		int spatialMapSize = SOM_SIZE;
+		int spatialMapSize = 5;
 		double learningRate = 0.1;
+		double stddev = 1;
 		double activationCodingFactor = 0.125;
 		
-		
 		if (USE_PLSOM){
-			spatialPooler = new PLSOM(spatialMapSize, spatialInputLength, rand, learningRate, activationCodingFactor, STDDEV);
+			spatialPooler = new PLSOM(spatialMapSize, spatialInputLength, rand, learningRate, activationCodingFactor, stddev);
 		} else {
-			spatialPooler = new SOM_SemiOnline(spatialMapSize, spatialInputLength, rand, learningRate, activationCodingFactor, STDDEV);
+			spatialPooler = new SOM_SemiOnline(spatialMapSize, spatialInputLength, rand, learningRate, activationCodingFactor, stddev);
 		}
-		
 		
 		//Temporal pooler
 		int temporalInputLength = spatialMapSize * spatialMapSize;
 		int temporalMapSize = 2;
 		
 		
-		temporalPooler = new RSOM_SemiOnline(temporalMapSize, temporalInputLength, rand, learningRate, activationCodingFactor, STDDEV, DECAY);
+		temporalPooler = new RSOM_SemiOnline(temporalMapSize, temporalInputLength, rand, learningRate, activationCodingFactor, stddev, DECAY);
 		
 		
 	}
