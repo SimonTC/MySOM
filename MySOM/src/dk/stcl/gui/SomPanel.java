@@ -17,7 +17,7 @@ public class SomPanel extends JPanel {
 	private ISomBasics som;
 	private int somModelsRows;
 	private int somModelsColumns;
-	private MatrixPanel[] panels;
+	private SimpleMatrixVisualizer[] panels;
 	
 	public SomPanel(ISomBasics som, int somModelsRows, int somModelsColumns) {
 		this.som = som;
@@ -28,11 +28,11 @@ public class SomPanel extends JPanel {
 		int rows = som.getHeight();
 		int cols = som.getWidth();		
 		setLayout(new GridLayout(rows, cols, 2, 2));
-		panels = new MatrixPanel[rows * cols];
+		panels = new SimpleMatrixVisualizer[rows * cols];
 		
 		//Add matrixPanels
 		for (int i = 0; i < som.getNodes().length; i++){
-			MatrixPanel p = new MatrixPanel(new SimpleMatrix(somModelsRows, somModelsColumns), true);
+			SimpleMatrixVisualizer p = new SimpleMatrixVisualizer(new SimpleMatrix(somModelsRows, somModelsColumns), true);
 			add(p);
 			panels[i] = p;
 		}
@@ -45,7 +45,7 @@ public class SomPanel extends JPanel {
 			SomNode n = som.getNode(i);
 			SimpleMatrix m = new SimpleMatrix(n.getVector());
 			m.reshape(somModelsRows, somModelsColumns);
-			MatrixPanel p = panels[i];
+			SimpleMatrixVisualizer p = panels[i];
 			p.registerMatrix(m);
 			p.revalidate();
 			p.repaint();			
@@ -58,7 +58,7 @@ public class SomPanel extends JPanel {
 			SomNode n = som.getNode(i);
 			SimpleMatrix m = new SimpleMatrix(n.getVector());
 			m.reshape(somModelsRows, somModelsColumns);
-			MatrixPanel p = panels[i];
+			SimpleMatrixVisualizer p = panels[i];
 			if (highlightList[i]){
 				p.setBorder(BorderFactory.createLineBorder(Color.RED));
 			} else {

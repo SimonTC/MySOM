@@ -12,21 +12,21 @@ import org.ejml.simple.SimpleMatrix;
  * @author Simon
  *
  */
-public class MatrixPanel extends JPanel {
+public class SimpleMatrixVisualizer extends JPanel {
 
 	private SimpleMatrix matrix;
-	private int width, height;
+	private int columns, rows;
 	private boolean scaled;
 	
-	public MatrixPanel(SimpleMatrix matrix, boolean scaled) {
+	public void initialize(SimpleMatrix matrix, boolean scaled){
 		registerMatrix(matrix);
 		this.scaled = scaled;
 	}
 	
 	public void registerMatrix(SimpleMatrix matrix){
 		this.matrix = matrix;
-		this.width = matrix.numCols();
-		this.height = matrix.numRows();
+		this.columns = matrix.numCols();
+		this.rows = matrix.numRows();
 	}
 	
 	@Override
@@ -37,11 +37,11 @@ public class MatrixPanel extends JPanel {
 		g.clearRect(0, 0, getWidth(), getHeight());
 
 		// Draw the grid
-		int cellWidth = getWidth() / width;
-		int cellHeight = getHeight() / height;
+		int cellWidth = getWidth() / columns;
+		int cellHeight = getHeight() / rows;
 		
-		for (int x=0; x<width; x++) {
-			for (int y=0; y<height; y++) {
+		for (int x=0; x<columns; x++) {
+			for (int y=0; y<rows; y++) {
 				
 				double value = matrix.get(y, x);
 				int rgb;

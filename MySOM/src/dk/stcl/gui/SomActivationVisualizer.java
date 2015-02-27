@@ -3,7 +3,9 @@ package dk.stcl.gui;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
+import dk.stcl.core.basic.ISomBasics;
 import dk.stcl.core.som.ISOM;
 
 /**
@@ -11,10 +13,10 @@ import dk.stcl.core.som.ISOM;
  * @author Simon
  *
  */
-public class SomActivationDrawer extends JFrame {
+public class SomActivationVisualizer extends JPanel {
 
-	private ISOM som;
-	private MatrixPanel panel;
+	private ISomBasics som;
+	private SimpleMatrixVisualizer panel;
 	
 	/**
 	 * 
@@ -22,12 +24,13 @@ public class SomActivationDrawer extends JFrame {
 	 * @param som
 	 * @param scaled true if the values are scaled between 0 and 1
 	 */
-	public SomActivationDrawer(int frameSize, ISOM som, boolean scaled){
+	public void initialize(ISomBasics som, boolean scaled){
 		this.som = som;
 		
-		setPreferredSize(new Dimension(frameSize, frameSize));
+		panel = new SimpleMatrixVisualizer();
+		panel.initialize(som.getActivationMatrix(), scaled);
 		
-		panel = new MatrixPanel(som.computeActivationMatrix(), scaled);
+		panel.setPreferredSize(getPreferredSize());
 		
 		add(panel);
 	}
@@ -38,7 +41,7 @@ public class SomActivationDrawer extends JFrame {
 	 * on the map
 	 */
 	public void updateData() {
-		this.panel.registerMatrix(som.computeActivationMatrix());
+		this.panel.registerMatrix(som.getActivationMatrix());
 		this.panel.revalidate();
 		this.panel.repaint();
 	}

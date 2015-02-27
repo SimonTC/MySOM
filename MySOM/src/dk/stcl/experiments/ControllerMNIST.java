@@ -1,5 +1,6 @@
 package dk.stcl.experiments;
 
+import java.awt.Dimension;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
@@ -19,16 +20,17 @@ public class ControllerMNIST {
 
 	private SimpleMatrix data;
 	private ISomBasics som;
-	private SomModelDrawer gui;
+	private JFrame gui;
 	private Random rand = new Random();
 	private DataLoader trainLoader, validationLoader, testLoader;
 	private FileWriter writer;
+	private SomModelDrawer drawer;
 	
 	/********************************************/
 	/*      Parameters used in the code         */
 	/********************************************/
 	private final int GUI_SIZE = 500;
-	private final int SOM_SIZE = 5;
+	private final int SOM_SIZE = 10;
 	private final double INITIAL_LEARNING = 0.1;
 	private final double STDDEV = 3;
 	private final int MAX_ITERATIONS = 1000;
@@ -37,7 +39,7 @@ public class ControllerMNIST {
 	
 	private final boolean CLASSIFY_NEW_DATA = false;
 	private final boolean USE_PLSOM = false;
-	private static final boolean VISUALIZE = false;
+	private static final boolean VISUALIZE = true;
 	int FRAMES_PER_SECOND = 100;
 	/**
 	 * @throws IOException ******************************************/
@@ -98,9 +100,14 @@ public class ControllerMNIST {
 		if (visualize){
 			//Create GUI
 			System.out.println("Creating gui");
-			gui = new SomModelDrawer(som, GUI_SIZE);
+			gui = new JFrame();
+			gui.setSize(GUI_SIZE, GUI_SIZE);
 			gui.setTitle("Visualization");
 			gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			drawer = new SomModelDrawer();
+			drawer.setPreferredSize(new Dimension(GUI_SIZE, GUI_SIZE));
+			drawer.initialize(som, true);
+			gui.add(drawer);
 			gui.pack();
 			gui.setVisible(true);
 		}
@@ -327,7 +334,6 @@ public class ControllerMNIST {
 	
 	private void visualizeSom(int iteration, int maxIterations){
 		gui.setTitle("Visualiztion - Iteration: " + iteration + " / " + maxIterations);
-		gui.updateData();
 		gui.revalidate();
 		gui.repaint();
 	}

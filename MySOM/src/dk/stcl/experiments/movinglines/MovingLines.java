@@ -1,5 +1,6 @@
 package dk.stcl.experiments.movinglines;
 
+import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -14,6 +15,7 @@ import dk.stcl.core.rsom.RSOM_SemiOnline;
 import dk.stcl.core.som.ISOM;
 import dk.stcl.core.som.PLSOM;
 import dk.stcl.core.som.SOM_SemiOnline;
+import dk.stcl.gui.GeneralExperimentGUI;
 
 	
 
@@ -26,7 +28,7 @@ public class MovingLines {
 	private ISOM spatialPooler;
 	private ISomBasics possibleInputs;
 	private IRSOM temporalPooler;
-	private MovingLinesGUI frame;
+	private GeneralExperimentGUI frame;
 	private final int GUI_SIZE = 500;
 	private final int MAX_ITERTIONS = 10000;
 	private final int FRAMES_PER_SECOND = 10;
@@ -194,7 +196,7 @@ public class MovingLines {
 	}
 	
 	private void updateGraphics(SimpleMatrix inputVector, int iteration){
-		frame.updateData(inputVector, spatialPooler, temporalPooler);
+		frame.updateData(possibleInputs.getActivationMatrix());
 		frame.setTitle("Visualiztion - Iteration: " + iteration);
 		frame.revalidate();
 		frame.repaint();
@@ -211,10 +213,12 @@ public class MovingLines {
 	
 	private void setupVisualization(ISomBasics som, int GUI_SIZE){
 		//Create GUI
-		frame = new MovingLinesGUI(som, possibleInputs);
+		frame = new GeneralExperimentGUI();
+		frame.setPreferredSize(new Dimension(500, 500));
+		frame.initialize(spatialPooler, temporalPooler, sequences[2][0], true,possibleInputs.getActivationMatrix());
 		frame.setTitle("Visualiztion");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		updateGraphics(sequences[2][0],0); //Give a blank
+		//updateGraphics(sequences[2][0],0); //Give a blank
 		frame.pack();
 		frame.setVisible(true);	
 	}
