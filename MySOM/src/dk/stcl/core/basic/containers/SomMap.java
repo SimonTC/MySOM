@@ -94,6 +94,35 @@ public class SomMap {
 		}
 	}
 	
+	/**
+	 * Create String representation of the map to be used when recreating this map
+	 * @return
+	 */
+	public String toFileString(){
+		String s = columns + " " + rows + "\n";
+		for (SomNode n : nodes){
+			s += n.toFileString() + "\n";
+		}
+		return s;
+	}
+	
+	/**
+	 * Instantiates the map as a copy of the map described in the string.
+	 * THe string representation is created by the toFileString() method
+	 * @param s
+	 */
+	public SomMap(String s){
+		String[] lines = s.split("\n");
+		String[] mapsize = lines[0].split(" ");
+		columns = Integer.parseInt(mapsize[0]);
+		rows = Integer.parseInt(mapsize[1]);
+		nodes = new SomNode[rows * columns];
+		for (int i = 1; i < lines.length; i++){
+			SomNode n = new SomNode(lines[i]);
+			nodes[n.getId()] = n;
+		}
+	}
+	
 	
 
 }

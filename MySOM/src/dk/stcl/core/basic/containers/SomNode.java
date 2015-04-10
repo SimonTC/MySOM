@@ -55,6 +55,27 @@ public class SomNode {
 	}
 	
 	/**
+	 * Constructor used to create the somnode from the string created by the toFileString() method
+	 * @param s
+	 */
+	public SomNode(String s){
+		String[] arr = s.split(" ");
+		id = Integer.parseInt(arr[0]);
+		label = Integer.parseInt(arr[1]);
+		row = Integer.parseInt(arr[2]);
+		col = Integer.parseInt(arr[3]);
+		
+		int vectorSize = arr.length - 4;
+		double[] data = new double[vectorSize];
+		for (int i = 4; i < arr.length; i++){
+			double d = Double.parseDouble(arr[i]);
+			data[i-4] = d;
+		}
+		valueVector = new SimpleMatrix(1, vectorSize, true, data);
+	}
+
+	
+	/**
 	 * Creates a new node with a value vector containing the given data
 	 * @param vector
 	 * @param col
@@ -194,8 +215,12 @@ public class SomNode {
 		return true;
 	}
 	
-	@Override
-	public String toString(){
+	/**
+	 * Creates a String representation of this node.
+	 * This string can be savd in a file to be used when recreating this node
+	 * @return
+	 */
+	public String toFileString(){
 		String s = id + " " + label + " " + row + " " + col;
 		for (double d : valueVector.getMatrix().data){
 			s += " " + d;
@@ -203,25 +228,6 @@ public class SomNode {
 		return s;
 	}
 	
-	/**
-	 * Constructor used to create the somnode from the str created by the toString() method
-	 * @param s
-	 */
-	public SomNode(String s){
-		String[] arr = s.split(" ");
-		id = Integer.parseInt(arr[0]);
-		label = Integer.parseInt(arr[1]);
-		row = Integer.parseInt(arr[2]);
-		col = Integer.parseInt(arr[3]);
-		
-		int vectorSize = arr.length - 4;
-		double[] data = new double[vectorSize];
-		for (int i = 4; i < arr.length; i++){
-			double d = Double.parseDouble(arr[i]);
-			data[i-4] = d;
-		}
-		valueVector = new SimpleMatrix(1, vectorSize, true, data);
-	}
 	
 	
 	
