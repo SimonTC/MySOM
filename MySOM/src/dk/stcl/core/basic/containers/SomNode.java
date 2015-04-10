@@ -75,6 +75,8 @@ public class SomNode {
 	}
 	
 	
+	
+	
 	/**
 	 * Only used if node is not placed in a map
 	 * @param vector
@@ -190,6 +192,35 @@ public class SomNode {
 		if (id != other.id)
 			return false;
 		return true;
+	}
+	
+	@Override
+	public String toString(){
+		String s = id + " " + label + " " + row + " " + col;
+		for (double d : valueVector.getMatrix().data){
+			s += " " + d;
+		}
+		return s;
+	}
+	
+	/**
+	 * Constructor used to create the somnode from the str created by the toString() method
+	 * @param s
+	 */
+	public SomNode(String s){
+		String[] arr = s.split(" ");
+		id = Integer.parseInt(arr[0]);
+		label = Integer.parseInt(arr[1]);
+		row = Integer.parseInt(arr[2]);
+		col = Integer.parseInt(arr[3]);
+		
+		int vectorSize = arr.length - 4;
+		double[] data = new double[vectorSize];
+		for (int i = 4; i < arr.length; i++){
+			double d = Double.parseDouble(arr[i]);
+			data[i-4] = d;
+		}
+		valueVector = new SimpleMatrix(1, vectorSize, true, data);
 	}
 	
 	
