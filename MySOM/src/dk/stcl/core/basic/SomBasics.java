@@ -1,6 +1,5 @@
 package dk.stcl.core.basic;
 
-import java.util.Observable;
 import java.util.Random;
 
 import org.ejml.simple.SimpleMatrix;

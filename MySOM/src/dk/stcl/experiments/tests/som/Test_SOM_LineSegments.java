@@ -1,6 +1,5 @@
 package dk.stcl.experiments.tests.som;
 
-import java.util.HashMap;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -9,8 +8,6 @@ import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.core.basic.ISomBasics;
 import dk.stcl.core.basic.containers.SomNode;
-import dk.stcl.core.rsom.IRSOM;
-import dk.stcl.core.rsom.RSOM_SemiOnline;
 import dk.stcl.core.som.ISOM;
 import dk.stcl.core.som.PLSOM;
 import dk.stcl.core.som.SOM_SemiOnline;

@@ -2,12 +2,9 @@ package dk.stcl.experiments.tests.rsom;
 
 import java.util.Random;
 
-import org.ejml.simple.SimpleMatrix;
-
 import dk.stcl.core.basic.containers.SomMap;
 import dk.stcl.core.basic.containers.SomNode;
 import dk.stcl.core.rsom.RSOM_SemiOnline;
-import dk.stcl.utils.RSomLabeler;
 
 public class UnderstandingRSOM {
 	

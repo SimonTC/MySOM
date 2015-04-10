@@ -5,7 +5,6 @@ import java.util.Random;
 
 import org.ejml.simple.SimpleMatrix;
 
-import dk.stcl.core.basic.ISomBasics;
 import dk.stcl.core.basic.containers.SomNode;
 import dk.stcl.core.rsom.IRSOM;
 import dk.stcl.core.rsom.RSOM_Simple;

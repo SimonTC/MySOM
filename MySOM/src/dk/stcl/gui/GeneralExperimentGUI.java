@@ -1,23 +1,15 @@
 package dk.stcl.gui;
 
-import java.awt.GraphicsConfiguration;
-import java.awt.HeadlessException;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 
 import javax.swing.JFrame;
-
-import java.awt.GridBagLayout;
-
 import javax.swing.JPanel;
 
 import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.core.rsom.IRSOM;
 import dk.stcl.core.som.ISOM;
-
-import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
 
 public class GeneralExperimentGUI extends JFrame {
 	private SimpleMatrixVisualizer inputPanel;

@@ -1,7 +1,5 @@
 package dk.stcl.experiments.tests.rsom;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 import javax.swing.JFrame;

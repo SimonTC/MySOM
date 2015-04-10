@@ -1,16 +1,11 @@
 package dk.stcl.gui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
-import java.awt.HeadlessException;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.core.basic.ISomBasics;
 import dk.stcl.core.basic.containers.SomNode;

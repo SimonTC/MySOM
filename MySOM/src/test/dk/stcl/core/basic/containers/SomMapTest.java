@@ -1,6 +1,7 @@
 package test.dk.stcl.core.basic.containers;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
 

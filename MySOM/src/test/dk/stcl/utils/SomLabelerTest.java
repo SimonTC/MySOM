@@ -1,6 +1,6 @@
 package test.dk.stcl.utils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
 

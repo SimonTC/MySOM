@@ -8,7 +8,6 @@ import org.ejml.simple.SimpleMatrix;
 import dk.stcl.core.basic.containers.SomMap;
 import dk.stcl.core.basic.containers.SomNode;
 import dk.stcl.core.rsom.RSOM_SemiOnline;
-import dk.stcl.core.rsom.RSOM_Simple;
 
 public class RSOM_SemiOnline_Temporality {
 	

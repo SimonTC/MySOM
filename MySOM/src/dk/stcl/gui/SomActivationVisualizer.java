@@ -1,12 +1,8 @@
 package dk.stcl.gui;
 
-import java.awt.Dimension;
-
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import dk.stcl.core.basic.ISomBasics;
-import dk.stcl.core.som.ISOM;
 
 /**
  * Visualizes the activation of a SOM map.
