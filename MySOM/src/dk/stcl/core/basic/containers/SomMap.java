@@ -2,7 +2,7 @@ package dk.stcl.core.basic.containers;
 
 import java.util.Random;
 
-import dk.stcl.utils.SomConstants;
+import dk.stcl.core.utils.SomConstants;
 
 public class SomMap {
 	

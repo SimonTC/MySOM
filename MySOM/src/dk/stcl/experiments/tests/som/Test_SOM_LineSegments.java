@@ -11,8 +11,8 @@ import dk.stcl.core.basic.containers.SomNode;
 import dk.stcl.core.som.ISOM;
 import dk.stcl.core.som.PLSOM;
 import dk.stcl.core.som.SOM_SemiOnline;
+import dk.stcl.core.utils.SomLabeler;
 import dk.stcl.experiments.movinglines.MovingLinesGUI;
-import dk.stcl.utils.SomLabeler;
 
 	
 /**

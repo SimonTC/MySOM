@@ -6,7 +6,7 @@ import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.core.basic.containers.SomMap;
 import dk.stcl.core.basic.containers.SomNode;
-import dk.stcl.utils.SomConstants;
+import dk.stcl.core.utils.SomConstants;
 
 public abstract class SomBasics implements ISomBasics {
 

@@ -1,4 +1,4 @@
-package dk.stcl.utils;
+package dk.stcl.core.utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;

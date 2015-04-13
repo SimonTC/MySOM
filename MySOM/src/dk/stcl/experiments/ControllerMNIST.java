@@ -13,8 +13,8 @@ import dk.stcl.core.basic.ISomBasics;
 import dk.stcl.core.basic.containers.SomNode;
 import dk.stcl.core.som.PLSOM;
 import dk.stcl.core.som.SOM_SemiOnline;
+import dk.stcl.core.utils.DataLoader;
 import dk.stcl.gui.SomModelDrawer;
-import dk.stcl.utils.DataLoader;
 
 public class ControllerMNIST {
 

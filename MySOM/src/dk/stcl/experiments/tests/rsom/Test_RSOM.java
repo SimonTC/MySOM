@@ -11,8 +11,8 @@ import dk.stcl.core.basic.containers.SomNode;
 import dk.stcl.core.rsom.IRSOM;
 import dk.stcl.core.rsom.RSOM_SemiOnline;
 import dk.stcl.core.som.SOM_SemiOnline;
+import dk.stcl.core.utils.RSomLabeler;
 import dk.stcl.experiments.movinglines.MovingLinesGUI;
-import dk.stcl.utils.RSomLabeler;
 
 public class Test_RSOM {
 	private final int NUM_ITERATIONS = 20000;

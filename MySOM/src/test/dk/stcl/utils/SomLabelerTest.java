@@ -11,7 +11,7 @@ import org.junit.Test;
 import dk.stcl.core.basic.containers.SomNode;
 import dk.stcl.core.som.ISOM;
 import dk.stcl.core.som.SOM_SemiOnline;
-import dk.stcl.utils.SomLabeler;
+import dk.stcl.core.utils.SomLabeler;
 
 public class SomLabelerTest {
 

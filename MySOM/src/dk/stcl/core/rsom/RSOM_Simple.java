@@ -7,7 +7,7 @@ import org.ejml.simple.SimpleMatrix;
 import dk.stcl.core.basic.SomBasics;
 import dk.stcl.core.basic.containers.SomMap;
 import dk.stcl.core.basic.containers.SomNode;
-import dk.stcl.utils.SomConstants;
+import dk.stcl.core.utils.SomConstants;
 
 /**
  * This clas is an implementation of the RSOM from the LoopSOM paper
