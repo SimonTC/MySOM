@@ -7,6 +7,7 @@ import org.ejml.simple.SimpleMatrix;
 import dk.stcl.core.basic.SomBasics;
 import dk.stcl.core.basic.containers.SomMap;
 import dk.stcl.core.basic.containers.SomNode;
+import dk.stcl.utils.SomConstants;
 
 /**
  * This clas is an implementation of the RSOM from the LoopSOM paper
@@ -42,6 +43,22 @@ public class RSOM_Simple extends SomBasics implements IRSOM {
 		setupLeakyDifferences();
 	}
 	
+	public RSOM_Simple(String s){
+		super(s);
+		String[] lines = s.split(SomConstants.LINE_SEPARATOR);
+		String[] somInfo = lines[0].split(" ");
+		decayFactor = Double.parseDouble(somInfo[0]);
+		maxIterations = Integer.parseInt(somInfo[1]);
+		mapRadius = Double.parseDouble(somInfo[2]);
+		timeConstant = Double.parseDouble(somInfo[3]);
+		initialNeighborHoodRadius = Double.parseDouble(somInfo[4]);
+		curNeighborhoodRadius = Double.parseDouble(somInfo[5]);
+		initialLearningRate = Double.parseDouble(somInfo[6]);
+		curLearningRate = Double.parseDouble(somInfo[7]);
+		activationCodingFactor = Double.parseDouble(somInfo[8]);
+		setupLeakyDifferences();
+	}
+	
 	public void updateMaxIterations(int maxIterations){
 		this.maxIterations = maxIterations;
 		this.timeConstant = maxIterations / mapRadius;
@@ -52,6 +69,13 @@ public class RSOM_Simple extends SomBasics implements IRSOM {
 		leakyDifferencesMap = new SomMap(columns, rows, inputLength);
 	}
 	
+	@Override
+	public String toFileString(){
+		String s = super.toFileString();
+		String info = decayFactor + " " + maxIterations + " " + mapRadius + " " + timeConstant + " " + initialNeighborHoodRadius + 
+				" " + curNeighborhoodRadius + " " + initialLearningRate + " " + curLearningRate + " " + activationCodingFactor + SomConstants.LINE_SEPARATOR;
+		return info + s;
+	}
 
 	@Override
 	/**

@@ -6,6 +6,7 @@ import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.core.basic.containers.SomMap;
 import dk.stcl.core.basic.containers.SomNode;
+import dk.stcl.utils.SomConstants;
 
 public abstract class SomBasics implements ISomBasics {
 
@@ -16,8 +17,7 @@ public abstract class SomBasics implements ISomBasics {
 	protected int inputLength, rows, columns;
 	protected SimpleMatrix inputVector;
 	protected double somFitness;
-	protected SimpleMatrix activationMatrix;
-	
+	protected SimpleMatrix activationMatrix;	
 	
 	/**
 	 * 
@@ -41,6 +41,19 @@ public abstract class SomBasics implements ISomBasics {
 		this(mapSize,mapSize,inputLength, rand);
 	}
 	
+	public SomBasics(String s){
+		String[] lines = s.split(SomConstants.LINE_SEPARATOR);
+		String[] somInfo = lines[0].split(" ");
+		inputLength = Integer.parseInt(somInfo[0]);
+		rows = Integer.parseInt(somInfo[1]);
+		columns = Integer.parseInt(somInfo[2]);
+		String somMapDescription = s.substring(lines[0].length(), s.length());
+		somMap = new SomMap(somMapDescription);
+		errorMatrix = new SimpleMatrix(rows, columns);
+		learning = true;
+		activationMatrix = new SimpleMatrix(rows, columns);		
+	}
+	
 
 	public SomNode step(SimpleMatrix inputVector){
 		//Save input vector
@@ -56,6 +69,12 @@ public abstract class SomBasics implements ISomBasics {
 		if (learning) updateWeights(inputVector);
 		
 		return bmu;
+	}
+	
+	public String toFileString(){
+		String s = inputLength + " " + rows + " " + columns + SomConstants.LINE_SEPARATOR;
+		s += somMap.toFileString();
+		return s;
 	}
 
 	/* (non-Javadoc)

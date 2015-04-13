@@ -7,6 +7,7 @@ import org.ejml.simple.SimpleMatrix;
 import dk.stcl.core.basic.SomBasics;
 import dk.stcl.core.basic.containers.SomMap;
 import dk.stcl.core.basic.containers.SomNode;
+import dk.stcl.utils.SomConstants;
 
 /**
  * This class is an implementation of the RSOM from the LoopSOM paper
@@ -32,10 +33,27 @@ public class RSOM_SemiOnline extends SomBasics implements IRSOM {
 		setupLeakyDifferences();
 	}
 	
+	public RSOM_SemiOnline(String s){
+		super(s);
+		String[] lines = s.split(SomConstants.LINE_SEPARATOR);
+		String[] somInfo = lines[0].split(" ");
+		decayFactor = Double.parseDouble(somInfo[0]);
+		learningRate = Double.parseDouble(somInfo[1]);
+		stddev = Double.parseDouble(somInfo[2]);
+		activationCodingFactor = Double.parseDouble(somInfo[3]);
+		setupLeakyDifferences();
+	}
+	
 	private void setupLeakyDifferences(){
 		leakyDifferencesMap = new SomMap(columns, rows, inputLength);
 	}
 	
+	@Override
+	public String toFileString(){
+		String s = super.toFileString();
+		String info = decayFactor + " " + learningRate + " " + stddev + " " + activationCodingFactor + SomConstants.LINE_SEPARATOR;
+		return info + s;
+	}
 
 	@Override
 	/**

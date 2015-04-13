@@ -2,6 +2,8 @@ package dk.stcl.core.basic.containers;
 
 import java.util.Random;
 
+import dk.stcl.utils.SomConstants;
+
 public class SomMap {
 	
 	private int rows, columns;
@@ -28,6 +30,24 @@ public class SomMap {
 		this.rows = rows;
 		initializeMap(inputLength, null);
 	}
+	
+	/**
+	 * Instantiates the map as a copy of the map described in the string.
+	 * The string representation is created by the toFileString() method
+	 * @param s
+	 */
+	public SomMap(String s){
+		String[] lines = s.split(SomConstants.LINE_SEPARATOR);
+		String[] mapsize = lines[0].split(" ");
+		columns = Integer.parseInt(mapsize[0]);
+		rows = Integer.parseInt(mapsize[1]);
+		nodes = new SomNode[rows * columns];
+		for (int i = 1; i < lines.length; i++){
+			SomNode n = new SomNode(lines[i]);
+			nodes[n.getId()] = n;
+		}
+	}
+
 	
 	/**
 	 * Fills the map with nodes where the vector values are set to random values between 0 and 1
@@ -99,29 +119,14 @@ public class SomMap {
 	 * @return
 	 */
 	public String toFileString(){
-		String s = columns + " " + rows + "\n";
+		String ls = SomConstants.LINE_SEPARATOR;
+		String s = columns + " " + rows + ls;
 		for (SomNode n : nodes){
-			s += n.toFileString() + "\n";
+			s += n.toFileString() + ls;
 		}
 		return s;
 	}
 	
-	/**
-	 * Instantiates the map as a copy of the map described in the string.
-	 * THe string representation is created by the toFileString() method
-	 * @param s
-	 */
-	public SomMap(String s){
-		String[] lines = s.split("\n");
-		String[] mapsize = lines[0].split(" ");
-		columns = Integer.parseInt(mapsize[0]);
-		rows = Integer.parseInt(mapsize[1]);
-		nodes = new SomNode[rows * columns];
-		for (int i = 1; i < lines.length; i++){
-			SomNode n = new SomNode(lines[i]);
-			nodes[n.getId()] = n;
-		}
-	}
 	
 	
 
