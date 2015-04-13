@@ -1,5 +1,6 @@
 package dk.stcl.core.basic;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import org.ejml.simple.SimpleMatrix;
@@ -8,8 +9,9 @@ import dk.stcl.core.basic.containers.SomMap;
 import dk.stcl.core.basic.containers.SomNode;
 import dk.stcl.core.utils.SomConstants;
 
-public abstract class SomBasics implements ISomBasics {
+public abstract class SomBasics implements ISomBasics, Serializable {
 
+	private static final long serialVersionUID = 1L;
 	protected SomMap somMap;
 	protected SimpleMatrix errorMatrix; //Contains the differences between the input weights and the node weights
 	protected boolean learning; //If false no learning will take place when a new input is presented

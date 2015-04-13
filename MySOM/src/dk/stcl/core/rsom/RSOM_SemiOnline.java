@@ -1,5 +1,6 @@
 package dk.stcl.core.rsom;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import org.ejml.simple.SimpleMatrix;
@@ -16,7 +17,7 @@ import dk.stcl.core.utils.SomConstants;
  */
 //TODO: Better citation
 public class RSOM_SemiOnline extends SomBasics implements IRSOM {
-	
+	private static final long serialVersionUID = 1L;
 	private SomMap leakyDifferencesMap;
 	private double decayFactor;
 	private double learningRate;

@@ -1,11 +1,13 @@
 package dk.stcl.core.basic.containers;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import org.ejml.simple.SimpleMatrix;
 
-public class SomNode {
+public class SomNode implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
 	private SimpleMatrix valueVector;
 	private int col, row; // Coordinates of the node
 	private int label;

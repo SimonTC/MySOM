@@ -1,11 +1,12 @@
 package dk.stcl.core.basic.containers;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import dk.stcl.core.utils.SomConstants;
 
-public class SomMap {
-	
+public class SomMap implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private int rows, columns;
 	private SomNode[] nodes; 
 	

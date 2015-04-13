@@ -16,7 +16,7 @@ import dk.stcl.core.utils.SomConstants;
  */
 //TODO: Better citation
 public class RSOM_Simple extends SomBasics implements IRSOM {
-	
+	private static final long serialVersionUID = 1L;
 	private SomMap leakyDifferencesMap;
 	private double decayFactor;
 	private int maxIterations;

@@ -3,13 +3,18 @@ package test.dk.stcl.core.basic.containers;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
+
+import javax.swing.text.MaskFormatter;
 
 import org.ejml.simple.SimpleMatrix;
 import org.junit.Before;
 import org.junit.Test;
 
 import dk.stcl.core.basic.containers.SomNode;
+import dk.stcl.core.utils.NodeSerializer;
 
 public class SomNodeTest {
 	SomNode n;
@@ -47,6 +52,24 @@ public class SomNodeTest {
 		SimpleMatrix newVector = newNode.getVector();
 		assertEquals(0, newVector.minus(correctVector).elementSum(), 0.00001); 
 	}
+	
+	@Test
+	public void testSerialize() throws IOException{
+		String path = "./test/Node.dat";
+		NodeSerializer.serialize(n, path);
+		
+		SomNode newNode = NodeSerializer.deserialize(path, SomNode.class);
+		assertTrue("ID doesn't match", newNode.getId() == n.getId());
+		assertTrue("Label doesn't match", newNode.getLabel() == n.getLabel());
+		assertTrue("Row doesn't match", newNode.getRow() == n.getRow());
+		assertTrue("Column doesn't match", newNode.getCol() == n.getCol());
+		
+		SimpleMatrix correctVector = n.getVector();
+		SimpleMatrix newVector = newNode.getVector();
+		assertEquals(0, newVector.minus(correctVector).elementSum(), 0.00001);
+		
+	}
+
 	
 	
 
