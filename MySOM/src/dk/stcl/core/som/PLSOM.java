@@ -105,7 +105,7 @@ public class PLSOM extends SOM_SemiOnline implements ISOM {
 	@Override
 	protected void adjustNodeWeights(SomNode n, double neighborhoodEffect,
 			double learningRate, double somFitness) {
-		SimpleMatrix valueVector = n.getVector();
+		SimpleMatrix valueVector = new SimpleMatrix(n.getVector());
 		
 		//Calculate difference between input and current values
 		SimpleMatrix diff = inputVector.minus(valueVector);
@@ -117,6 +117,8 @@ public class PLSOM extends SOM_SemiOnline implements ISOM {
 		
 		//Add the diff-values to the value vector
 		valueVector = valueVector.plus(diff);
+		
+		n.setVector(valueVector);
 		
 		assert(!valueVector.hasUncountable()) : "The value vector of node " +  n.getId() + " contains an uncountable number";
 		
