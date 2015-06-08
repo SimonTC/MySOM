@@ -23,6 +23,7 @@ public class SomNode implements Serializable{
 		// Create vector with the dimension values and set values between 0 and 1
 		valueVector = new SimpleMatrix(1, vectorSize);
 		valueVector.set(0);
+		this.setVector(valueVector);
 		setCoordinate(col, row);
 		this.id = id;
 		this.label = -1;
@@ -37,7 +38,8 @@ public class SomNode implements Serializable{
 	 */
 	public SomNode(int vectorSize, Random rand, int col, int row, int id) {
 		// Create vector with the dimension values and set values between 0 and 1
-		valueVector = SimpleMatrix.random(1, vectorSize, 0, 1, rand);	
+		SimpleMatrix v = SimpleMatrix.random(1, vectorSize, 0, 1, rand);	
+		this.setVector(v);
 		setCoordinate(col, row);
 		this.id = id;
 		this.label = -1;
@@ -50,7 +52,7 @@ public class SomNode implements Serializable{
 	 * @param row
 	 */
 	public SomNode(SimpleMatrix vector, int col, int row, int id){
-		this.valueVector = vector;
+		this.setVector(vector);
 		setCoordinate(col, row);
 		this.id = id;
 		this.label = -1;
@@ -73,7 +75,8 @@ public class SomNode implements Serializable{
 			double d = Double.parseDouble(arr[i]);
 			data[i-4] = d;
 		}
-		valueVector = new SimpleMatrix(1, vectorSize, true, data);
+		SimpleMatrix m = new SimpleMatrix(1, vectorSize, true, data);
+		this.setVector(m);
 	}
 
 	
@@ -105,7 +108,7 @@ public class SomNode implements Serializable{
 	 * @param vector
 	 */
 	public SomNode(SimpleMatrix vector){
-		this.valueVector = vector;
+		this.setVector(vector);
 	}
 	
 	private void setCoordinate(int col, int row){
@@ -133,6 +136,7 @@ public class SomNode implements Serializable{
 	}
 	
 	public void setVector(SimpleMatrix vector){
+		assert(!vector.hasUncountable()) : "The vector contains an uncountable number!";
 		valueVector = vector;
 	}
 	
