@@ -118,6 +118,8 @@ public class PLSOM extends SOM_SemiOnline implements ISOM {
 		//Add the diff-values to the value vector
 		valueVector = valueVector.plus(diff);
 		
+		assert(!valueVector.hasUncountable()) : "The value vector of node " +  n.getId() + " contains an uncountable number";
+		
 		n.setVector(valueVector);
 
 	}
