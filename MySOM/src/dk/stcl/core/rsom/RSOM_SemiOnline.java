@@ -34,10 +34,10 @@ public class RSOM_SemiOnline extends SomBasics implements IRSOM {
 		setupLeakyDifferences();
 	}
 	
-	public RSOM_SemiOnline(String s){
-		super(s);
+	public RSOM_SemiOnline(String s, int startLine){
+		super(s, startLine + 1);
 		String[] lines = s.split(SomConstants.LINE_SEPARATOR);
-		String[] somInfo = lines[0].split(" ");
+		String[] somInfo = lines[startLine].split(" ");
 		decayFactor = Double.parseDouble(somInfo[0]);
 		learningRate = Double.parseDouble(somInfo[1]);
 		stddev = Double.parseDouble(somInfo[2]);

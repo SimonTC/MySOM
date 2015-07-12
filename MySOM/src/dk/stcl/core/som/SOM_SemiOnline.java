@@ -27,7 +27,7 @@ public class SOM_SemiOnline extends RSOM_SemiOnline implements ISOM {
 	}
 	
 	public SOM_SemiOnline(String initializationString){
-		super(initializationString);
+		super(initializationString,0);
 	}
 	
 	

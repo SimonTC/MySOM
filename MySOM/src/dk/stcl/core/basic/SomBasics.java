@@ -43,17 +43,17 @@ public abstract class SomBasics implements ISomBasics, Serializable {
 		this(mapSize,mapSize,inputLength, rand);
 	}
 	
-	public SomBasics(String s){
-		String[] lines = s.split(SomConstants.LINE_SEPARATOR);
-		String[] somInfo = lines[0].split(" ");
+	public SomBasics(String initializationString, int startLine){
+		String[] lines = initializationString.split(SomConstants.LINE_SEPARATOR);
+		String[] somInfo = lines[startLine].split(" ");
 		inputLength = Integer.parseInt(somInfo[0]);
 		rows = Integer.parseInt(somInfo[1]);
 		columns = Integer.parseInt(somInfo[2]);
-		String somMapDescription = s.substring(lines[0].length(), s.length());
+		String somMapDescription = initializationString.substring(lines[0].length(), initializationString.length());
 		somMap = new SomMap(somMapDescription);
 		errorMatrix = new SimpleMatrix(rows, columns);
 		learning = true;
-		activationMatrix = new SimpleMatrix(rows, columns);		
+		activationMatrix = new SimpleMatrix(rows, columns);
 	}
 	
 
