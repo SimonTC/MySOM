@@ -49,7 +49,11 @@ public abstract class SomBasics implements ISomBasics, Serializable {
 		inputLength = Integer.parseInt(somInfo[0]);
 		rows = Integer.parseInt(somInfo[1]);
 		columns = Integer.parseInt(somInfo[2]);
-		String somMapDescription = initializationString.substring(lines[0].length(), initializationString.length());
+		int startID = 0;
+		for (int i = 0; i <= startLine; i++){
+			startID += lines[i].length()-1;
+		}
+		String somMapDescription = initializationString.substring(startID, initializationString.length());
 		somMap = new SomMap(somMapDescription);
 		errorMatrix = new SimpleMatrix(rows, columns);
 		learning = true;
