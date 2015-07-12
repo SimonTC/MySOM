@@ -50,8 +50,8 @@ public abstract class SomBasics implements ISomBasics, Serializable {
 		rows = Integer.parseInt(somInfo[1]);
 		columns = Integer.parseInt(somInfo[2]);
 		int startID = 0;
-		for (int i = 0; i <= startLine; i++){
-			startID += lines[i].length()-1;
+		for (int i = 0; i <= startLine + 1; i++){
+			startID += lines[i].length();
 		}
 		String somMapDescription = initializationString.substring(startID, initializationString.length());
 		somMap = new SomMap(somMapDescription);

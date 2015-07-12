@@ -38,7 +38,7 @@ public class SomMap implements Serializable{
 	 * @param s
 	 */
 	public SomMap(String s){
-		String[] lines = s.split(SomConstants.LINE_SEPARATOR);
+		String[] lines = s.replaceFirst("^" + SomConstants.LINE_SEPARATOR, "").split(SomConstants.LINE_SEPARATOR); //DOne to avoid trailing empty spaces
 		String[] mapsize = lines[0].split(" ");
 		columns = Integer.parseInt(mapsize[0]);
 		rows = Integer.parseInt(mapsize[1]);
