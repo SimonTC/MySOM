@@ -53,6 +53,7 @@ public abstract class SomBasics implements ISomBasics, Serializable {
 		for (int i = 0; i <= startLine + 1; i++){
 			startID += lines[i].length();
 		}
+		startID += startLine; //Beed to consider the /n that is coming after each line
 		int endID = initializationString.indexOf("TEMPORAL");
 		if (endID == -1 || endID < startID) endID = initializationString.length();
 		String somMapDescription = initializationString.substring(startID, endID);
