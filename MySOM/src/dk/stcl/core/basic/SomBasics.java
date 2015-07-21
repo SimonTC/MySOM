@@ -54,8 +54,11 @@ public abstract class SomBasics implements ISomBasics, Serializable {
 			startID += lines[i].length();
 		}
 		int endID = initializationString.indexOf("TEMPORAL");
-		if (endID == -1 || endID < startID) endID = initializationString.length();
-		String somMapDescription = initializationString.substring(startID, endID);
+		if (endID == -1 || endID < startID){
+			endID = initializationString.length();
+			startID += startLine - 2; //Need to add the number of lines when creating the RSOM. Not sure why
+		}
+		String somMapDescription = initializationString.substring(startID, endID);		
 		somMap = new SomMap(somMapDescription);
 		errorMatrix = new SimpleMatrix(rows, columns);
 		learning = true;
