@@ -26,6 +26,10 @@ public class SOM_SemiOnline extends RSOM_SemiOnline implements ISOM {
 		super(mapSize, inputLength, rand, learningRate, activationCodingFactor, stddev, 1); //Set decay factor to one to use as SOM
 	}
 	
+	public SOM_SemiOnline(int mapSize, int inputLength, double learningRate, double activationCodingFactor, double stddev ) {
+		super(mapSize, inputLength, learningRate, activationCodingFactor, stddev, 1); //Set decay factor to one to use as SOM
+	}
+	
 	public SOM_SemiOnline(String initializationString, int startLine){
 		super(initializationString,startLine);
 	}

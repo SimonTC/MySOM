@@ -34,6 +34,11 @@ public class RSOM_SemiOnline extends SomBasics implements IRSOM {
 		setupLeakyDifferences();
 	}
 	
+	public RSOM_SemiOnline(int mapSize, int inputLength, 
+			double learningRate, double activationCodingFactor, double stddev, double decayFactor) {
+			this(mapSize, inputLength, null, learningRate, activationCodingFactor, stddev, decayFactor);
+	}
+	
 	public RSOM_SemiOnline(String s, int startLine){
 		super(s, startLine + 1);
 		String[] lines = s.split(SomConstants.LINE_SEPARATOR);

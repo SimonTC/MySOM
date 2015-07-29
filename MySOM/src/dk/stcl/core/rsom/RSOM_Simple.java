@@ -43,6 +43,11 @@ public class RSOM_Simple extends SomBasics implements IRSOM {
 		setupLeakyDifferences();
 	}
 	
+	public RSOM_Simple(int mapSize, int inputLength, double initialLearningRate,
+			double activationCodingFactor, int maxIterations, double decay) {
+		this(mapSize, inputLength, null, initialLearningRate, activationCodingFactor, maxIterations,decay);
+	}
+	
 	public RSOM_Simple(String s, int startLine){
 		super(s, startLine + 1);
 		String[] lines = s.split(SomConstants.LINE_SEPARATOR);

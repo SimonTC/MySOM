@@ -37,10 +37,18 @@ public abstract class SomBasics implements ISomBasics, Serializable {
 		learning = true;
 		activationMatrix = new SimpleMatrix(rows, columns);
 		
-	}		
+	}	
 	
 	public SomBasics(int mapSize, int inputLength, Random rand) {
 		this(mapSize,mapSize,inputLength, rand);
+	}
+	
+	public SomBasics(int columns, int rows, int inputLength) {
+		this(columns, rows, inputLength, null);
+	}
+	
+	public SomBasics(int mapSize, int inputLength) {
+		this(mapSize,inputLength,null);
 	}
 	
 	public SomBasics(String initializationString, int startLine){

@@ -10,6 +10,10 @@ public class SOM_Simple extends RSOM_Simple implements ISOM {
 		super(mapSize, inputLength, rand, initialLearningRate, activationCodingFactor, maxIterations, 1); //Setting decay to one lets the rsom work as a normal som
 	}
 	
+	public SOM_Simple(int mapSize, int inputLength, double initialLearningRate, double activationCodingFactor, int maxIterations) {
+		super(mapSize, inputLength, initialLearningRate, activationCodingFactor, maxIterations, 1); //Setting decay to one lets the rsom work as a normal som
+	}
+	
 	
 
 
