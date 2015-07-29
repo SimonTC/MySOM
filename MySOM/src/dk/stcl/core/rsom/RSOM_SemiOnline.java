@@ -50,8 +50,8 @@ public class RSOM_SemiOnline extends SomBasics implements IRSOM {
 	}
 	
 	@Override
-	public String toFileString(){
-		String s = super.toFileString();
+	public String toInitializationString(){
+		String s = super.toInitializationString();
 		String info = decayFactor + " " + learningRate + " " + stddev + " " + activationCodingFactor + SomConstants.LINE_SEPARATOR;
 		return info + s;
 	}

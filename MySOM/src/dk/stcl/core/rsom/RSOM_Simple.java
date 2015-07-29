@@ -70,8 +70,8 @@ public class RSOM_Simple extends SomBasics implements IRSOM {
 	}
 	
 	@Override
-	public String toFileString(){
-		String s = super.toFileString();
+	public String toInitializationString(){
+		String s = super.toInitializationString();
 		String info = decayFactor + " " + maxIterations + " " + mapRadius + " " + timeConstant + " " + initialNeighborHoodRadius + 
 				" " + curNeighborhoodRadius + " " + initialLearningRate + " " + curLearningRate + " " + activationCodingFactor + SomConstants.LINE_SEPARATOR;
 		return info + s;

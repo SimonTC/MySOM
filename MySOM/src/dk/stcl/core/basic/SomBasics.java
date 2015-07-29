@@ -82,9 +82,9 @@ public abstract class SomBasics implements ISomBasics, Serializable {
 		return bmu;
 	}
 	
-	public String toFileString(){
+	public String toInitializationString(){
 		String s = inputLength + " " + rows + " " + columns + SomConstants.LINE_SEPARATOR;
-		s += somMap.toFileString();
+		s += somMap.toInitializationString();
 		return s;
 	}
 

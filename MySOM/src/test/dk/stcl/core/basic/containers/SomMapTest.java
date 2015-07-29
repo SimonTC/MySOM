@@ -23,7 +23,7 @@ public class SomMapTest {
 
 	@Test
 	public void testToFileString() {
-		String s = map.toFileString();
+		String s = map.toInitializationString();
 		
 		String[] lines = s.split("\n");
 		String mapSize[] = lines[0].split(" ");
@@ -34,7 +34,7 @@ public class SomMapTest {
 
 	@Test
 	public void testSomMapString() {
-		String s = map.toFileString();
+		String s = map.toInitializationString();
 		SomMap newMap = new SomMap(s);
 		
 		assertTrue(map.getHeight() == newMap.getHeight());

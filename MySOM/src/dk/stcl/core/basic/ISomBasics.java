@@ -82,6 +82,8 @@ public interface ISomBasics {
 	 * @param maxIterations
 	 */
 	public void sensitize(int iteration);
+	
+	public String toInitializationString();
 
 
 }

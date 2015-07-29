@@ -226,7 +226,7 @@ public class SomNode implements Serializable{
 	 * This string can be savd in a file to be used when recreating this node
 	 * @return
 	 */
-	public String toFileString(){
+	public String toInitializationString(){
 		String s = id + " " + label + " " + row + " " + col;
 		for (double d : valueVector.getMatrix().data){
 			s += " " + d;

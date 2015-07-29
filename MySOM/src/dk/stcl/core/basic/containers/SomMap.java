@@ -119,11 +119,11 @@ public class SomMap implements Serializable{
 	 * Create String representation of the map to be used when recreating this map
 	 * @return
 	 */
-	public String toFileString(){
+	public String toInitializationString(){
 		String ls = SomConstants.LINE_SEPARATOR;
 		String s = columns + " " + rows + ls;
 		for (SomNode n : nodes){
-			s += n.toFileString() + ls;
+			s += n.toInitializationString() + ls;
 		}
 		return s;
 	}
