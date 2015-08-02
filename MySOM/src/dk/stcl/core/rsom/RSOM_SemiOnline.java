@@ -21,7 +21,7 @@ public class RSOM_SemiOnline extends SomBasics implements IRSOM {
 	private SomMap leakyDifferencesMap;
 	private double decayFactor;
 	private double learningRate;
-	protected double stddev; //TODO: Give a good real name
+	protected double stddev;
 	private double activationCodingFactor;
 	
 	public RSOM_SemiOnline(int mapSize, int inputLength, Random rand,
