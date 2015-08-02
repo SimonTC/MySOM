@@ -44,7 +44,7 @@ public class MovingLines {
 	}
 	
 	private void run(){
-		boolean visualize = false;
+		boolean visualize = true;
 		Random rand = new Random(1234);
 		setupExperiment(rand, visualize);
 		runExperiment(MAX_ITERTIONS, visualize, rand);

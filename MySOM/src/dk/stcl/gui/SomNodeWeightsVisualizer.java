@@ -9,7 +9,7 @@ import org.ejml.simple.SimpleMatrix;
 import dk.stcl.core.basic.containers.SomNode;
 
 /**
- * Visualizes the activation of a SOM map.
+ * Visualizes the model of  single som node
  * @author Simon
  *
  */
