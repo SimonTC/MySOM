@@ -9,7 +9,6 @@ import dk.stcl.core.rsom.RSOM_SemiOnline;
  * @author Simon
  *
  */
-//TODO: Better citation
 public class SOM_SemiOnline extends RSOM_SemiOnline implements ISOM {
 	private static final long serialVersionUID = 1L;
 	

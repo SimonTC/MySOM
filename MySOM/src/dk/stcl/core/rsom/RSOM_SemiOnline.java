@@ -11,11 +11,11 @@ import dk.stcl.core.basic.containers.SomNode;
 import dk.stcl.core.utils.SomConstants;
 
 /**
- * This class is an implementation of the RSOM from the LoopSOM paper
+ * This class is an implementation of the RSOM from:
+ * R. Pinto and P. Engel, “LoopSOM: a robust som variant using self-organizing temporal feedback connections,” Proc. 7th ENIA-BRAZILIAN …, 2009.
  * @author Simon
  *
  */
-//TODO: Better citation
 public class RSOM_SemiOnline extends SomBasics implements IRSOM {
 	private static final long serialVersionUID = 1L;
 	private SomMap leakyDifferencesMap;

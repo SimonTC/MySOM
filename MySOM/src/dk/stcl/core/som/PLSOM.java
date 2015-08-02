@@ -7,7 +7,12 @@ import java.util.Random;
 import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.core.basic.containers.SomNode;
-
+/**
+ * This is an implementation of the Parameterless SOM (PLSOM)
+ * E. Berglund and J. Sitte, “The parameterless self-organizing map algorithm,” IEEE Trans. Neural Networks, vol. 17, pp. 305–316, 2006.
+ * @author Simon
+ *
+ */
 public class PLSOM extends SOM_SemiOnline implements ISOM {
 	
 	public PLSOM(int mapSize, int inputLength, Random rand,
@@ -32,10 +37,10 @@ public class PLSOM extends SOM_SemiOnline implements ISOM {
 	}
 	
 	/**
-	 * Calculates the diameter of the input space following E. Berglands article Improved PLSOM algorithm
+	 * Calculates the diameter of the input space following 
+	 * E. Berglund, “Improved PLSOM algorithm,” Appl. Intell., vol. 32, no. 1, pp. 122–130, Jul. 2008.
 	 * @param inputVector
 	 */
-	//TODO: Better citation
 	private double determineInputSpaceSize(SimpleMatrix inputVector){
 		double diameter = calculateDiameter(inputVector);
 		if (diameter > inputSpaceSize){

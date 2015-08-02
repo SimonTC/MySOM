@@ -9,12 +9,6 @@ import dk.stcl.core.basic.containers.SomMap;
 import dk.stcl.core.basic.containers.SomNode;
 import dk.stcl.core.utils.SomConstants;
 
-/**
- * This clas is an implementation of the RSOM from the LoopSOM paper
- * @author Simon
- *
- */
-//TODO: Better citation
 public class RSOM_Simple extends SomBasics implements IRSOM {
 	private static final long serialVersionUID = 1L;
 	private SomMap leakyDifferencesMap;

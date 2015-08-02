@@ -121,7 +121,7 @@ public class ControllerMNIST {
 	public void run(boolean visualizeClustering){
 		long startTime = System.nanoTime();
 		System.out.println("Starting run");
-		int maxIterations = trainLoader.getNumLines(); // MAX_ITERATIONS;//data.size() * 3; //TODO: Should probably be something else
+		int maxIterations = trainLoader.getNumLines(); // MAX_ITERATIONS;//data.size() * 3;
 		//int dataSize = data.numRows();
 		//int inputlength = data.numCols();
 		
