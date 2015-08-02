@@ -12,6 +12,7 @@ import dk.stcl.core.rsom.IRSOM;
 import dk.stcl.core.som.ISOM;
 
 public class GeneralExperimentGUI extends JFrame {
+	
 	private SimpleMatrixVisualizer inputPanel;
 	private SomModelDrawer modelPanel;
 	private SomActivationVisualizer activationPanel;

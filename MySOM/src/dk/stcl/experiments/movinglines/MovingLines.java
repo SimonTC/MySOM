@@ -197,7 +197,7 @@ public class MovingLines {
 	
 	private void updateGraphics(SimpleMatrix inputVector, int iteration){
 		frame.updateData(possibleInputs.getActivationMatrix());
-		frame.setTitle("Visualiztion - Iteration: " + iteration);
+		frame.setTitle("Visualization - Iteration: " + iteration);
 		frame.revalidate();
 		frame.repaint();
 
