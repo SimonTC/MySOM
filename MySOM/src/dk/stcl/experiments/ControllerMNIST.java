@@ -1,5 +1,6 @@
 package dk.stcl.experiments;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -45,10 +46,10 @@ public class ControllerMNIST {
 	 * @throws IOException ******************************************/
 	
 	public static void main(String[] args) throws IOException{
-		String dataPathTrain ="C:/Users/Simon/Documents/Experiments/SOM/MNIST/train_small.csv";
-		String dataPathValidation ="C:/Users/Simon/Documents/Experiments/SOM/MNIST/validation_small.csv";
-		String dataPathTest ="C:/Users/Simon/Documents/Experiments/SOM/MNIST/test.csv";
-		String filepathTestLabels = "C:/Users/Simon/Documents/Experiments/SOM/MNIST/test_output.csv";
+		String dataPathTrain ="C:/Users/Simon/Google Drev/Experiments/SOM/MNIST/train_small.csv";
+		String dataPathValidation ="C:/Users/Simon/Google Drev/Experiments/SOM/MNIST/validation_small.csv";
+		String dataPathTest ="C:/Users/Simon/Google Drev/Experiments/SOM/MNIST/test.csv";
+		String filepathTestLabels = "C:/Users/Simon/Google Drev/Experiments/SOM/MNIST/test_output.csv";
 		
 		ControllerMNIST c = new ControllerMNIST();
 		c.setupExperiment(dataPathTrain, dataPathValidation, dataPathTest, filepathTestLabels, VISUALIZE);
@@ -107,6 +108,7 @@ public class ControllerMNIST {
 			drawer = new SomModelDrawer();
 			drawer.setPreferredSize(new Dimension(GUI_SIZE, GUI_SIZE));
 			drawer.initialize(som, true);
+			drawer.setBackground(Color.red);
 			gui.add(drawer);
 			gui.pack();
 			gui.setVisible(true);

@@ -70,8 +70,5 @@ public class SomModelDrawer extends JPanel {
 				p.setBorder(BorderFactory.createEmptyBorder());
 			}
 		}
-		for (SomNodeWeightsVisualizer p : panels){
-			p.updateData();
-		}
 	}
 }
