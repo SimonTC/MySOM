@@ -188,11 +188,17 @@ public class GeneralExperimentGUI extends JFrame {
 		rsomArea.add(Box.createGlue());
 	}
 	
-	public void updateData(SimpleMatrix inputMatrix, SimpleMatrix miscMatrix){
+	public void updateData(SimpleMatrix inputMatrix, SimpleMatrix miscMatrix, boolean[] somModelHighlights, boolean[] temporalModelHighlights){
 		inputPanel.registerMatrix(inputMatrix);
 		activationPanel.updateData();
 		rsomActivationPanel.updateData();
+		if (somModelHighlights != null) modelPanel.updateHighlighList(somModelHighlights);
+		if (temporalModelHighlights != null) somModelsInRSOMPanel.updateHighlighList(temporalModelHighlights);
 		
+	}
+	
+	public void updateData(SimpleMatrix inputMatrix, SimpleMatrix miscMatrix){
+		this.updateData(inputMatrix, miscMatrix, null,null);
 	}
 	
 	private void setLayoutOfSubArea(Box area, JLabel label, JPanel panel){

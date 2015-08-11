@@ -32,6 +32,7 @@ public class MovingLines {
 	private final int GUI_SIZE = 600;
 	private final int MAX_ITERTIONS = 10000;
 	private final int FRAMES_PER_SECOND = 10;
+	private int spatialMapSize, temporalMapSize;
 	
 	private final double DECAY = 0.3;
 	
@@ -155,7 +156,7 @@ public class MovingLines {
 		for (SimpleMatrix m : sequence){
     		//Spatial classification	    
 			SimpleMatrix input = new SimpleMatrix(1, 9, true, m.getMatrix().data);
-    		spatialPooler.step(input);
+    		SomNode spatialBMU = spatialPooler.step(input);
     		SimpleMatrix spatialActivation = spatialPooler.computeActivationMatrix();
     		
     		//Transform spatial output matrix to vector
@@ -164,12 +165,12 @@ public class MovingLines {
     		double[] orthogonalized = orthogonalize(spatialOutputVector);
     		
     		//Temporal classification
-    		temporalPooler.step(orthogonalized);	    		
+    		SomNode temporalBMU = temporalPooler.step(orthogonalized);	    		
     		
     		if (visualize){
 				//Visualize
     			temporalPooler.computeActivationMatrix();
-    			updateGraphics(m,iteration);					
+    			updateGraphics(m,iteration, spatialBMU, temporalBMU);					
 				try {
 					Thread.sleep(SKIP_TICKS);
 				} catch (InterruptedException e) {
@@ -197,8 +198,14 @@ public class MovingLines {
 		return newVector;
 	}
 	
-	private void updateGraphics(SimpleMatrix inputVector, int iteration){
-		frame.updateData(inputVector,possibleInputs.getActivationMatrix());
+	private void updateGraphics(SimpleMatrix inputVector, int iteration, SomNode spatialBMU, SomNode temporalBMU){
+		boolean[] spatialHighlights = new boolean[spatialMapSize * spatialMapSize];
+		spatialHighlights[spatialBMU.getId()] = true;
+		
+		boolean[] temporalHighlights = new boolean[temporalMapSize * temporalMapSize];
+		temporalHighlights[temporalBMU.getId()] = true;
+		
+		frame.updateData(inputVector,possibleInputs.getActivationMatrix(), spatialHighlights, temporalHighlights);
 		frame.setTitle("Visualization - Iteration: " + iteration);
 		frame.revalidate();
 		frame.repaint();
@@ -216,9 +223,9 @@ public class MovingLines {
 	private void setupVisualization(ISomBasics som, int GUI_SIZE){
 		//Create GUI
 		frame = new GeneralExperimentGUI();
-		frame.setPreferredSize(new Dimension(500, 500));
+		frame.setPreferredSize(new Dimension(1200, 600));
 		frame.initialize(spatialPooler, temporalPooler, sequences[2][0], true,possibleInputs);
-		frame.setTitle("Visualiztion");
+		frame.setTitle("Visualization");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//updateGraphics(sequences[2][0],0); //Give a blank
 		frame.pack();
@@ -228,7 +235,7 @@ public class MovingLines {
 	private void setupPoolers(Random rand){		
 		//Spatial pooler
 		int spatialInputLength = 9;
-		int spatialMapSize = 3;
+		spatialMapSize = 3;
 		double learningRate = 0.1;
 		double stddev = 1;
 		double activationCodingFactor = 0.125;
@@ -241,7 +248,7 @@ public class MovingLines {
 		
 		//Temporal pooler
 		int temporalInputLength = spatialMapSize * spatialMapSize;
-		int temporalMapSize = 2;
+		temporalMapSize = 2;
 		
 		
 		temporalPooler = new RSOM_SemiOnline(temporalMapSize, temporalInputLength, rand, learningRate, activationCodingFactor, stddev, DECAY);

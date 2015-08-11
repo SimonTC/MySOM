@@ -19,11 +19,11 @@ import dk.stcl.core.som.SOM_Simple;
  *
  */
 public class SomModelDrawer extends JPanel {
+	private boolean[] highlightList;
+	
 	public SomModelDrawer() {
 		ISomBasics som = new SOM_Simple(3, 5, 0, 0, 1);
-		this.initialize(som, true);
-		
-		
+		this.initialize(som, true);		
 	}
 
 	private ArrayList<SomNodeWeightsVisualizer> panels;
@@ -46,6 +46,8 @@ public class SomModelDrawer extends JPanel {
 			panels.add(p);
 			add(p);
 		}
+		
+		highlightList = new boolean[panels.size()];
 	}
 	
 	@Override
@@ -54,7 +56,20 @@ public class SomModelDrawer extends JPanel {
 		updatePanels();
 	}
 	
+	public void updateHighlighList(boolean[] newHighlightList){
+		this.highlightList = newHighlightList;
+	}
+	
 	private void updatePanels(){
+		for (int i = 0; i < panels.size(); i++){
+			SomNodeWeightsVisualizer p = panels.get(i);
+			p.updateData();
+			if (highlightList[i]){
+				p.setBorder(BorderFactory.createLineBorder(Color.RED));
+			} else {
+				p.setBorder(BorderFactory.createEmptyBorder());
+			}
+		}
 		for (SomNodeWeightsVisualizer p : panels){
 			p.updateData();
 		}
