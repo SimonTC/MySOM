@@ -1,4 +1,4 @@
-package dk.stcl.experiments;
+package dk.stcl.experiments.mnist;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -21,11 +21,10 @@ public class ControllerMNIST {
 
 	private SimpleMatrix data;
 	private ISomBasics som;
-	private JFrame gui;
+	private MnistGUI gui;
 	private Random rand = new Random();
 	private DataLoader trainLoader, validationLoader, testLoader;
 	private FileWriter writer;
-	private SomModelDrawer drawer;
 	
 	/********************************************/
 	/*      Parameters used in the code         */
@@ -101,15 +100,11 @@ public class ControllerMNIST {
 		if (visualize){
 			//Create GUI
 			System.out.println("Creating gui");
-			gui = new JFrame();
+			gui = new MnistGUI();
 			gui.setSize(GUI_SIZE, GUI_SIZE);
 			gui.setTitle("Visualization");
 			gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			drawer = new SomModelDrawer();
-			drawer.setPreferredSize(new Dimension(GUI_SIZE, GUI_SIZE));
-			drawer.initialize(som, true);
-			drawer.setBackground(Color.red);
-			gui.add(drawer);
+			gui.initialize(som);
 			gui.pack();
 			gui.setVisible(true);
 		}
@@ -335,6 +330,9 @@ public class ControllerMNIST {
 	}
 	
 	private void visualizeSom(int iteration, int maxIterations){
+		boolean[] tmp = new boolean[100];
+		tmp[rand.nextInt(tmp.length)] = true;
+		//drawer.updateHighlighList(tmp);
 		gui.setTitle("Visualiztion - Iteration: " + iteration + " / " + maxIterations);
 		gui.revalidate();
 		gui.repaint();
