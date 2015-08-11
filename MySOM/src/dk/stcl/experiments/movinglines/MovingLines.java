@@ -26,14 +26,14 @@ public class MovingLines {
 	
 	private SimpleMatrix[][] sequences;
 	private ISOM spatialPooler;
-	private ISomBasics possibleInputs;
+	private ISOM possibleInputs;
 	private IRSOM temporalPooler;
 	private GeneralExperimentGUI frame;
-	private final int GUI_SIZE = 500;
+	private final int GUI_SIZE = 600;
 	private final int MAX_ITERTIONS = 10000;
 	private final int FRAMES_PER_SECOND = 10;
 	
-	private final double DECAY = 0.7;
+	private final double DECAY = 0.3;
 	
 	private final boolean USE_PLSOM = false;
 
@@ -153,8 +153,9 @@ public class MovingLines {
 	private void doSequence(SimpleMatrix[] sequence, boolean visualize, int iteration){
 		int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 		for (SimpleMatrix m : sequence){
-    		//Spatial classification	    		
-    		spatialPooler.step(m.getMatrix().data);
+    		//Spatial classification	    
+			SimpleMatrix input = new SimpleMatrix(1, 9, true, m.getMatrix().data);
+    		spatialPooler.step(input);
     		SimpleMatrix spatialActivation = spatialPooler.computeActivationMatrix();
     		
     		//Transform spatial output matrix to vector
@@ -167,6 +168,7 @@ public class MovingLines {
     		
     		if (visualize){
 				//Visualize
+    			temporalPooler.computeActivationMatrix();
     			updateGraphics(m,iteration);					
 				try {
 					Thread.sleep(SKIP_TICKS);
@@ -196,7 +198,7 @@ public class MovingLines {
 	}
 	
 	private void updateGraphics(SimpleMatrix inputVector, int iteration){
-		frame.updateData(possibleInputs.getActivationMatrix());
+		frame.updateData(inputVector,possibleInputs.getActivationMatrix());
 		frame.setTitle("Visualization - Iteration: " + iteration);
 		frame.revalidate();
 		frame.repaint();
@@ -215,7 +217,7 @@ public class MovingLines {
 		//Create GUI
 		frame = new GeneralExperimentGUI();
 		frame.setPreferredSize(new Dimension(500, 500));
-		frame.initialize(spatialPooler, temporalPooler, sequences[2][0], true,possibleInputs.getActivationMatrix());
+		frame.initialize(spatialPooler, temporalPooler, sequences[2][0], true,possibleInputs);
 		frame.setTitle("Visualiztion");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//updateGraphics(sequences[2][0],0); //Give a blank
@@ -260,7 +262,6 @@ public class MovingLines {
 				{0,0,0},
 				{0,0,0}};
 		m = new SimpleMatrix(hor1);
-		m.reshape(1, 9);
 		sequences[0][0] = m;
 		nodes[0] = new SomNode(m);
 		
@@ -269,7 +270,6 @@ public class MovingLines {
 				{1,1,1},
 				{0,0,0}};
 		m = new SimpleMatrix(hor2);
-		m.reshape(1, 9);
 		sequences[0][1] = m;
 		nodes[1] = new SomNode(m);
 		
@@ -278,7 +278,6 @@ public class MovingLines {
 				{0,0,0},
 				{1,1,1}};
 		m = new SimpleMatrix(hor3);
-		m.reshape(1, 9);
 		sequences[0][2] = m;
 		nodes[2] = new SomNode(m);
 		
@@ -288,7 +287,6 @@ public class MovingLines {
 				{1,0,0},
 				{1,0,0}};
 		m = new SimpleMatrix(ver1);
-		m.reshape(1, 9);
 		sequences[1][0] = m;
 		nodes[3] = new SomNode(m);
 		
@@ -297,7 +295,6 @@ public class MovingLines {
 				{0,1,0},
 				{0,1,0}};
 		m = new SimpleMatrix(ver2);
-		m.reshape(1, 9);
 		sequences[1][1] = m;
 		nodes[4] = new SomNode(m);
 		
@@ -306,7 +303,6 @@ public class MovingLines {
 				{0,0,1},
 				{0,0,1}};
 		m = new SimpleMatrix(ver3);
-		m.reshape(1, 9);
 		sequences[1][2] = m;
 		nodes[5] = new SomNode(m);
 		
@@ -316,7 +312,6 @@ public class MovingLines {
 				{0,0,0},
 				{0,0,0}};
 		m = new SimpleMatrix(blank);
-		m.reshape(1, 9);
 		sequences[2][0] = m;
 		sequences[2][1] = m;
 		sequences[2][2] = m;

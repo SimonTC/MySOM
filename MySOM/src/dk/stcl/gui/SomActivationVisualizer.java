@@ -3,6 +3,15 @@ package dk.stcl.gui;
 import javax.swing.JPanel;
 
 import dk.stcl.core.basic.ISomBasics;
+import dk.stcl.core.som.SOM_Simple;
+
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+
+import org.ejml.simple.SimpleMatrix;
+
+import java.awt.Color;
+import java.awt.GridLayout;
 
 /**
  * Visualizes the activation of a SOM map.
@@ -10,9 +19,15 @@ import dk.stcl.core.basic.ISomBasics;
  *
  */
 public class SomActivationVisualizer extends JPanel {
-
+	
 	private ISomBasics som;
-	private SimpleMatrixVisualizer panel;
+	private SimpleMatrixVisualizer MatrixViz;
+	
+	public SomActivationVisualizer() {
+		
+		ISomBasics som = new SOM_Simple(3, 5, 0, 0, 1);
+		this.initialize(som, true);
+	}
 	
 	/**
 	 * 
@@ -21,14 +36,16 @@ public class SomActivationVisualizer extends JPanel {
 	 * @param scaled true if the values are scaled between 0 and 1
 	 */
 	public void initialize(ISomBasics som, boolean scaled){
+		this.removeAll();
 		this.som = som;
 		
-		panel = new SimpleMatrixVisualizer();
-		panel.initialize(som.getActivationMatrix(), scaled);
+		MatrixViz = new SimpleMatrixVisualizer();
+		MatrixViz.initialize(som.getActivationMatrix(), scaled);
+		setLayout(new GridLayout(0, 1, 0, 0));
 		
-		panel.setPreferredSize(getPreferredSize());
+		MatrixViz.setPreferredSize(getPreferredSize());
 		
-		add(panel);
+		add(MatrixViz);
 	}
 	
 	
@@ -37,9 +54,8 @@ public class SomActivationVisualizer extends JPanel {
 	 * on the map
 	 */
 	public void updateData() {
-		this.panel.registerMatrix(som.getActivationMatrix());
-		this.panel.revalidate();
-		this.panel.repaint();
+		this.MatrixViz.registerMatrix(som.getActivationMatrix());
+		this.MatrixViz.revalidate();
+		this.MatrixViz.repaint();
 	}
-
 }

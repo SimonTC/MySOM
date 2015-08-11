@@ -1,5 +1,6 @@
 package dk.stcl.experiments.movinglines;
 
+import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -14,6 +15,7 @@ import dk.stcl.core.rsom.RSOM_SemiOnline;
 import dk.stcl.core.som.ISOM;
 import dk.stcl.core.som.PLSOM;
 import dk.stcl.core.som.SOM_SemiOnline;
+import dk.stcl.gui.GeneralExperimentGUI;
 
 	
 
@@ -26,7 +28,7 @@ public class TwoDLines {
 	private ISOM spatialPooler;
 	private ISOM possibleInputs;
 	private IRSOM temporalPooler;
-	private MovingLinesGUI frame;
+	private GeneralExperimentGUI frame;
 	private final int GUI_SIZE = 500;
 	private final int MAX_ITERTIONS = 10000;
 	private final int FRAMES_PER_SECOND = 10;
@@ -104,7 +106,7 @@ public class TwoDLines {
 			int curInputID = rand.nextInt(3);
 			seq = sequences[curSeqID];
 			
-			SimpleMatrix input = seq[curInputID];
+			SimpleMatrix input = new SimpleMatrix(1, 9, true, seq[curInputID].getMatrix().data);
 			step(input);
 			
 			if (visualize){
@@ -206,6 +208,7 @@ public class TwoDLines {
 		
 		//Temporal classification
 		temporalPooler.step(spatialOutputVector);	    	
+		temporalPooler.computeActivationMatrix();
 	}
 	
 	private void doSequence(SimpleMatrix[] sequence, boolean visualize, int iteration){
@@ -245,8 +248,8 @@ public class TwoDLines {
 	}
 	
 	private void updateGraphics(SimpleMatrix inputVector, int iteration){
-		frame.updateData(inputVector, spatialPooler, temporalPooler);
-		frame.setTitle("Visualiztion - Iteration: " + iteration);
+		frame.updateData(inputVector,possibleInputs.getActivationMatrix());
+		frame.setTitle("Visualization - Iteration: " + iteration);
 		frame.revalidate();
 		frame.repaint();
 
@@ -262,10 +265,12 @@ public class TwoDLines {
 	
 	private void setupVisualization(ISomBasics som, int GUI_SIZE){
 		//Create GUI
-		frame = new MovingLinesGUI(som, possibleInputs);
+		frame = new GeneralExperimentGUI();
+		frame.setPreferredSize(new Dimension(500, 500));
+		frame.initialize(spatialPooler, temporalPooler, sequences[2][0], true,possibleInputs);
 		frame.setTitle("Visualiztion");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		updateGraphics(sequences[2][0],0); //Give a blank
+		//updateGraphics(sequences[2][0],0); //Give a blank
 		frame.pack();
 		frame.setVisible(true);	
 	}
@@ -308,7 +313,6 @@ public class TwoDLines {
 				{0,0,0},
 				{0,0,0}};
 		m = new SimpleMatrix(hor1);
-		m.reshape(1, 9);
 		sequences[0][0] = m;
 		nodes[0] = new SomNode(m);
 		
@@ -317,7 +321,6 @@ public class TwoDLines {
 				{1,1,1},
 				{0,0,0}};
 		m = new SimpleMatrix(hor2);
-		m.reshape(1, 9);
 		sequences[0][1] = m;
 		nodes[1] = new SomNode(m);
 		
@@ -326,7 +329,6 @@ public class TwoDLines {
 				{0,0,0},
 				{1,1,1}};
 		m = new SimpleMatrix(hor3);
-		m.reshape(1, 9);
 		sequences[0][2] = m;
 		nodes[2] = new SomNode(m);
 		
@@ -336,7 +338,6 @@ public class TwoDLines {
 				{1,0,0},
 				{1,0,0}};
 		m = new SimpleMatrix(ver1);
-		m.reshape(1, 9);
 		sequences[1][0] = m;
 		nodes[3] = new SomNode(m);
 		
@@ -345,7 +346,6 @@ public class TwoDLines {
 				{0,1,0},
 				{0,1,0}};
 		m = new SimpleMatrix(ver2);
-		m.reshape(1, 9);
 		sequences[1][1] = m;
 		nodes[4] = new SomNode(m);
 		
@@ -354,7 +354,6 @@ public class TwoDLines {
 				{0,0,1},
 				{0,0,1}};
 		m = new SimpleMatrix(ver3);
-		m.reshape(1, 9);
 		sequences[1][2] = m;
 		nodes[5] = new SomNode(m);
 		
@@ -364,7 +363,6 @@ public class TwoDLines {
 				{0,0,0},
 				{0,0,0}};
 		m = new SimpleMatrix(blank);
-		m.reshape(1, 9);
 		sequences[2][0] = m;
 		sequences[2][1] = m;
 		sequences[2][2] = m;

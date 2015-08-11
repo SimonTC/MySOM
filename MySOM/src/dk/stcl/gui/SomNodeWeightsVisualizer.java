@@ -7,6 +7,10 @@ import javax.swing.JPanel;
 import org.ejml.simple.SimpleMatrix;
 
 import dk.stcl.core.basic.containers.SomNode;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import java.awt.Color;
+import java.awt.GridLayout;
 
 /**
  * Visualizes the model of  single som node
@@ -15,11 +19,20 @@ import dk.stcl.core.basic.containers.SomNode;
  */
 public class SomNodeWeightsVisualizer extends JPanel {
 
+
 	private SomNode node;
 	private SimpleMatrixVisualizer panel;
 	private SimpleMatrix matrix;
 	private int mapSize;
 	
+	
+	public SomNodeWeightsVisualizer() {
+		setBackground(Color.GREEN);
+		setLayout(new GridLayout(1, 1, 2, 2));
+		
+		SimpleMatrixVisualizer simpleMatrixVisualizer = new SimpleMatrixVisualizer();
+		add(simpleMatrixVisualizer);
+	}
 	/**
 	 * 
 	 * @param frameSize
@@ -27,6 +40,7 @@ public class SomNodeWeightsVisualizer extends JPanel {
 	 * @param scaled true if the values are scaled between 0 and 1
 	 */
 	public void initialize(SomNode node, int mapSize, boolean scaled){
+		this.removeAll();
 		this.node = node;
 		this.mapSize = mapSize;
 		
