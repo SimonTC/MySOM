@@ -50,9 +50,9 @@ public class SimpleMatrixVisualizer extends JPanel {
 				double value = matrix.get(y, x);
 				int rgb;
 				if (scaled){
-					rgb = (int) ((value) * 255);
+					rgb = (int) ((1-value) * 255);
 				} else {
-					rgb = (int) value;
+					rgb = (int) (1-value);
 				}
 				Color c = new Color(rgb, rgb, rgb);
 				g.setColor(c);
